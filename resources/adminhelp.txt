@@ -1,10 +1,11 @@
 ****Groove Bot V2.0.0****
 Administrator commands.
+**Argument Key:** `"Spaces must be enclosed with quotation marks"`
 >>> ~~---------------~~:tools: Commands :tools:~~----------------~~
 **createalbum** `[acronym]` `[description]` - Creates an album.
-**deletealbum** `[acronym]` - Creates an album.
+**deletealbum** `[acronym]` - Deletes an album
 **createmusic** `[album_acronym]` `[acronym]` `[description]` `[url]` - Creates music associated to an album.
-**deletemusic** `[acronym]` - Deleted music.
+**deletemusic** `[acronym]` - Deletes music.
 **createabbreviation** `[acronym]` `[description]` - Creates an abbreviation.
 **deleteabbreviation** `[acronym]` - Deletes an abbreviation.
 
