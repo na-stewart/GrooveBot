@@ -21,9 +21,9 @@ async def fact(ctx):
 
 
 @bot.command()
-async def neuropol(ctx, message):
+async def neuropol(ctx, *args):
     neuropol_message = ''
-    for char in message.upper():
+    for char in "{}".format(" ".join(args)).upper():
         if char != ' ':
             neuropol_message += ':' + char + '_: '
     await ctx.send(neuropol_message)
