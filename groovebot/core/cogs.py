@@ -100,7 +100,7 @@ class MusicCog(commands.Cog):
             raise send_failure_message(ctx, 'Music could not be deleted due to an error.')
 
 
-class AbbreviationCog(commands.cog):
+class AbbreviationCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 

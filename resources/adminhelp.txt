@@ -1,10 +1,10 @@
 ****Groove Bot V2.0.0****
 Administrator commands.
 >>> ~~---------------~~:tools: Commands :tools:~~----------------~~
-**createalbum** `[acronym]` `[name]` - Creates an album.
+**createalbum** `[acronym]` `[description]` - Creates an album.
 **deletealbum** `[acronym]` - Creates an album.
-**createmusic** `[album_acronym]` `[acronym]` `[name]` `[url]` - Creates music associated to an album.
+**createmusic** `[album_acronym]` `[acronym]` `[description]` `[url]` - Creates music associated to an album.
 **deletemusic** `[acronym]` - Deleted music.
-**createabbreviation** `[acronym]` `[name]` - Creates an abbreviation.
+**createabbreviation** `[acronym]` `[description]` - Creates an abbreviation.
 **deleteabbreviation** `[acronym]` - Deletes an abbreviation.
 
