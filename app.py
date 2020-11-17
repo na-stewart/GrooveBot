@@ -2,7 +2,7 @@ import random
 
 from discord.ext import commands
 
-from groovebot.core.cogs import MusicCog, UtilsCog
+from groovebot.core.cogs import MusicCog, UtilsCog, AbbreviationCog
 from groovebot.core.config import config_parser
 from groovebot.core.lib.tortoise import tortoise_init
 from groovebot.core.utils import read_file
@@ -33,7 +33,7 @@ async def neuropol(ctx, *args):
 if __name__ == '__main__':
     bot.add_cog(MusicCog(bot))
     bot.add_cog(UtilsCog(bot))
+    bot.add_cog(AbbreviationCog(bot))
     bot.loop.create_task(tortoise_init())
     bot.command_prefix = config_parser['GROOVE']['prefix']
-
     bot.run(config_parser['GROOVE']['token'], bot=True)
