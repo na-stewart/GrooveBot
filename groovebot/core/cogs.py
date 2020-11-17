@@ -63,9 +63,9 @@ class MusicCog(commands.Cog):
 
     @has_permissions(administrator=True)
     @commands.command()
-    async def createalbum(self, ctx, acronym, name):
+    async def createalbum(self, ctx, acronym, description):
         try:
-            album = await Album().create(acronym=acronym, name=name)
+            album = await Album().create(acronym=acronym, description=description)
             await send_success_message(ctx, album.description + ' added to database.')
         except IntegrityError:
             await send_failure_message(ctx, 'Album with passed acronym exists.')
@@ -80,11 +80,11 @@ class MusicCog(commands.Cog):
 
     @has_permissions(administrator=True)
     @commands.command()
-    async def createmusic(self, ctx, album_acronym, acronym, name, url):
+    async def createmusic(self, ctx, album_acronym, acronym, description, url):
         album = await Album().filter(acronym=album_acronym).first()
         if album:
             try:
-                music = await Music().create(parent_uid=album.uid, acronym=acronym, name=name, url=url)
+                music = await Music().create(parent_uid=album.uid, acronym=acronym, description=description, url=url)
                 await send_success_message(ctx, music.description + ' added to database.')
             except IntegrityError:
                 await send_failure_message(ctx, 'Music with passed acronym exists.')
@@ -106,9 +106,9 @@ class AbbreviationCog(commands.Cog):
 
     @has_permissions(administrator=True)
     @commands.command()
-    async def createabbreviation(self, ctx, acronym, name):
+    async def createabbreviation(self, ctx, acronym, description):
         try:
-            abbreviation = await Abbreviation().create(acronym=acronym, name=name)
+            abbreviation = await Abbreviation().create(acronym=acronym, description=description)
             await send_success_message(ctx, abbreviation.description + ' added to database.')
         except IntegrityError:
             await send_failure_message(ctx, 'Abbreviation with passed acronym exists.')
