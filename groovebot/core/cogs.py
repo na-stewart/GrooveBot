@@ -73,7 +73,7 @@ class MusicCog(commands.Cog):
             album = await Album().create(acronym=acronym, value=title, description=description)
             await send_success_message(ctx, 'Album added to database.', album)
         except IntegrityError:
-            await send_failure_message(ctx, 'Album with passed acronym exists.')
+            await send_failure_message(ctx, 'Album with passed acronym exists or too many characters.')
 
     @has_permissions(administrator=True)
     @commands.command()
@@ -93,7 +93,7 @@ class MusicCog(commands.Cog):
                                              url=url)
                 await send_success_message(ctx, 'Music added to database!', music)
             except IntegrityError:
-                await send_failure_message(ctx, 'Music with passed acronym exists.')
+                await send_failure_message(ctx, 'Music with passed acronym exists or too many characters.')
         else:
             await send_failure_message(ctx, 'No album with passed acronym exists.')
 
@@ -117,7 +117,7 @@ class AbbreviationCog(commands.Cog):
             abbreviation = await Abbreviation().create(acronym=acronym, value=description)
             await send_success_message(ctx, 'Abbreviation added to database!', abbreviation)
         except IntegrityError:
-            await send_failure_message(ctx, 'Abbreviation with passed acronym exists.')
+            await send_failure_message(ctx, 'Abbreviation with passed acronym exists or too many characters.')
 
     @has_permissions(administrator=True)
     @commands.command()
