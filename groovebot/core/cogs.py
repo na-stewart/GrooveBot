@@ -139,6 +139,13 @@ class AbbreviationCog(commands.Cog):
         else:
             await send_failure_message(ctx, 'No abbreviations have been created.')
 
+    @commands.command()
+    async def getabbreviation(self, ctx, acronym):
+        abbreviation = await Abbreviation().filter(acronym=acronym).first()
+        if abbreviation:
+            await send_success_message(ctx, 'Abbreviation retrieved!', str(abbreviation))
+        else:
+            await send_failure_message(ctx, 'No abbreviation with passed acronym exists.')
 
 class EasterEggCog(commands.Cog):
 
