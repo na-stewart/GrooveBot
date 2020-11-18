@@ -81,7 +81,7 @@ class MusicCog(commands.Cog):
         if await Album().filter(acronym=acronym).delete() > 0:
             await send_success_message(ctx, 'Album deleted from database!')
         else:
-            await send_failure_message(ctx, 'No album or music with passed acronym exists.')
+            await send_failure_message(ctx, 'No album with passed acronym exists.')
 
     @has_permissions(administrator=True)
     @commands.command()
