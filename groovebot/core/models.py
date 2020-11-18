@@ -23,15 +23,24 @@ class Fact(BaseModel):
 
 class Abbreviation(BaseModel):
     acronym = fields.CharField(max_length=12, unique=True)
-    description = fields.CharField(max_length=45)
+    value = fields.CharField(max_length=45)
+
+    def __str__(self):
+        return f"***Acronym:*** `{self.acronym}`\n***Value:*** `{self.value}`"
 
 
 class Album(Abbreviation):
-    pass
+    description = fields.CharField(max_length=255)
+
+    def __str__(self):
+        return f"***Acronym:*** `{self.acronym}`\n***Title:*** `{self.value}`\n***Description:*** `{self.description}`"
 
 
-class Music(Album):
+class Music(Abbreviation):
     url = fields.CharField(max_length=45)
+
+    def __str__(self):
+        return f"***Acronym:*** `{self.acronym}`\n***Title:*** `{self.value}`\n***URL:*** {self.url}"
 
 
 class YTDLSource(discord.PCMVolumeTransformer):

@@ -1,30 +1,34 @@
 import os
-import random
 
 import discord
 from discord.ext import commands
-
 from discord.ext.commands import has_permissions
 from tortoise.exceptions import IntegrityError
 
 from groovebot.core.models import Album, Music, YTDLSource, Abbreviation
-from groovebot.core.utils import read_file, send_success_message, send_failure_message
+from groovebot.core.utils import read_file, send_failure_message, send_success_message
 
 
 class MusicCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    async def play_music(self, ctx, music):
-        channel = ctx.author.voice.channel
+    async def _attempt_voice_connect(self, channel):
         try:
             await channel.connect()
         except discord.ClientException:
             pass
-        for client in self.bot.voice_clients:
-            if client.channel is channel:
-                filename, player = await YTDLSource.from_url(music.url)
-                client.play(player, after=lambda e: os.remove(filename))
+
+    async def play_music(self, ctx, music):
+        try:
+            channel = ctx.author.voice.channel
+            await self._attempt_voice_connect(channel)
+            for client in self.bot.voice_clients:
+                if client.channel is channel:
+                    filename, player = await YTDLSource.from_url(music.url)
+                    client.play(player, after=lambda e: os.remove(filename))
+        except AttributeError:
+            pass
 
     @commands.command()
     async def getalbums(self, ctx):
@@ -34,7 +38,7 @@ class MusicCog(commands.Cog):
             embed.set_author(name='Here\'s a guide to all of the album abbreviations!')
             for album in albums:
                 embed.add_field(name=album.acronym, value=album.description, inline=True)
-            await ctx.send(embed=embed)
+            await send_success_message(ctx, 'Albums retrieved!', embed=embed)
         else:
             await send_failure_message(ctx, 'No albums have been created.')
 
@@ -43,11 +47,14 @@ class MusicCog(commands.Cog):
         album = await Album().filter(acronym=acronym).first()
         if album:
             music = await Music().filter(parent_uid=album.uid).all()
-            embed = discord.Embed(colour=discord.Colour.blue())
-            embed.set_author(name='Here\'s a guide to all of the music abbreviations!')
-            for song in music:
-                embed.add_field(name=song.acronym, value=song.description, inline=True)
-            await ctx.send(embed=embed)
+            if music:
+                embed = discord.Embed(colour=discord.Colour.blue())
+                embed.set_author(name='Here\'s a guide to all of the music abbreviations!')
+                for song in music:
+                    embed.add_field(name=song.acronym, value=song.value, inline=True)
+                await send_success_message(ctx, 'Album retrieved!', album, embed)
+            else:
+                await send_failure_message(ctx, 'There is currently no music in this album.')
         else:
             await send_failure_message(ctx, 'No album with passed acronym exists.')
 
@@ -55,18 +62,17 @@ class MusicCog(commands.Cog):
     async def getmusic(self, ctx, acronym):
         music = await Music().filter(acronym=acronym).first()
         if music:
-            success_message = music.url + '\nI can play music too! Simply join a voice channel.'
-            await send_success_message(ctx, success_message)
+            await send_success_message(ctx, 'Music retrieved, join a voice channel to play!', str(music))
             await self.play_music(ctx, music)
         else:
             await send_failure_message(ctx, 'No album or music with passed acronym exists.')
 
     @has_permissions(administrator=True)
     @commands.command()
-    async def createalbum(self, ctx, acronym, description):
+    async def createalbum(self, ctx, acronym, title, description):
         try:
-            album = await Album().create(acronym=acronym, description=description)
-            await send_success_message(ctx, album.description + ' added to database.')
+            album = await Album().create(acronym=acronym, value=title, description=description)
+            await send_success_message(ctx, 'Album added to database.', album)
         except IntegrityError:
             await send_failure_message(ctx, 'Album with passed acronym exists.')
 
@@ -74,18 +80,21 @@ class MusicCog(commands.Cog):
     @commands.command()
     async def deletealbum(self, ctx, acronym):
         try:
+
             await Album().filter(acronym=acronym).delete()
+            await send_success_message(ctx, 'Album deleted from database!')
         except IntegrityError:
             await send_failure_message(ctx, 'This album could not be deleted due to an error.')
 
     @has_permissions(administrator=True)
     @commands.command()
-    async def createmusic(self, ctx, album_acronym, acronym, description, url):
+    async def createmusic(self, ctx, album_acronym, acronym, title, url):
         album = await Album().filter(acronym=album_acronym).first()
         if album:
             try:
-                music = await Music().create(parent_uid=album.uid, acronym=acronym, description=description, url=url)
-                await send_success_message(ctx, music.description + ' added to database.')
+                music = await Music().create(parent_uid=album.uid, acronym=acronym, value=title,
+                                             url=url)
+                await send_success_message(ctx, 'Music added to database!', music)
             except IntegrityError:
                 await send_failure_message(ctx, 'Music with passed acronym exists.')
         else:
@@ -96,6 +105,7 @@ class MusicCog(commands.Cog):
     async def deletemusic(self, ctx, acronym):
         try:
             await Music().filter(acronym=acronym).delete()
+            await send_success_message(ctx, 'Music successfully deleted from database.')
         except IntegrityError:
             raise send_failure_message(ctx, 'Music could not be deleted due to an error.')
 
@@ -109,7 +119,7 @@ class AbbreviationCog(commands.Cog):
     async def createabbreviation(self, ctx, acronym, description):
         try:
             abbreviation = await Abbreviation().create(acronym=acronym, description=description)
-            await send_success_message(ctx, abbreviation.description + ' added to database.')
+            await send_success_message(ctx, 'Abbreviation added to database!', abbreviation)
         except IntegrityError:
             await send_failure_message(ctx, 'Abbreviation with passed acronym exists.')
 
@@ -118,18 +128,19 @@ class AbbreviationCog(commands.Cog):
     async def deleteabbreviation(self, ctx, acronym):
         try:
             await Abbreviation().filter(acronym=acronym).delete()
+            await send_success_message(ctx, 'Abbreviation deleted from database!')
         except IntegrityError:
             raise send_failure_message(ctx, 'Abbreviation could not be deleted due to an error.')
 
     @commands.command()
     async def getabbreviations(self, ctx):
-        abbreviations = await Abbreviation.filter().all()
+        abbreviations = await Abbreviation.all()
         if abbreviations:
             embed = discord.Embed(colour=discord.Colour.red())
             embed.set_author(name='Here\'s a guide to all of the server\'s abbreviations!')
             for abbreviation in abbreviations:
-                embed.add_field(name=abbreviation.acronym, value=abbreviation.description, inline=True)
-            await ctx.send(embed=embed)
+                embed.add_field(name=abbreviation.acronym, value=abbreviation.value, inline=True)
+            await send_success_message(ctx, 'Abbreviations retrieved!', embed=embed
         else:
             await send_failure_message(ctx, 'No abbreviations with passed acronym exists.')
 

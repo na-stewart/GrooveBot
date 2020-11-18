@@ -6,9 +6,8 @@ If you have any issues/requests contact Denyul or sunsetdev.
 **fact** - Retrieves an Animusic fact.
 **getalbums** - Retrieves all albums.
 **getalbum** `[acronym]` - Retrieves all music within an album.
-**getmusic** `[acronym]` - Retrieves url of music and can be played in a voice channel.
+**getmusic** `[acronym]` - Retrieves url of music. Will play on voice channel if you joined one.
 **getabbreviations** - Retrieves all Animusic specific abbreviations.
-**neuropol** `[message]` - Parses all text into neuropol. Does not require quotation marks for spacing.
 **stop** - Stops audio transmission.
 **leave** - Removes bot from voice channel.
 

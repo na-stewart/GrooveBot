@@ -2,7 +2,7 @@
 Administrator commands.
 **Argument Key:** `"Spaces must be enclosed with quotation marks"`
 >>> ~~---------------~~:tools: Commands :tools:~~----------------~~
-**createalbum** `[acronym]` `[description]` - Creates an album.
+**createalbum** `[acronym]` `[title]` `[description]` - Creates an album.
 **deletealbum** `[acronym]` - Deletes an album
 **createmusic** `[album_acronym]` `[acronym]` `[description]` `[url]` - Creates music associated to an album.
 **deletemusic** `[acronym]` - Deletes music.
