@@ -37,7 +37,7 @@ class MusicCog(commands.Cog):
             embed = discord.Embed(colour=discord.Colour.purple())
             embed.set_author(name='Here\'s a guide to all of the album abbreviations!')
             for album in albums:
-                embed.add_field(name=album.acronym, value=album.description, inline=True)
+                embed.add_field(name=album.acronym, value=album.value, inline=True)
             await send_success_message(ctx, 'Albums retrieved!', embed=embed)
         else:
             await send_failure_message(ctx, 'No albums have been created.')
@@ -47,14 +47,13 @@ class MusicCog(commands.Cog):
         album = await Album().filter(acronym=acronym).first()
         if album:
             music = await Music().filter(parent_uid=album.uid).all()
+            embed = None
             if music:
                 embed = discord.Embed(colour=discord.Colour.blue())
                 embed.set_author(name='Here\'s a guide to all of the music abbreviations!')
                 for song in music:
                     embed.add_field(name=song.acronym, value=song.value, inline=True)
-                await send_success_message(ctx, 'Album retrieved!', album, embed)
-            else:
-                await send_failure_message(ctx, 'There is currently no music in this album.')
+            await send_success_message(ctx, 'Album retrieved!', album, embed)
         else:
             await send_failure_message(ctx, 'No album with passed acronym exists.')
 
@@ -79,12 +78,10 @@ class MusicCog(commands.Cog):
     @has_permissions(administrator=True)
     @commands.command()
     async def deletealbum(self, ctx, acronym):
-        try:
-
-            await Album().filter(acronym=acronym).delete()
+        if await Album().filter(acronym=acronym).delete() > 0:
             await send_success_message(ctx, 'Album deleted from database!')
-        except IntegrityError:
-            await send_failure_message(ctx, 'This album could not be deleted due to an error.')
+        else:
+            await send_failure_message(ctx, 'No album or music with passed acronym exists.')
 
     @has_permissions(administrator=True)
     @commands.command()
@@ -103,11 +100,10 @@ class MusicCog(commands.Cog):
     @has_permissions(administrator=True)
     @commands.command()
     async def deletemusic(self, ctx, acronym):
-        try:
-            await Music().filter(acronym=acronym).delete()
+        if await Music().filter(acronym=acronym).delete() > 0:
             await send_success_message(ctx, 'Music successfully deleted from database.')
-        except IntegrityError:
-            raise send_failure_message(ctx, 'Music could not be deleted due to an error.')
+        else:
+            await send_failure_message(ctx, 'No music with this acronym could be found.')
 
 
 class AbbreviationCog(commands.Cog):
@@ -126,11 +122,10 @@ class AbbreviationCog(commands.Cog):
     @has_permissions(administrator=True)
     @commands.command()
     async def deleteabbreviation(self, ctx, acronym):
-        try:
-            await Abbreviation().filter(acronym=acronym).delete()
+        if await Abbreviation().filter(acronym=acronym).delete() > 0:
             await send_success_message(ctx, 'Abbreviation deleted from database!')
-        except IntegrityError:
-            raise send_failure_message(ctx, 'Abbreviation could not be deleted due to an error.')
+        else:
+            await send_failure_message(ctx, 'No abbreviation with passed acronym exists.')
 
     @commands.command()
     async def getabbreviations(self, ctx):
