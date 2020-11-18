@@ -114,7 +114,7 @@ class AbbreviationCog(commands.Cog):
     @commands.command()
     async def createabbreviation(self, ctx, acronym, description):
         try:
-            abbreviation = await Abbreviation().create(acronym=acronym, description=description)
+            abbreviation = await Abbreviation().create(acronym=acronym, value=description)
             await send_success_message(ctx, 'Abbreviation added to database!', abbreviation)
         except IntegrityError:
             await send_failure_message(ctx, 'Abbreviation with passed acronym exists.')
@@ -137,7 +137,7 @@ class AbbreviationCog(commands.Cog):
                 embed.add_field(name=abbreviation.acronym, value=abbreviation.value, inline=True)
             await send_success_message(ctx, 'Abbreviations retrieved!', embed=embed)
         else:
-            await send_failure_message(ctx, 'No abbreviations with passed acronym exists.')
+            await send_failure_message(ctx, 'No abbreviations have been created.')
 
 
 class EasterEggCog(commands.Cog):
