@@ -4,8 +4,8 @@ Administrator commands.
 >>> ~~---------------~~:tools: Commands :tools:~~----------------~~
 **createalbum** `[acronym]` `[title]` `[description]` - Creates an album.
 **deletealbum** `[acronym]` - Deletes an album
-**createmusic** `[album_acronym]` `[acronym]` `[description]` `[url]` - Creates music associated to an album.
+**createmusic** `[album_acronym]` `[acronym]` `[title]` `[url]` - Creates music associated to an album.
 **deletemusic** `[acronym]` - Deletes music.
-**createabbreviation** `[acronym]` `[description]` - Creates an abbreviation.
+**createabbreviation** `[acronym]` `[value]` - Creates an abbreviation.
 **deleteabbreviation** `[acronym]` - Deletes an abbreviation.
 
