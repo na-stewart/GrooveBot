@@ -1,7 +1,6 @@
 ****Groove Bot V2.0.0****
 Hello! I am GrooveBot, a bot specially coded for the r/Animusic Discord server!
 If you have any issues/requests contact Denyul or sunsetdev.
-**Argument Key:** `"Spaces must be enclosed with quotation marks"`
 >>> ~~---------------~~:tools: Commands :tools:~~----------------~~
 **fact** - Retrieves an Animusic fact.
 **getalbums** - Retrieves all albums.
