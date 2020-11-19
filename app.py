@@ -3,7 +3,7 @@ import random
 
 from discord.ext import commands
 
-from groovebot.core.cogs import MusicCog, UtilsCog, AbbreviationCog
+from groovebot.core.cogs import MusicCog, UtilsCog, AbbreviationCog, NeuropolCog
 from groovebot.core.config import config_parser
 from groovebot.core.lib.tortoise import tortoise_init
 from groovebot.core.utils import read_file
@@ -21,16 +21,6 @@ async def fact(ctx):
     await ctx.send(random.choice(await read_file('facts.txt', True)))
 
 
-@bot.command()
-async def neuropol(ctx, *args):
-    neuropol_message = ''
-    for char in "{}".format(" ".join(args)).upper():
-        if char != ' ':
-            neuropol_message += '\\:' + char + '_: '
-    print(neuropol_message)
-    await ctx.send('\\:eye:')
-    await ctx.message.delete()
-
 
 async def disconnect_from_voice_when_alone():
     while True:
@@ -42,6 +32,7 @@ async def disconnect_from_voice_when_alone():
 
 if __name__ == '__main__':
     bot.add_cog(MusicCog(bot))
+    bot.add_cog(NeuropolCog(bot))
     bot.add_cog(UtilsCog(bot))
     bot.add_cog(AbbreviationCog(bot))
     bot.loop.create_task(tortoise_init())

@@ -1,6 +1,8 @@
+import random
+import string
 import os
-
 import discord
+from PIL import ImageFont, Image, ImageDraw
 from discord.ext import commands
 from discord.ext.commands import has_permissions
 from tortoise.exceptions import IntegrityError
@@ -147,6 +149,29 @@ class AbbreviationCog(commands.Cog):
         else:
             await send_failure_message(ctx, 'No abbreviation with passed acronym exists.')
 
+
+class NeuropolCog(commands.Cog):
+    font = ImageFont.truetype("resources/NEUROPOL.ttf", 420)
+
+    def __init__(self, bot):
+        self.bot = bot
+
+    def text_to_neuropol(self, message):
+        file = ''.join(random.choice(string.ascii_lowercase) for i in range(5)) + '.png'
+        img = Image.new('RGBA', (4620, 550), (255, 0, 0, 0))
+        draw = ImageDraw.Draw(img)
+        draw.text((0, 0), message, (255,255,255), font=self.font)
+        img.save(file)
+        return file
+
+    @commands.command()
+    async def neuropol(self, ctx, *args):
+        neuropol_img = self.text_to_neuropol("{}".format(" ".join(args)).upper())
+        await ctx.send(file=discord.File(neuropol_img))
+        os.remove(neuropol_img)
+        await ctx.message.delete()
+
+
 class EasterEggCog(commands.Cog):
 
     def __init__(self, bot):
@@ -167,12 +192,12 @@ class UtilsCog(commands.Cog):
 
     @commands.command()
     async def help(self, ctx):
-        await ctx.send(await read_file('help.txt'))
+        await ctx.send(read_file('help.txt'))
 
     @has_permissions(administrator=True)
     @commands.command()
     async def adminhelp(self, ctx):
-        await ctx.send(await read_file('adminhelp.txt'))
+        await ctx.send(read_file('adminhelp.txt'))
 
     @commands.command()
     async def stop(self, ctx):
