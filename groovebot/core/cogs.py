@@ -166,10 +166,14 @@ class NeuropolCog(commands.Cog):
 
     @commands.command()
     async def neuropol(self, ctx, *args):
-        neuropol_img = self.text_to_neuropol("{}".format(" ".join(args)).upper())
-        await ctx.send(file=discord.File(neuropol_img))
-        os.remove(neuropol_img)
-        await ctx.message.delete()
+        message = "{}".format(" ".join(args)).upper()
+        if len(message) < 18:
+            neuropol_img = self.text_to_neuropol(message)
+            await ctx.send(file=discord.File(neuropol_img))
+            os.remove(neuropol_img)
+            await ctx.message.delete()
+        else:
+            await ctx.send(send_failure_message(ctx, 'Too many characters to parse!'))
 
 
 class EasterEggCog(commands.Cog):
