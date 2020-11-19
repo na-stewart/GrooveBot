@@ -106,7 +106,7 @@ prefix=.
 [TORTOISE]
 schema=groovebot.sqlite3
 models=['groovebot.core.models']
-generate=true
+generate=false
 ```
 
 <!-- CONTRIBUTING -->
