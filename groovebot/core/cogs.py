@@ -158,7 +158,7 @@ class NeuropolCog(commands.Cog):
 
     def text_to_neuropol(self, message):
         file = ''.join(random.choice(string.ascii_lowercase) for i in range(5)) + '.png'
-        img = Image.new('RGBA', (4620, 550), (255, 0, 0, 0))
+        img = Image.new('RGBA', (4730, 550), (255, 0, 0, 0))
         draw = ImageDraw.Draw(img)
         draw.text((0, 0), message, (255,255,255), font=self.font)
         img.save(file)
