@@ -8,6 +8,7 @@ If you have any issues/requests contact Denyul or sunsetdev.
 **getmusic** `[acronym]` - Retrieves url of music. Will play on voice channel if you joined one.
 **getabbreviations** - Retrieves all Animusic specific abbreviations.
 **getabbreviation** `[acronym]` - Retrieves a specific abbreviation.
+**neuropol** `[message]` - Parses message into neuropol font.
 **stop** - Stops audio transmission.
 **leave** - Removes bot from voice channel.
 
