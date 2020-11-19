@@ -171,7 +171,6 @@ class NeuropolCog(commands.Cog):
             neuropol_img = self.text_to_neuropol(message)
             await ctx.send(file=discord.File(neuropol_img))
             os.remove(neuropol_img)
-            await ctx.message.delete()
         else:
             await send_failure_message(ctx, 'Too many characters to parse!')
 
