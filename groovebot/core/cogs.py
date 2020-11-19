@@ -173,7 +173,7 @@ class NeuropolCog(commands.Cog):
             os.remove(neuropol_img)
             await ctx.message.delete()
         else:
-            await ctx.send(send_failure_message(ctx, 'Too many characters to parse!'))
+            await send_failure_message(ctx, 'Too many characters to parse!')
 
 
 class EasterEggCog(commands.Cog):
