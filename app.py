@@ -18,7 +18,7 @@ async def on_ready():
 
 @bot.command()
 async def fact(ctx):
-    await ctx.send(random.choice(await read_file('facts.txt', True)))
+    await ctx.send(random.choice(read_file('facts.txt', True)))
 
 
 
