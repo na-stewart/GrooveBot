@@ -167,7 +167,7 @@ class NeuropolCog(commands.Cog):
     @commands.command()
     async def neuropol(self, ctx, *args):
         message = "{}".format(" ".join(args)).upper()
-        if len(message) < 18:
+        if len(message) < 17:
             neuropol_img = self.text_to_neuropol(message)
             await ctx.send(file=discord.File(neuropol_img))
             os.remove(neuropol_img)
