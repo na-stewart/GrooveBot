@@ -151,7 +151,7 @@ https://discord.gg/yDfyhfA
 [issues-shield]: https://img.shields.io/github/issues/sunset-developer/GrooveBot.svg?style=flat-square
 [issues-url]: https://github.com/sunset-developer/GrooveBot/issues
 [license-shield]: https://img.shields.io/github/license/sunset-developer/GrooveBot.svg?style=flat-square
-[license-url]: https://github.com/sunset-developer/GrooveBot/blob/master/LICENSE.txt
+[license-url]: https://github.com/sunset-developer/GrooveBot/blob/master/LICENSE
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=flat-square&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/github_username
 [product-screenshot]: images/screenshot.png
