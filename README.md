@@ -79,6 +79,12 @@ First install pip, which contains all of the necessary packages.
 sudo apt install python3-pip
 ```
 
+Make sure to install ffmeg for audio capabilties.
+* ffmpeg
+```sh
+sudo apt install ffmpeg
+```
+
 ### Installation
 
 * Clone the repo
