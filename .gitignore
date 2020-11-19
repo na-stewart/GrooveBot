@@ -1,6 +1,3 @@
 # Project exclude paths
 /venv/
 /resources/groove.ini
-/groovebot.sqlite3
-/groovebot.sqlite3-shm
-/groovebot.sqlite3-wal
