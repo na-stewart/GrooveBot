@@ -47,7 +47,7 @@ class YTDLSource(discord.PCMVolumeTransformer):
     youtube_dl.utils.bug_reports_message = lambda: ''
 
     ytdl_format_options = {
-        'format': 'bestaudio/best',
+        'format': 'best',
         'outtmpl': '%(extractor)s-%(id)s-%(title)s.%(ext)s',
         'restrictfilenames': True,
         'noplaylist': True,
@@ -55,13 +55,11 @@ class YTDLSource(discord.PCMVolumeTransformer):
         'ignoreerrors': False,
         'logtostderr': False,
         'quiet': True,
-        'no_warnings': True,
-        'default_search': 'auto',
-        'source_address': '0.0.0.0'  # bind to ipv4 since ipv6 addresses cause issues sometimes
+        'no_warnings': True
     }
 
     ffmpeg_options = {
-        'options': '-vn'
+        'options': '-vn -vf scale=320:240 -b:a 320k'
     }
 
     ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
@@ -73,10 +71,10 @@ class YTDLSource(discord.PCMVolumeTransformer):
         self.url = data.get('url')
 
     @classmethod
-    async def from_url(cls, url, *, loop=None, stream=False):
+    async def from_url(cls, url, *, loop=None):
         loop = loop or asyncio.get_event_loop()
-        data = await loop.run_in_executor(None, lambda: cls.ytdl.extract_info(url, download=not stream))
+        data = await loop.run_in_executor(None, lambda: cls.ytdl.extract_info(url, download=True))
         if 'entries' in data:
             data = data['entries'][0]
-        filename = data['url'] if stream else cls.ytdl.prepare_filename(data)
+        filename = cls.ytdl.prepare_filename(data)
         return filename, cls(discord.FFmpegPCMAudio(filename, **cls.ffmpeg_options), data=data)
