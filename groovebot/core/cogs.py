@@ -151,14 +151,14 @@ class AbbreviationCog(commands.Cog):
 
 
 class NeuropolCog(commands.Cog):
-    font = ImageFont.truetype("resources/NEUROPOL.ttf", 420)
+    font = ImageFont.truetype("resources/NEUROPOL.ttf", 35)
 
     def __init__(self, bot):
         self.bot = bot
 
     def text_to_neuropol(self, message):
         file = ''.join(random.choice(string.ascii_lowercase) for i in range(5)) + '.png'
-        img = Image.new('RGBA', (4730, 550), (255, 0, 0, 0))
+        img = Image.new('RGBA', (400, 40), (255, 0, 0, 0))
         draw = ImageDraw.Draw(img)
         draw.text((0, 0), message, (255,255,255), font=self.font)
         img.save(file)
@@ -167,7 +167,7 @@ class NeuropolCog(commands.Cog):
     @commands.command()
     async def neuropol(self, ctx, *args):
         message = "{}".format(" ".join(args)).upper()
-        if len(message) < 17:
+        if len(message) < 16:
             neuropol_img = self.text_to_neuropol(message)
             await ctx.send(file=discord.File(neuropol_img))
             os.remove(neuropol_img)
