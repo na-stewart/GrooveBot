@@ -21,7 +21,6 @@ async def fact(ctx):
     await ctx.send(random.choice(read_file('facts.txt', True)))
 
 
-
 async def disconnect_from_voice_when_alone():
     while True:
         for client in bot.voice_clients:
