@@ -175,20 +175,6 @@ class NeuropolCog(commands.Cog):
             await send_failure_message(ctx, 'Too many characters to parse!')
 
 
-class EasterEggCog(commands.Cog):
-
-    def __init__(self, bot):
-        self.bot = bot
-
-    @commands.command()
-    async def pee(self, ctx):
-        await ctx.send('poo')
-
-    @commands.command(aliases=['pd3sg'])
-    async def pd3(self, ctx):
-        await ctx.send('https://docs.google.com/document/d/18pU0sbrRfMq3bqw-WYSVNHmGMCRqZuT0KJZHtStWA58/edit')
-
-
 class UtilsCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
