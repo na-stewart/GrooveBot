@@ -57,7 +57,8 @@ class MusicCog(commands.Cog):
                     embed.add_field(name=song.acronym, value=song.value, inline=True)
             await send_success_message(ctx, 'Album retrieved!', album, embed)
         else:
-            await send_failure_message(ctx, 'No album with passed acronym exists.')
+            await send_failure_message(ctx, 'No album with passed acronym exists. Perhaps you should try '
+                                            '.getabbreviation?')
 
     @commands.command()
     async def getmusic(self, ctx, acronym):
@@ -67,7 +68,7 @@ class MusicCog(commands.Cog):
             await self.play_music(ctx, music)
         else:
             await send_failure_message(ctx, 'No music with passed acronym exists. Perhaps you should try '
-                                            '.getabbreviations?')
+                                            '.getabbreviation?')
 
     @has_permissions(administrator=True)
     @commands.command()
@@ -140,7 +141,7 @@ class AbbreviationCog(commands.Cog):
                 embed.add_field(name=abbreviation.acronym, value=abbreviation.value, inline=True)
             await send_success_message(ctx, 'Abbreviations retrieved!', embed=embed)
         else:
-            await send_failure_message(ctx, 'No abbreviations have been created. Perhaps you should try .getalbum?')
+            await send_failure_message(ctx, 'No abbreviations have been created.')
 
     @commands.command()
     async def getabbreviation(self, ctx, acronym):
@@ -149,7 +150,7 @@ class AbbreviationCog(commands.Cog):
             await send_success_message(ctx, 'Abbreviation retrieved!', str(abbreviation))
         else:
             await send_failure_message(ctx, 'No abbreviation with passed acronym exists. Perhaps you should try '
-                                            '.getmusic?')
+                                            '.getmusic or .getalbum?')
 
 
 class NeuropolCog(commands.Cog):
