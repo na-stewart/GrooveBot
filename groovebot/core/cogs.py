@@ -140,7 +140,7 @@ class AbbreviationCog(commands.Cog):
                 embed.add_field(name=abbreviation.acronym, value=abbreviation.value, inline=True)
             await send_success_message(ctx, 'Abbreviations retrieved!', embed=embed)
         else:
-            await send_failure_message(ctx, 'No abbreviations have been created. Perhaps you should try .getmusic?')
+            await send_failure_message(ctx, 'No abbreviations have been created. Perhaps you should try .getalbum?')
 
     @commands.command()
     async def getabbreviation(self, ctx, acronym):
@@ -148,7 +148,8 @@ class AbbreviationCog(commands.Cog):
         if abbreviation:
             await send_success_message(ctx, 'Abbreviation retrieved!', str(abbreviation))
         else:
-            await send_failure_message(ctx, 'No abbreviation with passed acronym exists.')
+            await send_failure_message(ctx, 'No abbreviation with passed acronym exists. Perhaps you should try '
+                                            '.getmusic?')
 
 
 class NeuropolCog(commands.Cog):
