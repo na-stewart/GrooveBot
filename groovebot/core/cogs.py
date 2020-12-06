@@ -66,7 +66,8 @@ class MusicCog(commands.Cog):
             await send_success_message(ctx, 'Music retrieved, join a voice channel to play!', str(music))
             await self.play_music(ctx, music)
         else:
-            await send_failure_message(ctx, 'No music with passed acronym exists.')
+            await send_failure_message(ctx, 'No music with passed acronym exists. Perhaps you should try '
+                                            '.getabbreviations?')
 
     @has_permissions(administrator=True)
     @commands.command()
