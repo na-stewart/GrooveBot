@@ -136,7 +136,7 @@ class AbbreviationCog(commands.Cog):
         abbreviations = await Abbreviation.all()
         if abbreviations:
             embed = discord.Embed(colour=discord.Colour.red())
-            embed.set_author(name='Here\'s a guide to all of the server\'s abbreviations!')
+            embed.set_author(name='Here\'s a guide to some of the server\'s abbreviations!')
             for abbreviation in abbreviations:
                 embed.add_field(name=abbreviation.acronym, value=abbreviation.value, inline=True)
             await send_success_message(ctx, 'Abbreviations retrieved!', embed=embed)
