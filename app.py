@@ -20,7 +20,7 @@ async def on_ready():
 
 
 async def on_member_join_or_leave(member, file):
-    channel = discord.utils.get(member.guild.text_channels, name="general-discussion")
+    channel = discord.utils.get(member.guild.text_channels, name="general-discussion-1")
     response = random.choice(read_file(file, as_array=True)).format(member.mention)
     await channel.send(response)
 
