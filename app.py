@@ -34,6 +34,7 @@ async def on_member_join(member):
 async def on_member_remove(member):
     await on_member_join_or_leave(member, 'farewells.txt')
 
+
 @bot.command()
 async def fact(ctx):
     await ctx.send(random.choice(read_file('facts.txt', True)))
