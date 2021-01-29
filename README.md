@@ -66,6 +66,8 @@
 GrooveBot is a bot specially coded for the r/Animusic Discord server. Some of Groovebot's unique 
 features include album creation, abbreviation creation, neuropol parsing, join and leave messages, and can play music within voice channels.
 
+Currently, all data is stored locally on a SQLite database. A pre-populated database file is included with this repository. Use .help for user commands and .adminhelp for admin commands. 
+
 ## Images
 
 ![alt text](https://github.com/sunset-developer/GrooveBot/blob/master/images/groovebot1.png)
