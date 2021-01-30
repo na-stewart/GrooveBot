@@ -49,6 +49,7 @@
 ## Table of Contents
 
 * [About the Project](#about-the-project)
+* [Images](#Images)
 * [Getting Started](#getting-started)
   * [Prerequisites](#prerequisites)
   * [Installation](#installation)
@@ -63,7 +64,30 @@
 ## About The Project
 
 GrooveBot is a bot specially coded for the r/Animusic Discord server. Some of Groovebot's unique 
-features include album creation, abbreviation creation, neuropol parsing, and can play music within voice channels.
+features include album creation, abbreviation creation, neuropol parsing, join and leave messages, and can play music within voice channels.
+
+Currently, all data is stored locally on a SQLite database. A pre-populated database file is included with this repository. Use .help for user commands and .adminhelp for admin commands. 
+
+## Images
+
+![alt text](https://github.com/sunset-developer/GrooveBot/blob/master/images/groovebot1.png)
+
+![alt text](https://github.com/sunset-developer/GrooveBot/blob/master/images/groovebot3.png)
+
+![alt text](https://github.com/sunset-developer/GrooveBot/blob/master/images/groovebot4.png)
+
+![alt text](https://github.com/sunset-developer/GrooveBot/blob/master/images/groovebot5.png)
+
+![alt text](https://github.com/sunset-developer/GrooveBot/blob/master/images/groovebot6.png)
+
+![alt text](https://github.com/sunset-developer/GrooveBot/blob/master/images/groovebot7.png)
+
+![alt text](https://github.com/sunset-developer/GrooveBot/blob/master/images/groovebot8.png)
+
+![alt text](https://github.com/sunset-developer/GrooveBot/blob/master/images/groovebot9.png)
+
+![alt text](https://github.com/sunset-developer/GrooveBot/blob/master/images/groovebot11.png)
+
 
 <!-- GETTING STARTED -->
 ## Getting Started
