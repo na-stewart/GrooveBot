@@ -190,7 +190,7 @@ class ModerationCog(commands.Cog):
     async def get_strikes(self, ctx, member: discord.Member):
         strikes = await Strike.filter(member_id=member.id).all()
         if strikes:
-            embed = discord.Embed(colour=discord.Colour.dark_red)
+            embed = discord.Embed(colour=discord.Colour.dark_red())
             embed.set_author(name='Here are a list of strikes against ' + member.display_name + '!')
             for strike in strikes:
                 embed.add_field(name=strike.id, value=strike.reason, inline=True)
