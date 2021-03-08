@@ -168,6 +168,7 @@ class ModerationCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    @has_permissions(administrator=True)
     @commands.command()
     async def suspend(self, ctx, user: discord.Member):
         try:
@@ -180,6 +181,7 @@ class ModerationCog(commands.Cog):
             await failure_message(ctx, 'Could not suspend! Either your suspended role or verified role id in the '
                                        'config is incorrect!')
 
+    @has_permissions(administrator=True)
     @commands.command()
     async def pardon(self, ctx, user: discord.Member):
         try:
