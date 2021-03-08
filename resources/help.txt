@@ -1,4 +1,4 @@
-****Groove Bot V2.0.0****
+****Groove Bot V2.2.0****
 Hello! I am GrooveBot, a bot specially coded for the r/Animusic Discord server!
 If you have any issues/requests contact Denyul or sunsetdev.
 >>> ~~---------------~~:tools: Commands :tools:~~----------------~~
@@ -8,7 +8,6 @@ If you have any issues/requests contact Denyul or sunsetdev.
 **getmusic** `[acronym]` - Retrieves url of music. Will play on voice channel if you joined one.
 **getabbreviations** - Retrieves most Animusic specific abbreviations.
 **getabbreviation** `[acronym]` - Retrieves a specific abbreviation.
-**neuropol** `[message]` - Parses message into neuropol font.
 **stop** - Stops audio transmission.
 **leave** - Removes bot from voice channel.
 

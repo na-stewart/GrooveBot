@@ -1,4 +1,4 @@
-****Groove Bot V2.0.0****
+****Groove Bot V2.2.0****
 Administrator commands.
 **Argument Help:** `"Spaces must be enclosed with quotation marks"`
 >>> ~~---------------~~:tools: Commands :tools:~~----------------~~
@@ -8,4 +8,7 @@ Administrator commands.
 **deletemusic** `[acronym]` - Deletes music.
 **createabbreviation** `[acronym]` `[value]` - Creates an abbreviation.
 **deleteabbreviation** `[acronym]` - Deletes an abbreviation.
+**suspend** `[mention]` - Suspends a member of the server.
+**pardon** `[mention]` - Removes a suspension of a member of the server.
+
 

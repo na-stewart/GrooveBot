@@ -1,12 +1,12 @@
-async def send_failure_message(ctx, message):
+async def failure_message(ctx, message):
     await ctx.send(':x: **' + message + '**')
 
 
-async def send_success_message(ctx, message, model=None, embed=None):
-    success_message = ':white_check_mark: __** ' + message + '**__'
+async def success_message(ctx, message, model=None, embed=None):
+    message = ':white_check_mark: __** ' + message + '**__'
     if model:
-        success_message += '\n' + str(model)
-    await ctx.send(success_message, embed=embed)
+        message += '\n' + str(model)
+    await ctx.send(message, embed=embed)
 
 
 def read_file(path, as_array=False):

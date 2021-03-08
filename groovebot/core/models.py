@@ -16,11 +16,6 @@ class BaseModel(Model):
     class Meta:
         abstract = True
 
-
-class Fact(BaseModel):
-    content = fields.CharField(max_length=255)
-
-
 class Abbreviation(BaseModel):
     acronym = fields.CharField(max_length=12, unique=True)
     value = fields.CharField(max_length=45)
@@ -30,7 +25,7 @@ class Abbreviation(BaseModel):
 
 
 class Album(Abbreviation):
-    description = fields.CharField(max_length=255)
+    description = fields.TextField()
 
     def __str__(self):
         return f"***Acronym:*** `{self.acronym}`\n***Title:*** `{self.value}`\n***Description:*** `{self.description}`"
@@ -47,7 +42,7 @@ class YTDLSource(discord.PCMVolumeTransformer):
     youtube_dl.utils.bug_reports_message = lambda: ''
 
     ytdl_format_options = {
-        'format': 'best',
+        'format': 'bestaudio/best',
         'outtmpl': '%(extractor)s-%(id)s-%(title)s.%(ext)s',
         'restrictfilenames': True,
         'noplaylist': True,
@@ -55,11 +50,13 @@ class YTDLSource(discord.PCMVolumeTransformer):
         'ignoreerrors': False,
         'logtostderr': False,
         'quiet': True,
-        'no_warnings': True
+        'no_warnings': True,
+        'default_search': 'auto',
+        'source_address': '0.0.0.0'
     }
 
     ffmpeg_options = {
-        'options': '-vn -vf scale=320:240 -b:a 320k'
+        'options': '-vn'
     }
 
     ytdl = youtube_dl.YoutubeDL(ytdl_format_options)

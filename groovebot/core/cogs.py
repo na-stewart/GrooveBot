@@ -1,51 +1,70 @@
 import random
-import string
-import os
+
 import discord
-from PIL import ImageFont, Image, ImageDraw
 from discord.ext import commands
 from discord.ext.commands import has_permissions
 from tortoise.exceptions import IntegrityError
 
-from groovebot.core.models import Album, Music, YTDLSource, Abbreviation
-from groovebot.core.utils import read_file, send_failure_message, send_success_message
+from groovebot.core.config import config
+from groovebot.core.models import Album, Music, Abbreviation
+from groovebot.core.utils import read_file, failure_message, success_message
 
 
 class MusicCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    async def _attempt_voice_connect(self, channel):
-        try:
-            await channel.connect()
-        except discord.ClientException:
-            pass
+    @commands.command(name='getmusic')
+    async def get_music(self, ctx, acronym):
+        music = await Music().filter(acronym=acronym).first()
+        if music:
+            await success_message(ctx, 'Music retrieved!', str(music))
+        else:
+            await failure_message(ctx, 'No music with passed acronym exists. Perhaps you should try '
+                                       '.getabbreviation?')
 
-    async def play_music(self, ctx, music):
-        try:
-            channel = ctx.author.voice.channel
-            await self._attempt_voice_connect(channel)
-            for client in self.bot.voice_clients:
-                if client.channel is channel:
-                    filename, player = await YTDLSource.from_url(music.url)
-                    client.play(player, after=lambda e: os.remove(filename))
-        except AttributeError:
-            pass
+    @has_permissions(administrator=True)
+    @commands.command(name='createmusic')
+    async def create_music(self, ctx, album_acronym, acronym, title, url):
+        album = await Album().filter(acronym=album_acronym).first()
+        if album:
+            try:
+                music = await Music().create(parent_uid=album.uid, acronym=acronym, value=title,
+                                             url=url)
+                await success_message(ctx, 'Music added to database!', music)
+            except IntegrityError:
+                await failure_message(ctx, 'Music with passed acronym exists or too many characters.')
+        else:
+            await failure_message(ctx, 'No album with passed acronym exists.')
 
-    @commands.command()
-    async def getalbums(self, ctx):
+    @has_permissions(administrator=True)
+    @commands.command(name='deletemusic')
+    async def delete_music(self, ctx, acronym):
+        if await Music().filter(acronym=acronym).delete() == 1:
+            await success_message(ctx, 'Music successfully deleted from database.')
+        else:
+            await failure_message(ctx, 'Music has not been deleted successfully.')
+
+
+class AlbumCog(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+
+    @commands.command(name='getalbums')
+    async def get_albums(self, ctx):
         albums = await Album().all()
         if albums:
             embed = discord.Embed(colour=discord.Colour.purple())
             embed.set_author(name='Here\'s a guide to all of the album abbreviations!')
             for album in albums:
                 embed.add_field(name=album.acronym, value=album.value, inline=True)
-            await send_success_message(ctx, 'Albums retrieved!', embed=embed)
+            await success_message(ctx, 'Albums retrieved! Use **getalbum** to retrieve album content.',
+                                  embed=embed)
         else:
-            await send_failure_message(ctx, 'No albums have been created.')
+            await failure_message(ctx, 'No albums have been created.')
 
-    @commands.command()
-    async def getalbum(self, ctx, acronym):
+    @commands.command(name='getalbum')
+    async def get_album(self, ctx, acronym):
         album = await Album().filter(acronym=acronym).first()
         if album:
             music = await Music().filter(parent_uid=album.uid).all()
@@ -54,62 +73,29 @@ class MusicCog(commands.Cog):
                 embed.set_author(name='Here\'s a guide to all of the music abbreviations!')
                 for song in music:
                     embed.add_field(name=song.acronym, value=song.value, inline=True)
-                await send_success_message(ctx, 'Album retrieved!', album, embed)
+                await success_message(ctx, 'Album retrieved! Use **getmusic** to retrieve music content.', album, embed)
             else:
-                await send_failure_message(ctx, 'This album contains no music.')
-
+                await failure_message(ctx, 'This album contains no music.')
         else:
-            await send_failure_message(ctx, 'No album with passed acronym exists. Perhaps you should try '
-                                            '.getabbreviation?')
-
-    @commands.command()
-    async def getmusic(self, ctx, acronym):
-        music = await Music().filter(acronym=acronym).first()
-        if music:
-            await send_success_message(ctx, 'Music retrieved, join a voice channel to play!', str(music))
-            await self.play_music(ctx, music)
-        else:
-            await send_failure_message(ctx, 'No music with passed acronym exists. Perhaps you should try '
-                                            '.getabbreviation?')
+            await failure_message(ctx, 'No album with passed acronym exists. Perhaps you should try '
+                                       '.getabbreviation?')
 
     @has_permissions(administrator=True)
-    @commands.command()
-    async def createalbum(self, ctx, acronym, title, description):
+    @commands.command(name='createalbum')
+    async def create_album(self, ctx, acronym, title, description):
         try:
             album = await Album().create(acronym=acronym, value=title, description=description)
-            await send_success_message(ctx, 'Album added to database.', album)
+            await success_message(ctx, 'Album added to database.', album)
         except IntegrityError:
-            await send_failure_message(ctx, 'Album with passed acronym exists or too many characters.')
+            await failure_message(ctx, 'Album with passed acronym exists or too many characters.')
 
     @has_permissions(administrator=True)
-    @commands.command()
-    async def deletealbum(self, ctx, acronym):
+    @commands.command(name='deletealbum')
+    async def delete_album(self, ctx, acronym):
         if await Album().filter(acronym=acronym).delete() > 0:
-            await send_success_message(ctx, 'Album deleted from database!')
+            await success_message(ctx, 'Album deleted from database!')
         else:
-            await send_failure_message(ctx, 'No album with passed acronym exists.')
-
-    @has_permissions(administrator=True)
-    @commands.command()
-    async def createmusic(self, ctx, album_acronym, acronym, title, url):
-        album = await Album().filter(acronym=album_acronym).first()
-        if album:
-            try:
-                music = await Music().create(parent_uid=album.uid, acronym=acronym, value=title,
-                                             url=url)
-                await send_success_message(ctx, 'Music added to database!', music)
-            except IntegrityError:
-                await send_failure_message(ctx, 'Music with passed acronym exists or too many characters.')
-        else:
-            await send_failure_message(ctx, 'No album with passed acronym exists.')
-
-    @has_permissions(administrator=True)
-    @commands.command()
-    async def deletemusic(self, ctx, acronym):
-        if await Music().filter(acronym=acronym).delete() > 0:
-            await send_success_message(ctx, 'Music successfully deleted from database.')
-        else:
-            await send_failure_message(ctx, 'No music with this acronym could be found.')
+            await failure_message(ctx, 'No album with passed acronym exists.')
 
 
 class AbbreviationCog(commands.Cog):
@@ -117,70 +103,45 @@ class AbbreviationCog(commands.Cog):
         self.bot = bot
 
     @has_permissions(administrator=True)
-    @commands.command()
-    async def createabbreviation(self, ctx, acronym, description):
+    @commands.command(name='createabbreviation')
+    async def create_abbreviation(self, ctx, acronym, description):
         try:
             abbreviation = await Abbreviation().create(acronym=acronym, value=description)
-            await send_success_message(ctx, 'Abbreviation added to database!', abbreviation)
+            await success_message(ctx, 'Abbreviation added to database!', abbreviation)
         except IntegrityError:
-            await send_failure_message(ctx, 'Abbreviation with passed acronym exists or too many characters.')
+            await failure_message(ctx, 'Abbreviation with passed acronym exists or too many characters.')
 
     @has_permissions(administrator=True)
-    @commands.command()
-    async def deleteabbreviation(self, ctx, acronym):
+    @commands.command(name='deleteabbreviation')
+    async def delete_abbreviation(self, ctx, acronym):
         if await Abbreviation().filter(acronym=acronym).delete() > 0:
-            await send_success_message(ctx, 'Abbreviation deleted from database!')
+            await success_message(ctx, 'Abbreviation deleted from database!')
         else:
-            await send_failure_message(ctx, 'No abbreviation with passed acronym exists.')
+            await failure_message(ctx, 'No abbreviation with passed acronym exists.')
 
-    @commands.command()
-    async def getabbreviations(self, ctx):
+    @commands.command(name='getabbreviations')
+    async def get_abbreviations(self, ctx):
         abbreviations = await Abbreviation.all()
         if abbreviations:
             embed = discord.Embed(colour=discord.Colour.red())
             embed.set_author(name='Here\'s a guide to some of the server\'s abbreviations!')
             for abbreviation in abbreviations:
                 embed.add_field(name=abbreviation.acronym, value=abbreviation.value, inline=True)
-            await send_success_message(ctx, 'Abbreviations retrieved!', embed=embed)
+            await success_message(ctx, 'Abbreviations retrieved!', embed=embed)
         else:
-            await send_failure_message(ctx, 'No abbreviations have been created.')
+            await failure_message(ctx, 'No abbreviations have been created.')
 
-    @commands.command()
-    async def getabbreviation(self, ctx, acronym):
+    @commands.command(name='getabbreviation')
+    async def get_abbreviation(self, ctx, acronym):
         abbreviation = await Abbreviation().filter(acronym=acronym).first()
         if abbreviation:
-            await send_success_message(ctx, 'Abbreviation retrieved!', str(abbreviation))
+            await success_message(ctx, 'Abbreviation retrieved!', str(abbreviation))
         else:
-            await send_failure_message(ctx, 'No abbreviation with passed acronym exists. Perhaps you should try '
-                                            '.getmusic or .getalbum?')
+            await failure_message(ctx, 'No abbreviation with passed acronym exists. Perhaps you should try '
+                                       '.getmusic or .getalbum?')
 
 
-class NeuropolCog(commands.Cog):
-    font = ImageFont.truetype("resources/NEUROPOL.ttf", 35)
-
-    def __init__(self, bot):
-        self.bot = bot
-
-    def text_to_neuropol(self, message):
-        file = ''.join(random.choice(string.ascii_lowercase) for i in range(5)) + '.png'
-        img = Image.new('RGBA', (400, 40), (255, 0, 0, 0))
-        draw = ImageDraw.Draw(img)
-        draw.text((0, 0), message, (255,255,255), font=self.font)
-        img.save(file)
-        return file
-
-    @commands.command()
-    async def neuropol(self, ctx, *args):
-        message = "{}".format(" ".join(args)).upper()
-        if len(message) < 17:
-            neuropol_img = self.text_to_neuropol(message)
-            await ctx.send(file=discord.File(neuropol_img))
-            os.remove(neuropol_img)
-        else:
-            await send_failure_message(ctx, 'Too many characters to parse!')
-
-
-class UtilsCog(commands.Cog):
+class HelpCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -189,19 +150,44 @@ class UtilsCog(commands.Cog):
         await ctx.send(read_file('help.txt'))
 
     @has_permissions(administrator=True)
-    @commands.command()
-    async def adminhelp(self, ctx):
+    @commands.command(name='adminhelp')
+    async def admin_help(self, ctx):
         await ctx.send(read_file('adminhelp.txt'))
 
-    @commands.command()
-    async def stop(self, ctx):
-        for client in self.bot.voice_clients:
-            if client.channel is ctx.author.voice.channel:
-                client.stop()
+
+class ExtrasCog(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
 
     @commands.command()
-    async def leave(self, ctx):
-        await self.stop(ctx)
-        for client in self.bot.voice_clients:
-            if client.channel is ctx.author.voice.channel:
-                await client.disconnect()
+    async def fact(self, ctx):
+        await ctx.send(random.choice(read_file('facts.txt', True)))
+
+
+class ModerationCog(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+
+    @commands.command()
+    async def suspend(self, ctx, user: discord.Member):
+        try:
+            await user.add_roles(ctx.guild.get_role(int(config['GROOVE']['suspended_id'])))
+            await user.remove_roles(ctx.author.guild.get_role(int(config['GROOVE']['verified_id'])))
+            await ctx.author.send('You are temporarily suspended from the Animusic Discord server. '
+                                  'Please await further information from the staff.')
+            await success_message(ctx, 'Member has been suspended!')
+        except AttributeError:
+            await failure_message(ctx, 'Could not suspend! Either your suspended role or verified role id in the '
+                                       'config is incorrect!')
+
+    @commands.command()
+    async def pardon(self, ctx, user: discord.Member):
+        try:
+            await user.add_roles(ctx.guild.get_role(int(config['GROOVE']['verified_id'])))
+            await user.remove_roles(ctx.author.guild.get_role(int(config['GROOVE']['suspended_id'])))
+            await ctx.author.send('You are no longer suspended and your access to the Animusic Discord server has '
+                                  'been reinstated. Please follow the rules!')
+            await success_message(ctx, 'Member has been pardoned!')
+        except AttributeError:
+            await failure_message(ctx, 'Could not suspend! Either your suspended role or verified role id in the '
+                                       'config is incorrect!')
