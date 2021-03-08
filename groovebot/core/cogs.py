@@ -173,9 +173,9 @@ class ModerationCog(commands.Cog):
     async def suspend(self, ctx, user: discord.Member):
         try:
             await user.add_roles(ctx.guild.get_role(int(config['GROOVE']['suspended_id'])))
-            await user.remove_roles(ctx.author.guild.get_role(int(config['GROOVE']['verified_id'])))
+            await user.remove_roles(ctx.guild.get_role(int(config['GROOVE']['verified_id'])))
             await user.send('You are temporarily suspended from the Animusic Discord server. '
-                                  'Please await further information from the staff.')
+                            'Please await further information from the staff.')
             await success_message(ctx, 'Member has been suspended!')
         except AttributeError:
             await failure_message(ctx, 'Could not suspend! Either your suspended role or verified role id in the '
@@ -186,9 +186,9 @@ class ModerationCog(commands.Cog):
     async def pardon(self, ctx, user: discord.Member):
         try:
             await user.add_roles(ctx.guild.get_role(int(config['GROOVE']['verified_id'])))
-            await user.remove_roles(ctx.author.guild.get_role(int(config['GROOVE']['suspended_id'])))
+            await user.remove_roles(ctx.guild.get_role(int(config['GROOVE']['suspended_id'])))
             await user.send('You are no longer suspended and your access to the Animusic Discord server has '
-                                  'been reinstated. Please follow the rules!')
+                            'been reinstated. Please follow the rules!')
             await success_message(ctx, 'Member has been pardoned!')
         except AttributeError:
             await failure_message(ctx, 'Could not suspend! Either your suspended role or verified role id in the '
