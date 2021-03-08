@@ -1,5 +1,5 @@
 ****Groove Bot V2.2.0****
-Administrator commands.
+Moderator commands.
 **Argument Help:** `"Spaces must be enclosed with quotation marks"`
 >>> ~~---------------~~:tools: Commands :tools:~~----------------~~
 **createalbum** `[acronym]` `[title]` `[description]` - Creates an album.

@@ -3,7 +3,7 @@ async def failure_message(ctx, message):
 
 
 async def success_message(ctx, message, model=None, embed=None):
-    message = ':white_check_mark: __** ' + message + '**__'
+    message = ':white_check_mark: ** ' + message + '**'
     if model:
         message += '\n' + str(model)
     await ctx.send(message, embed=embed)

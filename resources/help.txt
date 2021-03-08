@@ -5,7 +5,7 @@ If you have any issues/requests contact Denyul or sunsetdev.
 **fact** - Retrieves an Animusic fact.
 **getalbums** - Retrieves all albums.
 **getalbum** `[acronym]` - Retrieves all music within an album.
-**getmusic** `[acronym]` - Retrieves url of music. Will play on voice channel if you joined one.
+**getmusic** `[acronym]` - Retrieves url and info of music.
 **getabbreviations** - Retrieves most Animusic specific abbreviations.
 **getabbreviation** `[acronym]` - Retrieves a specific abbreviation.
 **stop** - Stops audio transmission.
