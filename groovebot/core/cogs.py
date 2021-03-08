@@ -190,22 +190,21 @@ class ModerationCog(commands.Cog):
     async def get_strikes(self, ctx, member: discord.Member):
         strikes = await Strike.filter(member_id=member.id).all()
         if strikes:
-            embed = discord.Embed(colour=discord.Colour.red())
+            embed = discord.Embed(colour=discord.Colour.dark_red)
             embed.set_author(name='Here are a list of strikes against ' + member.display_name + '!')
             for strike in strikes:
-                embed.add_field(name=str(strike.date_created).split()[0], value=strike.reason, inline=True)
+                embed.add_field(name=strike.id, value=strike.reason, inline=True)
             await success_message(ctx, 'Strikes retrieved!', embed=embed)
         else:
-            await failure_message(ctx, 'No strikes for this user exist!')
+            await failure_message(ctx, 'No strikes for this member exist!')
 
     @has_permissions(manage_messages=True)
-    @commands.command(name='strikestrike')
-    async def delete_strike(self, ctx, member: discord.Member, reason):
-        try:
-            abbreviation = await Abbreviation.create(member_id=member.id, reason=reason)
-            await success_message(ctx, 'Strike added to database!', abbreviation)
-        except IntegrityError:
-            await failure_message(ctx, 'Strike reason is too long.')
+    @commands.command()
+    async def unstrike(self, ctx, member: discord.Member, number):
+        if await Strike.filter(member_id=member.id, id=number).delete() > 0:
+            await success_message(ctx, 'Strike deleted from database!')
+        else:
+            await failure_message(ctx, 'Could not find strike with member or number.')
 
     @has_permissions(manage_messages=True)
     @commands.command()
