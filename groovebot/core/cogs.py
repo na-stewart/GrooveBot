@@ -174,7 +174,7 @@ class ModerationCog(commands.Cog):
         try:
             await user.add_roles(ctx.guild.get_role(int(config['GROOVE']['suspended_id'])))
             await user.remove_roles(ctx.author.guild.get_role(int(config['GROOVE']['verified_id'])))
-            await ctx.author.send('You are temporarily suspended from the Animusic Discord server. '
+            await user.send('You are temporarily suspended from the Animusic Discord server. '
                                   'Please await further information from the staff.')
             await success_message(ctx, 'Member has been suspended!')
         except AttributeError:
@@ -187,7 +187,7 @@ class ModerationCog(commands.Cog):
         try:
             await user.add_roles(ctx.guild.get_role(int(config['GROOVE']['verified_id'])))
             await user.remove_roles(ctx.author.guild.get_role(int(config['GROOVE']['suspended_id'])))
-            await ctx.author.send('You are no longer suspended and your access to the Animusic Discord server has '
+            await user.send('You are no longer suspended and your access to the Animusic Discord server has '
                                   'been reinstated. Please follow the rules!')
             await success_message(ctx, 'Member has been pardoned!')
         except AttributeError:
