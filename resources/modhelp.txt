@@ -10,6 +10,6 @@ Moderator commands.
 **deleteabbreviation** `[acronym]` - Deletes an abbreviation.
 **strike** `[mention]` `[reason]` - Creates a strike associated to a member.
 **getstrikes** `[mention]` - Gets all strikes associated to a user.
-**removestrike** `[number]` - Deleted a strike associated to a user.
+**deletestrike** `[number]` - Deleted a strike associated to a user.
 **suspend** `[mention]` - Suspends a member of the server.
 **pardon** `[mention]` - Removes a suspension of a member of the server.
