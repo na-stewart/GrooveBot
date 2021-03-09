@@ -20,8 +20,8 @@ class MusicCog(commands.Cog):
         if music:
             await success_message(ctx, 'Music retrieved!', str(music))
         else:
-            await failure_message(ctx, 'No music with passed acronym exists. Perhaps you should try '
-                                       '`getabbreviation`?')
+            await failure_message(ctx, 'No music with passed acronym exists. Perhaps you should try the '
+                                       '`getabbreviation` command?')
 
     @has_permissions(manage_messages=True)
     @commands.command(name='createmusic')
@@ -58,7 +58,7 @@ class AlbumCog(commands.Cog):
             embed.set_author(name='Here\'s a guide to all of the album abbreviations!')
             for album in albums:
                 embed.add_field(name=album.acronym, value=album.value, inline=True)
-            await success_message(ctx, 'Albums retrieved! Use `getalbum` to retrieve album content.',
+            await success_message(ctx, 'Albums retrieved! Use the `getalbum` command to retrieve album content.',
                                   embed=embed)
         else:
             await failure_message(ctx, 'No albums have been created.')
@@ -73,12 +73,13 @@ class AlbumCog(commands.Cog):
                 embed.set_author(name='Here\'s a guide to all of the music abbreviations!')
                 for song in music:
                     embed.add_field(name=song.acronym, value=song.value, inline=True)
-                await success_message(ctx, 'Album retrieved! Use `getmusic` to retrieve music content.', album, embed)
+                await success_message(ctx, 'Album retrieved! Use the `getmusic` command to retrieve music content.',
+                                      album, embed)
             else:
                 await failure_message(ctx, 'This album contains no music.')
         else:
-            await failure_message(ctx, 'No album with passed acronym exists. Perhaps you should try '
-                                       '`getabbreviation`?')
+            await failure_message(ctx, 'No album with passed acronym exists. Perhaps you should try the '
+                                       '`getabbreviation` command?')
 
     @has_permissions(manage_messages=True)
     @commands.command(name='createalbum')
@@ -137,8 +138,8 @@ class AbbreviationCog(commands.Cog):
         if abbreviation:
             await success_message(ctx, 'Abbreviation retrieved!', str(abbreviation))
         else:
-            await failure_message(ctx, 'No abbreviation with passed acronym exists. Perhaps you should try '
-                                       '`getmusic` or `getalbum`?')
+            await failure_message(ctx, 'No abbreviation with passed acronym exists. Perhaps you should try the'
+                                       '`getmusic` or `getalbum` command?')
 
 
 class HelpCog(commands.Cog):
