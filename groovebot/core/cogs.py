@@ -165,8 +165,8 @@ class MiscCog(commands.Cog):
 
     @commands.command()
     async def verify(self, ctx):
-        if ctx.guild.get_member_role(int(config['GROOVE']['suspended_role_id'])) not in ctx.author.roles:
-            role = ctx.guild.get_member_role(int(config['GROOVE']['verified_role_id']))
+        if ctx.guild.get_role(int(config['GROOVE']['suspended_role_id'])) not in ctx.author.roles:
+            role = ctx.guild.get_role(int(config['GROOVE']['verified_role_id']))
             await ctx.author.add_roles(role)
 
     @has_permissions(manage_messages=True)
@@ -180,7 +180,7 @@ class ModerationCog(commands.Cog):
         self.bot = bot
 
     def get_member_role(self, ctx, suspend):
-        return ctx.guild.get_member_role(int(config['GROOVE']['suspended_role_id'])) if suspend \
+        return ctx.guild.get_role(int(config['GROOVE']['suspended_role_id'])) if suspend \
             else ctx.guild.get_member_role(int(config['GROOVE']['verified_role_id']))
 
     async def handle_member_roles(self, ctx, member, suspend):
