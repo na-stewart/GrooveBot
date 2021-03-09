@@ -13,5 +13,3 @@ Moderator commands.
 **removestrike** `[number]` - Deleted a strike associated to a user.
 **suspend** `[mention]` - Suspends a member of the server.
 **pardon** `[mention]` - Removes a suspension of a member of the server.
-
-
