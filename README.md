@@ -72,6 +72,8 @@ Currently, all data is stored locally on a SQLite database. A pre-populated data
 
 ![alt text](https://github.com/sunset-developer/GrooveBot/blob/master/images/groovebot1.png)
 
+![alt text](https://github.com/sunset-developer/GrooveBot/blob/master/images/groovebot2.png)
+
 ![alt text](https://github.com/sunset-developer/GrooveBot/blob/master/images/groovebot3.png)
 
 ![alt text](https://github.com/sunset-developer/GrooveBot/blob/master/images/groovebot4.png)
@@ -86,7 +88,10 @@ Currently, all data is stored locally on a SQLite database. A pre-populated data
 
 ![alt text](https://github.com/sunset-developer/GrooveBot/blob/master/images/groovebot9.png)
 
+![alt text](https://github.com/sunset-developer/GrooveBot/blob/master/images/groovebot10.png)
+
 ![alt text](https://github.com/sunset-developer/GrooveBot/blob/master/images/groovebot11.png)
+
 
 
 <!-- GETTING STARTED -->
@@ -100,12 +105,6 @@ First install pip, which contains all of the necessary packages.
 * pip
 ```sh
 sudo apt install python3-pip
-```
-
-Make sure to install ffmeg for audio capabilties.
-* ffmpeg
-```sh
-sudo apt install ffmpeg
 ```
 
 ### Installation
@@ -123,13 +122,16 @@ pip3 install -r requirements.txt
 * Create a groove.ini file in the GrooveBot/resources directory, then configure GrooveBot using the example below:
 ```ini
 [GROOVE]
-token=bottoken
+token=NYeeOweIPUyuHHuygODQ0MTYx.X7PcFg.k-BedTOIUgwOHIBbsQSi5aVAE
 prefix=.
+general_channel_id=general-discussion-1
+suspended_role_id=818172621720083812
+verified_role_id=827182728768211978
 
 [TORTOISE]
 schema=groovebot.sqlite3
-models=['groovebot.core.models']
-generate=false
+models=groovebot.core.models
+generate=true
 ```
 
 <!-- CONTRIBUTING -->
