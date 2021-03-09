@@ -41,4 +41,5 @@ class Strike(BaseModel):
     reason = fields.CharField(max_length=45)
 
     def __str__(self):
-        return f"***Number:*** `{str(self.id).split(' ')[0]}`\n***Reason:*** `{self.reason}`"
+        return f"***Date*** `{str(self.date_created).split(' ')[0]}`\n***Number:*** `{self.id}`\n***Reason:*** " \
+               f"`{self.reason}`"

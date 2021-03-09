@@ -147,34 +147,61 @@ class HelpCog(commands.Cog):
 
     @commands.command()
     async def help(self, ctx):
-        await ctx.send(read_file('help.txt'))
+        await ctx.send(await read_file('help.txt'))
 
     @has_permissions(manage_messages=True)
     @commands.command(name='modhelp')
     async def mod_help(self, ctx):
-        await ctx.send(read_file('modhelp.txt'))
+        await ctx.send(await read_file('modhelp.txt'))
 
 
-class ExtrasCog(commands.Cog):
+class MiscCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
     @commands.command()
     async def fact(self, ctx):
-        await ctx.send(random.choice(read_file('facts.txt', True)))
+        await ctx.send(random.choice(await read_file('facts.txt', True)))
+
+    @commands.command()
+    async def verify(self, ctx):
+        if ctx.guild.get_member_role(int(config['GROOVE']['suspended_role_id'])) not in ctx.author.roles:
+            role = ctx.guild.get_member_role(int(config['GROOVE']['verified_role_id']))
+            await ctx.author.add_roles(role)
+
+    @has_permissions(manage_messages=True)
+    @commands.command(name='welcometest')
+    async def welcome_test(self, ctx):
+        await ctx.send(await read_file('welcome.txt'))
 
 
 class ModerationCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    def get_role(self, ctx, suspend):
-        return ctx.guild.get_role(int(config['GROOVE']['suspended_id'])) if suspend \
-            else ctx.guild.get_role(int(config['GROOVE']['verified_id']))
+    def get_member_role(self, ctx, suspend):
+        return ctx.guild.get_member_role(int(config['GROOVE']['suspended_role_id'])) if suspend \
+            else ctx.guild.get_member_role(int(config['GROOVE']['verified_role_id']))
 
     async def handle_member_roles(self, ctx, member, suspend):
-        await member.add_roles(self.get_role(ctx, suspend))
-        await member.remove_roles(self.get_role(ctx, not suspend))
+        await member.add_roles(self.get_member_role(ctx, suspend))
+        await member.remove_roles(self.get_member_role(ctx, not suspend))
+
+    @has_permissions(manage_messages=True)
+    @commands.command()
+    async def suspend(self, ctx, member: discord.Member):
+        await self.handle_member_roles(ctx, member, True)
+        await member.send('You are temporarily suspended from the Animusic Discord server. '
+                          'Please await further information from the staff.')
+        await success_message(ctx, member.mention + ' has been suspended!')
+
+    @has_permissions(manage_messages=True)
+    @commands.command()
+    async def pardon(self, ctx, member: discord.Member):
+        await self.handle_member_roles(ctx, member, False)
+        await member.send('You are no longer suspended and your access to the Animusic Discord server has '
+                          'been reinstated. Please follow the rules!')
+        await success_message(ctx, member.mention + ' has been pardoned!')
 
     @has_permissions(manage_messages=True)
     @commands.command()
@@ -193,31 +220,17 @@ class ModerationCog(commands.Cog):
             embed = discord.Embed(colour=discord.Colour.dark_red())
             embed.set_author(name='Here are a list of strikes against ' + member.display_name + '!')
             for strike in strikes:
-                embed.add_field(name=strike.id, value=strike.reason, inline=True)
+                embed.add_field(name=str(strike.date_created).split(' ')[0] + ' -- ' + str(strike.id),
+                                value=strike.reason, inline=True)
             await success_message(ctx, 'Strikes retrieved!', embed=embed)
         else:
             await failure_message(ctx, 'No strikes for this member exist!')
 
     @has_permissions(manage_messages=True)
     @commands.command()
-    async def unstrike(self, ctx, member: discord.Member, number):
-        if await Strike.filter(member_id=member.id, id=number).delete() > 0:
+    async def unstrike(self, ctx, number):
+        if await Strike.filter(id=number).delete() > 0:
             await success_message(ctx, 'Strike deleted from database!')
         else:
             await failure_message(ctx, 'Could not find strike with member or number.')
 
-    @has_permissions(manage_messages=True)
-    @commands.command()
-    async def suspend(self, ctx, member: discord.Member):
-        await self.handle_member_roles(ctx, member, True)
-        await member.send('You are temporarily suspended from the Animusic Discord server. '
-                          'Please await further information from the staff.')
-        await success_message(ctx, member.mention + ' has been suspended!')
-
-    @has_permissions(manage_messages=True)
-    @commands.command()
-    async def pardon(self, ctx, member: discord.Member):
-        await self.handle_member_roles(ctx, member, False)
-        await member.send('You are no longer suspended and your access to the Animusic Discord server has '
-                          'been reinstated. Please follow the rules!')
-        await success_message(ctx, member.mention + ' has been pardoned!')

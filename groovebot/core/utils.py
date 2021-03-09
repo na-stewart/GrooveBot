@@ -1,3 +1,6 @@
+import aiofiles
+
+
 async def failure_message(ctx, message):
     await ctx.send(':x: **' + message + '**')
 
@@ -9,6 +12,7 @@ async def success_message(ctx, message, model=None, embed=None):
     await ctx.send(message, embed=embed)
 
 
-def read_file(path, as_array=False):
-    with open('resources/' + path, mode="r") as f:
-        return f.readlines() if as_array else f.read()
+async def read_file(path, as_array=False):
+    async with aiofiles.open('resources/' + path) as f:
+        return [line.strip() async for line in f] if as_array else await f.read()
+
