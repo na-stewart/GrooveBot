@@ -67,7 +67,7 @@ GrooveBot is a bot specially coded for the r/Animusic Discord server. Some of Gr
 features include music and abbreviation organization, suspending and striking users, join and leave messages, verification,
 and more.
 
-Currently, all data is stored locally on a SQLite database. A pre-populated database file is included with this repository. Use .help for user commands and .adminhelp for admin commands. 
+Currently, all data is stored locally on a SQLite database. A pre-populated database file is included with this repository. Use .help for user commands and .modhelp for moderator commands. 
 
 ## Images
 
