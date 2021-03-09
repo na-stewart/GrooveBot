@@ -227,8 +227,8 @@ class ModerationCog(commands.Cog):
             await failure_message(ctx, 'No strikes for this member exist!')
 
     @has_permissions(manage_messages=True)
-    @commands.command(name='removestrike')
-    async def remove_strike(self, ctx, number):
+    @commands.command(name='deletestrike')
+    async def delete_strike(self, ctx, number):
         if await Strike.filter(id=number).delete() > 0:
             await success_message(ctx, 'Strike deleted from database!')
         else:
