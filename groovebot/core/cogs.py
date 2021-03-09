@@ -181,7 +181,7 @@ class ModerationCog(commands.Cog):
 
     def get_member_role(self, ctx, suspend):
         return ctx.guild.get_role(int(config['GROOVE']['suspended_role_id'])) if suspend \
-            else ctx.guild.get_member_role(int(config['GROOVE']['verified_role_id']))
+            else ctx.guild.get_role(int(config['GROOVE']['verified_role_id']))
 
     async def handle_member_roles(self, ctx, member, suspend):
         await member.add_roles(self.get_member_role(ctx, suspend))
