@@ -49,7 +49,7 @@
 ## Table of Contents
 
 * [About the Project](#about-the-project)
-https://avatars.githubusercontent.com/u/39848845?s=400&u=0c29d31b5367a6dbcce3e00500e14df0cde79057&v=4* [Images](#Images)
+* [Images](#Images)
 * [Getting Started](#getting-started)
   * [Prerequisites](#prerequisites)
   * [Installation](#installation)
