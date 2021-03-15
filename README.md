@@ -85,15 +85,6 @@ Currently, all data is stored locally on a SQLite database. A pre-populated data
 
 ![alt text](https://github.com/sunset-developer/GrooveBot/blob/master/images/groovebot7.png)
 
-![alt text](https://github.com/sunset-developer/GrooveBot/blob/master/images/groovebot8.png)
-
-![alt text](https://github.com/sunset-developer/GrooveBot/blob/master/images/groovebot9.png)
-
-![alt text](https://github.com/sunset-developer/GrooveBot/blob/master/images/groovebot10.png)
-
-![alt text](https://github.com/sunset-developer/GrooveBot/blob/master/images/groovebot11.png)
-
-
 
 <!-- GETTING STARTED -->
 ## Getting Started
