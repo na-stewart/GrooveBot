@@ -20,7 +20,7 @@ async def on_ready():
 
 async def on_member_event(member, file):
     channel = member.guild.get_channel(int(config['GROOVE']['general_channel_id']))
-    response = random.choice(await read_file(file, as_array=True)).format(member.mention)
+    response = random.choice(await read_file(file, as_array=True)).format(member.mention,member.name,member.discriminator)
     await channel.send(response)
 
 
