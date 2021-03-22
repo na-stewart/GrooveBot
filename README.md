@@ -154,7 +154,7 @@ https://discord.gg/yDfyhfA
 <!-- ACKNOWLEDGEMENTS -->
 ## Acknowledgements
 
-* [Be the first! Submit a pull request.](https://github.com/sunset-developer/GrooveBot/pulls)
+* Thanks to marchkarcz for improving leave messages for mobile.
 
 
 <!-- MARKDOWN LINKS & IMAGES -->
