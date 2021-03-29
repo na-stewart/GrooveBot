@@ -67,7 +67,9 @@ GrooveBot is a bot specially coded for the r/Animusic Discord server. Some of Gr
 features include music and abbreviation organization, suspending and striking users, join and leave messages, verification,
 and more.
 
-Currently, all data is stored locally on a SQLite database. A pre-populated database file is included with this repository. Use .help for user commands and .modhelp for moderator commands. 
+This bot was created to help new users discover all of Wayne Lytles work and understand Animusic related abbreviations. From his well known Animusic albums to his work at Cornell, all of this is included in the sqlite database file. GrooveBot also features moderating capabilties such as suspending and striking users.
+
+Use .help for user commands and .modhelp for moderator commands. 
 
 ## Images
 
