@@ -221,19 +221,23 @@ class RetrievalCog(commands.Cog):
         self.bot = bot
 
     @commands.command()
-    async def get(self, ctx, acronym):
-        acronym_upper = acronym.upper()
-        if await Album.filter(acronym=acronym_upper).exists():
-            album = await Album.filter(acronym=acronym_upper).first()
-            await self.get_album(ctx, album)
-        elif await Music.filter(acronym=acronym_upper).exists():
-            music = await Music.filter(acronym=acronym_upper).first()
-            await success_message(ctx, 'Music retrieved!', str(music))
-        elif await Abbreviation.filter(acronym=acronym_upper).exists():
-            abbreviation = await Abbreviation.filter(acronym=acronym_upper).first()
-            await success_message(ctx, 'Abbreviation retrieved!', str(abbreviation))
+    async def get(self, ctx, acronym=None):
+        if acronym:
+            acronym_upper = acronym.upper()
+            if await Album.filter(acronym=acronym_upper).exists():
+                album = await Album.filter(acronym=acronym_upper).first()
+                await self.get_album(ctx, album)
+            elif await Music.filter(acronym=acronym_upper).exists():
+                music = await Music.filter(acronym=acronym_upper).first()
+                await success_message(ctx, 'Music retrieved!', str(music))
+            elif await Abbreviation.filter(acronym=acronym_upper).exists():
+                abbreviation = await Abbreviation.filter(acronym=acronym_upper).first()
+                await success_message(ctx, 'Abbreviation retrieved!', str(abbreviation))
+            else:
+                await failure_message(ctx, 'No album, music, or abbreviation with this acronym exists.')
         else:
-            await failure_message(ctx, 'No album, music, or abbreviation with this acronym exists.')
+            await failure_message(ctx, 'You cannot have an empty acronym argument!')
+
 
     async def get_album(self, ctx, album):
         music = await Music.filter(album=album).all()

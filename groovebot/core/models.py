@@ -26,7 +26,7 @@ class Album(Abbreviation):
 
 
 class Music(Abbreviation):
-    album = fields.ForeignKeyField('Models.album')
+    album = fields.ForeignKeyField('models.Album')
     url = fields.CharField(max_length=45)
 
     def __str__(self):

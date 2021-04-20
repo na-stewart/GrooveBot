@@ -125,8 +125,8 @@ verified_role_id=1625184182632815125
 [TORTOISE]
 username=admin
 password=8UVbijLUGYfUtItAi
-endpoint=groovebot.cweAenuBY6b.us-north-1.rds.amazonaws.com
-schema=grooveschema
+endpoint=groovedb.cweAenuBY6b.us-north-1.rds.amazonaws.com
+schema=groovebot
 models=groovebot.core.models
 engine=mysql
 generate=true
