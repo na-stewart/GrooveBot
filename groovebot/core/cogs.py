@@ -52,8 +52,7 @@ class AlbumCog(commands.Cog):
             embed.set_author(name='Here\'s a guide to all of the album abbreviations!')
             for album in albums:
                 embed.add_field(name=album.acronym, value=album.value, inline=True)
-            await success_message(ctx, 'Albums retrieved! Use the `getalbum` command to retrieve album content.',
-                                  embed=embed)
+            await success_message(ctx, 'Albums retrieved!', embed=embed)
         else:
             await failure_message(ctx, 'No albums have been created.')
 
