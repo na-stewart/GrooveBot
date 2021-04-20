@@ -142,12 +142,12 @@ class NeuropolCog(commands.Cog):
     @commands.command()
     async def neuropol(self, ctx, *args):
         message = "{}".format(" ".join(args)).upper()
-        if len(message) < 18:
+        if len(message) < 18 and message:
             neuropol_img = await self.text_to_neuropol(message)
             await ctx.send(file=discord.File(neuropol_img))
             await aiofiles.os.remove(neuropol_img)
         else:
-            await failure_message(ctx, 'Too many characters to parse!')
+            await failure_message(ctx, 'Too many characters to parse or empty!')
 
 
 class MiscCog(commands.Cog):
