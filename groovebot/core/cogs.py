@@ -227,7 +227,7 @@ class RetrievalCog(commands.Cog):
                 album = await Album.filter(acronym=acronym_upper).first()
                 await self.get_album(ctx, album)
             elif await Music.filter(acronym=acronym_upper).exists():
-                music = await Music.filter(acronym=acronym_upper).first()
+                music = await Music.filter(acronym=acronym_upper).prefetch_related('album').first()
                 await success_message(ctx, 'Music retrieved!', str(music))
             elif await Abbreviation.filter(acronym=acronym_upper).exists():
                 abbreviation = await Abbreviation.filter(acronym=acronym_upper).first()
@@ -236,7 +236,6 @@ class RetrievalCog(commands.Cog):
                 await failure_message(ctx, 'No album, music, or abbreviation with this acronym exists.')
         else:
             await failure_message(ctx, 'You cannot have an empty acronym argument!')
-
 
     async def get_album(self, ctx, album):
         music = await Music.filter(album=album).all()
