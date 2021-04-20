@@ -55,7 +55,6 @@
   * [Installation](#installation)
 * [Contributing](#contributing)
 * [License](#license)
-* [Contact](#contact)
 * [Acknowledgements](#acknowledgements)
 
 
@@ -63,16 +62,13 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-GrooveBot is a bot specially coded for the r/Animusic Discord server. Some of Groovebot's unique 
-features include music and abbreviation organization, suspending and striking users, join and leave messages, verification,
-and more.
-
-This bot was created to help new users discover all of Wayne Lytles work and understand Animusic related abbreviations. From his well known Animusic albums to his work at Cornell, all of this is included in the sqlite database file. GrooveBot also features moderating capabilties such as suspending and striking users.
+GrooveBot is a bot specially coded for the r/Animusic Discord server. This bot was created as an easy way to reference
+Wayne Lytles work and understand abbreviations that may be thrown around within the server. There are also moderation 
+and security features such as verification, suspending and striking users, and join/leave messages.
 
 Use .help for user commands and .modhelp for moderator commands. 
 
 ## Images
-
 ![alt text](https://github.com/sunset-developer/GrooveBot/blob/master/images/groovebot1.png)
 
 ![alt text](https://github.com/sunset-developer/GrooveBot/blob/master/images/groovebot2.png)
@@ -113,7 +109,9 @@ git clone https://github.com/sunset-developer/GrooveBot
 pip3 install -r requirements.txt
 ```
 
-* Create a groove.ini file in the GrooveBot/resources directory, then configure GrooveBot using the example below:
+* Create a groove.ini file in the project directory. Make sure Python's working directory is the project directory. 
+  Below is an example of its contents:
+  
 ```ini
 [GROOVE]
 token=Nzc4MjYzMjAwMDQyODQ0MTYx.X7PcFg.k-BedTOS3LgoEU6teXsQSi5aVAE
@@ -148,14 +146,6 @@ Contributions are what make the open source community such an amazing place to b
 ## License
 
 Distributed under the MIT License. See `LICENSE` for more information.
-
-
-<!-- CONTACT -->
-## Contact
-
-Please contact sunsetdev or Denyul on discord at:
-https://discord.gg/yDfyhfA
-
 
 <!-- ACKNOWLEDGEMENTS -->
 ## Acknowledgements

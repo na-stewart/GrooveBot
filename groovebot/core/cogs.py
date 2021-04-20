@@ -234,7 +234,7 @@ class RetrievalCog(commands.Cog):
             else:
                 await failure_message(ctx, 'No album, music, or abbreviation with this acronym exists.')
         else:
-            await failure_message(ctx, 'You cannot have an empty acronym argument!')
+            await failure_message(ctx, 'Your acronym argument is empty!')
 
     async def get_album(self, ctx, album):
         music = await Music.filter(album=album).all()
