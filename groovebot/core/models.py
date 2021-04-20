@@ -1,12 +1,8 @@
-import uuid
-
 from tortoise import Model, fields
 
 
 class BaseModel(Model):
     id = fields.IntField(pk=True)
-    uid = fields.UUIDField(default=uuid.uuid1, max_length=36)
-    parent_uid = fields.UUIDField(null=True, max_length=36)
     date_created = fields.DatetimeField(auto_now_add=True)
     date_updated = fields.DatetimeField(auto_now=True)
 
@@ -30,10 +26,11 @@ class Album(Abbreviation):
 
 
 class Music(Abbreviation):
+    album = fields.ForeignKeyField('Models.album')
     url = fields.CharField(max_length=45)
 
     def __str__(self):
-        return f"***Acronym:*** `{self.acronym}`\n***Title:*** `{self.value}`\n***URL:*** {self.url}"
+        return f"***Acronym:*** `{self.acronym}`\n***Title:*** `{self.value}`\n***URL:*** {self.url}\n***Album:*** {self.value}"
 
 
 class Strike(BaseModel):

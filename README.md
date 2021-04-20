@@ -114,15 +114,19 @@ pip3 install -r requirements.txt
 * Create a groove.ini file in the GrooveBot/resources directory, then configure GrooveBot using the example below:
 ```ini
 [GROOVE]
-token=NYeeOweIPUyuHHuygODQ0MTYx.X7PcFg.k-BedTOIUgwOHIBbsQSi5aVAE
+token=Nzc4MjYzMjAwMDQyODQ0MTYx.X7PcFg.k-BedTOS3LgoEU6teXsQSi5aVAE
 prefix=.
-general_channel_id=general-discussion-1
-suspended_role_id=818172621720083812
-verified_role_id=827182728768211978
+general_channel_id=1625118263628154181
+suspended_role_id=1625184812712815183
+verified_role_id=1625184182632815125
 
 [TORTOISE]
-schema=groovebot.sqlite3
+username=admin
+password=8UVbijLUGYfUtItAi
+endpoint=groovebot.cweAenuBY6b.us-north-1.rds.amazonaws.com
+schema=grooveschema
 models=groovebot.core.models
+engine=mysql
 generate=true
 ```
 

@@ -1,4 +1,4 @@
 from configparser import ConfigParser
 
 config = ConfigParser()
-config.read('groove.ini')
+config.read('./groove.ini')
