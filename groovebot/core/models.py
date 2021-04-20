@@ -30,7 +30,8 @@ class Music(Abbreviation):
     url = fields.CharField(max_length=45)
 
     def __str__(self):
-        return f"***Acronym:*** `{self.acronym}`\n***Title:*** `{self.value}`\n***Album:*** `{self.value}`\n***URL:*** {self.url}"
+        return f"***Acronym:*** `{self.acronym}`\n***Title:*** `{self.value}`\n***Album:*** `{self.album.value}`" \
+               f"\n***URL:*** {self.url}"
 
 
 class Strike(BaseModel):
