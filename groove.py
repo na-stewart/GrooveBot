@@ -2,7 +2,7 @@ import random
 
 import discord
 from discord.ext import commands
-from discord.ext.commands import CommandNotFound
+from discord.ext.commands import CommandNotFound, MissingRequiredArgument
 
 from groovebot.core.cogs import MusicCog, AlbumCog, HelpCog, MiscCog, AbbreviationCog, ModerationCog, RetrievalCog, \
     NeuropolCog
@@ -22,7 +22,8 @@ async def on_ready():
 
 async def on_member_event(member, file):
     channel = member.guild.get_channel(int(config['GROOVE']['general_channel_id']))
-    response = random.choice(await read_file(file, as_array=True)).format(member.mention,member.name,member.discriminator)
+    response = random.choice(await read_file(file, as_array=True)).format(member.mention, member.name,
+                                                                          member.discriminator)
     await channel.send(response)
 
 
@@ -31,9 +32,16 @@ async def on_member_join(member):
     await on_member_event(member, 'greetings.txt')
     await member.send(await read_file('welcome.txt'))
 
+
 @bot.event
 async def on_member_remove(member):
     await on_member_event(member, 'farewells.txt')
+
+
+@bot.event
+async def on_command_error(ctx, error):
+    if isinstance(error, MissingRequiredArgument):
+        await failure_message(ctx, 'You are missing one or more arguments in your command!')
 
 
 if __name__ == '__main__':
