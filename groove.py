@@ -2,8 +2,7 @@ import random
 
 import discord
 from discord.ext import commands
-from discord.ext.commands import CommandNotFound, MissingRequiredArgument
-
+from discord.ext.commands import MissingRequiredArgument
 from groovebot.core.cogs import MusicCog, AlbumCog, HelpCog, MiscCog, AbbreviationCog, ModerationCog, RetrievalCog, \
     NeuropolCog
 from groovebot.core.config import config

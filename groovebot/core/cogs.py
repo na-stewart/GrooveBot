@@ -220,7 +220,6 @@ class RetrievalCog(commands.Cog):
 
     @commands.command()
     async def get(self, ctx, acronym):
-
         acronym_upper = acronym.upper()
         if await Album.filter(acronym=acronym_upper).exists():
             album = await Album.filter(acronym=acronym_upper).first()
