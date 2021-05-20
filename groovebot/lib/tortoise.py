@@ -1,6 +1,7 @@
 from tortoise import Tortoise
 
-from groovebot.core.config import config
+from groovebot.core.utils import config
+
 
 async def tortoise_init():
     username = config['TORTOISE']['username']

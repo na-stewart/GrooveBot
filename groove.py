@@ -5,8 +5,7 @@ from discord.ext import commands
 from discord.ext.commands import MissingRequiredArgument
 from groovebot.core.cogs import MusicCog, AlbumCog, HelpCog, MiscCog, AbbreviationCog, ModerationCog, RetrievalCog, \
     NeuropolCog
-from groovebot.core.config import config
-from groovebot.core.utils import read_file, failure_message
+from groovebot.core.utils import read_file, failure_message, config
 from groovebot.lib.tortoise import tortoise_init
 
 intents = discord.Intents.default()
@@ -17,6 +16,7 @@ bot = commands.Bot(help_command=None, command_prefix=None, intents=intents)
 @bot.event
 async def on_ready():
     await tortoise_init()
+    print('Groovebot initialized.')
 
 
 async def on_member_event(member, file):

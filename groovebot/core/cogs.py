@@ -8,9 +8,8 @@ from discord.ext import commands
 from discord.ext.commands import has_permissions
 from tortoise.exceptions import IntegrityError
 
-from groovebot.core.config import config
 from groovebot.core.models import Album, Music, Abbreviation, Strike
-from groovebot.core.utils import read_file, failure_message, success_message
+from groovebot.core.utils import read_file, failure_message, success_message, config
 
 
 class MusicCog(commands.Cog):
@@ -206,12 +205,25 @@ class ModerationCog(commands.Cog):
             await failure_message(ctx, 'Strike reason is too long.')
 
     @has_permissions(manage_messages=True)
+    @commands.command(name='getstrikes')
+    async def get_strikes(self, ctx, member: discord.Member):
+        strikes = await Strike.filter(member_id=member.id).all()
+        if strikes:
+            embed = discord.Embed(colour=discord.Colour.red())
+            embed.set_author(name='Here\'s a list of all of the strikes against this member!')
+            for strike in strikes:
+                embed.add_field(name=strike.id, value=strike.reason, inline=True)
+            await success_message(ctx, 'Strikes retrieved!', embed=embed)
+        else:
+            await failure_message(ctx, 'No strikes associated with this member could be found!')
+
+    @has_permissions(manage_messages=True)
     @commands.command(name='deletestrike')
-    async def delete_strike(self, ctx, number):
-        if await Strike.filter(id=number).delete() > 0:
+    async def delete_strike(self, ctx, id):
+        if await Strike.filter(id=id).delete() > 0:
             await success_message(ctx, 'Strike deleted from database!')
         else:
-            await failure_message(ctx, 'Could not find strike with member or number.')
+            await failure_message(ctx, 'Could not find strike with id.')
 
 
 class RetrievalCog(commands.Cog):
