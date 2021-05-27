@@ -39,7 +39,7 @@
     <br />
     <a href="https://github.com/sunset-developer/GrooveBot/issues">Report Bug</a>
     ·
-    <a href="https://github.com/sunset-developer/GrooveBot/issues">Request Feature</a>
+    <a href="https://github.com/sunset-developer/GrooveBot/pulls">Request Feature</a>
   </p>
 </p>
 
