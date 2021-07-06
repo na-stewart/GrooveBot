@@ -6,7 +6,6 @@ import discord
 from PIL import ImageFont, Image, ImageDraw
 from discord.ext import commands
 from discord.ext.commands import has_permissions
-from tortoise.exceptions import IntegrityError
 
 from groovebot.core.models import Album, Music, Abbreviation, Strike
 from groovebot.core.utils import read_file, failure_message, success_message, config
@@ -21,12 +20,9 @@ class MusicCog(commands.Cog):
     async def create_music(self, ctx, album_acronym, acronym, title, url):
         album = await Album.filter(acronym=album_acronym.upper()).first()
         if album:
-            try:
-                music = await Music.create(album=album, acronym=acronym.upper(), value=title,
-                                           url=url)
-                await success_message(ctx, 'Music added to database!', music)
-            except IntegrityError:
-                await failure_message(ctx, 'Music with passed acronym exists or too many characters.')
+            music = await Music.create(album=album, acronym=acronym.upper(), value=title,
+                                       url=url)
+            await success_message(ctx, 'Music added to database!', music)
         else:
             await failure_message(ctx, 'No album with passed acronym exists.')
 
@@ -58,11 +54,8 @@ class AlbumCog(commands.Cog):
     @has_permissions(manage_messages=True)
     @commands.command(name='createalbum')
     async def create_album(self, ctx, acronym, title, description):
-        try:
-            album = await Album.create(acronym=acronym.upper(), value=title, description=description)
-            await success_message(ctx, 'Album added to database.', album)
-        except IntegrityError:
-            await failure_message(ctx, 'Album with passed acronym exists or too many characters.')
+        album = await Album.create(acronym=acronym.upper(), value=title, description=description)
+        await success_message(ctx, 'Album added to database.', album)
 
     @has_permissions(manage_messages=True)
     @commands.command(name='deletealbum')
@@ -92,11 +85,8 @@ class AbbreviationCog(commands.Cog):
     @has_permissions(manage_messages=True)
     @commands.command(name='createabbreviation')
     async def create_abbreviation(self, ctx, acronym, description):
-        try:
-            abbreviation = await Abbreviation.create(acronym=acronym.upper(), value=description)
-            await success_message(ctx, 'Abbreviation added to database!', abbreviation)
-        except IntegrityError:
-            await failure_message(ctx, 'Abbreviation with passed acronym exists or too many characters.')
+        abbreviation = await Abbreviation.create(acronym=acronym.upper(), value=description)
+        await success_message(ctx, 'Abbreviation added to database!', abbreviation)
 
     @has_permissions(manage_messages=True)
     @commands.command(name='deleteabbreviation')
@@ -198,11 +188,8 @@ class ModerationCog(commands.Cog):
     @has_permissions(manage_messages=True)
     @commands.command()
     async def strike(self, ctx, member: discord.Member, reason):
-        try:
-            strike = await Strike.create(member_id=member.id, reason=reason)
-            await success_message(ctx, 'Strike against ' + member.mention + ' added to database!', strike)
-        except IntegrityError:
-            await failure_message(ctx, 'Strike reason is too long.')
+        strike = await Strike.create(member_id=member.id, reason=reason)
+        await success_message(ctx, 'Strike against ' + member.mention + ' added to database!', strike)
 
     @has_permissions(manage_messages=True)
     @commands.command(name='getstrikes')
@@ -212,7 +199,7 @@ class ModerationCog(commands.Cog):
             embed = discord.Embed(colour=discord.Colour.red())
             embed.set_author(name='Here\'s a list of all of the strikes against this member!')
             for strike in strikes:
-                embed.add_field(name=strike.id, value=strike.reason, inline=True)
+                embed.add_field(name=str(self.date_created).split(' ')[0], value=strike.reason, inline=True)
             await success_message(ctx, 'Strikes retrieved!', embed=embed)
         else:
             await failure_message(ctx, 'No strikes associated with this member could be found!')
@@ -230,21 +217,6 @@ class RetrievalCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
-    async def get(self, ctx, acronym):
-        acronym_upper = acronym.upper()
-        if await Album.filter(acronym=acronym_upper).exists():
-            album = await Album.filter(acronym=acronym_upper).first()
-            await self.get_album(ctx, album)
-        elif await Music.filter(acronym=acronym_upper).exists():
-            music = await Music.filter(acronym=acronym_upper).prefetch_related('album').first()
-            await success_message(ctx, 'Music retrieved!', str(music))
-        elif await Abbreviation.filter(acronym=acronym_upper).exists():
-            abbreviation = await Abbreviation.filter(acronym=acronym_upper).first()
-            await success_message(ctx, 'Abbreviation retrieved!', str(abbreviation))
-        else:
-            await failure_message(ctx, 'No album, music, or abbreviation with this acronym exists.')
-
     async def get_album(self, ctx, album):
         music = await Music.filter(album=album).all()
         if music:
@@ -255,3 +227,21 @@ class RetrievalCog(commands.Cog):
             await success_message(ctx, 'Album retrieved!', album, embed)
         else:
             await failure_message(ctx, 'This album contains no music.')
+
+    @commands.command()
+    async def get(self, ctx, acronym):
+        acronym_upper = acronym.upper()
+        if await Album.filter(acronym=acronym_upper).exists():
+            album = await Album.filter(acronym=acronym_upper).first()
+            await self.get_album(ctx, album)
+        elif await Music.filter(acronym=acronym_upper).exists():
+            music = await Music.filter(acronym=acronym_upper).prefetch_related('album').first()
+            await success_message(ctx, 'Music retrieved!', music)
+        elif await Abbreviation.filter(acronym=acronym_upper).exists():
+            abbreviation = await Abbreviation.filter(acronym=acronym_upper).first()
+            await success_message(ctx, 'Abbreviation retrieved!', abbreviation)
+        elif await Strike.filter(id=acronym).exists():
+            strike = await Strike.filter(id=acronym).first()
+            await success_message(ctx, 'Strike retrieved!', strike)
+        else:
+            await failure_message(ctx, 'No album, music, or abbreviation with this acronym exists.')

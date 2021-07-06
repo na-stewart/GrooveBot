@@ -3,6 +3,8 @@ import random
 import discord
 from discord.ext import commands
 from discord.ext.commands import MissingRequiredArgument
+from tortoise.exceptions import ValidationError, IntegrityError
+
 from groovebot.core.cogs import MusicCog, AlbumCog, HelpCog, MiscCog, AbbreviationCog, ModerationCog, RetrievalCog, \
     NeuropolCog
 from groovebot.core.utils import read_file, failure_message, config
@@ -41,7 +43,12 @@ async def on_member_remove(member):
 async def on_command_error(ctx, error):
     if isinstance(error, MissingRequiredArgument):
         await failure_message(ctx, 'You are missing one or more arguments in your command!')
-
+    if error.original:
+        if isinstance(error.original, ValidationError):
+            await failure_message(ctx, 'One or more of your arguments in your command is too long!')
+        if isinstance(error.original, IntegrityError):
+            if error.original.args[0].args[0] == 1062:
+                await failure_message(ctx, 'This acronym is already being used in the database!')
 
 if __name__ == '__main__':
     bot.add_cog(AlbumCog(bot))
