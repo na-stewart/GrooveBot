@@ -1,3 +1,4 @@
 # Project exclude paths
-/venv/
 /groove.ini
+.idea
+venv
