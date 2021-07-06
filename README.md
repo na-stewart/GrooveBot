@@ -37,9 +37,9 @@
   <p align="center">
     The Official r/Animusic Bot.
     <br />
-    <a href="https://github.com/sunset-developer/GrooveBot_name/issues">Report Bug</a>
+    <a href="https://github.com/sunset-developer/GrooveBot/issues">Report Bug</a>
     ·
-    <a href="https://github.com/sunset-developer/GrooveBot_name/issues">Request Feature</a>
+    <a href="https://github.com/sunset-developer/GrooveBot/pulls">Request Feature</a>
   </p>
 </p>
 
