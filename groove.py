@@ -43,7 +43,7 @@ async def on_member_remove(member):
 async def on_command_error(ctx, error):
     if isinstance(error, MissingRequiredArgument):
         await failure_message(ctx, 'You are missing one or more arguments in your command!')
-    if error.original:
+    if hasattr(error, 'original'):
         if isinstance(error.original, ValidationError):
             await failure_message(ctx, 'One or more of your arguments in your command is too long!')
         if isinstance(error.original, IntegrityError):
