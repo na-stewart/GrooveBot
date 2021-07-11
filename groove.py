@@ -42,13 +42,15 @@ async def on_member_remove(member):
 @bot.event
 async def on_command_error(ctx, error):
     if isinstance(error, MissingRequiredArgument):
-        await failure_message(ctx, 'You are missing one or more arguments in your command!')
+        await failure_message(ctx, 'You are missing one or more arguments in your command!', error)
     if hasattr(error, 'original'):
         if isinstance(error.original, ValidationError):
-            await failure_message(ctx, 'One or more of your arguments in your command is too long!')
-        if isinstance(error.original, IntegrityError):
+            await failure_message(ctx, 'One or more of your arguments in your command is too long!', error.original)
+        elif isinstance(error.original, IntegrityError):
             if error.original.args[0].args[0] == 1062:
-                await failure_message(ctx, 'This acronym is already being used in the database!')
+                await failure_message(ctx, 'This acronym is already being used in the database!', error.original)
+    await failure_message(ctx, 'An unexpected error has occurred! Please see console.', error)
+
 
 if __name__ == '__main__':
     bot.add_cog(AlbumCog(bot))

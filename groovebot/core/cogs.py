@@ -60,7 +60,9 @@ class AlbumCog(commands.Cog):
     @has_permissions(manage_messages=True)
     @commands.command(name='deletealbum')
     async def delete_album(self, ctx, acronym):
-        if await Album.filter(acronym=acronym.upper()).delete() > 0:
+        if await Album.filter(acronym=acronym.upper()).delete() == 1:
+            album = await Album.filter(acronym=acronym.upper()).first()
+            await Music.filter(album=album).delete()
             await success_message(ctx, 'Album deleted from database!')
         else:
             await failure_message(ctx, 'No album with passed acronym exists.')
@@ -91,7 +93,7 @@ class AbbreviationCog(commands.Cog):
     @has_permissions(manage_messages=True)
     @commands.command(name='deleteabbreviation')
     async def delete_abbreviation(self, ctx, acronym):
-        if await Abbreviation.filter(acronym=acronym.upper()).delete() > 0:
+        if await Abbreviation.filter(acronym=acronym.upper()).delete() == 1:
             await success_message(ctx, 'Abbreviation deleted from database!')
         else:
             await failure_message(ctx, 'No abbreviation with passed acronym exists.')
@@ -199,7 +201,7 @@ class ModerationCog(commands.Cog):
             embed = discord.Embed(colour=discord.Colour.red())
             embed.set_author(name='Here\'s a list of all of the strikes against this member!')
             for strike in strikes:
-                embed.add_field(name=str(self.date_created).split(' ')[0], value=strike.reason, inline=True)
+                embed.add_field(name=str(strike.date_created).split(' ')[0], value=strike.reason, inline=True)
             await success_message(ctx, 'Strikes retrieved!', embed=embed)
         else:
             await failure_message(ctx, 'No strikes associated with this member could be found!')
@@ -207,7 +209,7 @@ class ModerationCog(commands.Cog):
     @has_permissions(manage_messages=True)
     @commands.command(name='deletestrike')
     async def delete_strike(self, ctx, id):
-        if await Strike.filter(id=id).delete() > 0:
+        if await Strike.filter(id=id).delete() == 1:
             await success_message(ctx, 'Strike deleted from database!')
         else:
             await failure_message(ctx, 'Could not find strike with id.')
@@ -240,8 +242,5 @@ class RetrievalCog(commands.Cog):
         elif await Abbreviation.filter(acronym=acronym_upper).exists():
             abbreviation = await Abbreviation.filter(acronym=acronym_upper).first()
             await success_message(ctx, 'Abbreviation retrieved!', abbreviation)
-        elif await Strike.filter(id=acronym).exists():
-            strike = await Strike.filter(id=acronym).first()
-            await success_message(ctx, 'Strike retrieved!', strike)
         else:
             await failure_message(ctx, 'No album, music, or abbreviation with this acronym exists.')

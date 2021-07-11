@@ -1,4 +1,4 @@
-****Groove Bot V2.3.4****
+****Groove Bot V2.3.5****
 Moderator commands.
 **Argument Help:** `"Spaces must be enclosed with quotation marks"`
 >>> ~~---------------~~:tools: Commands :tools:~~----------------~~
