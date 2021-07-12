@@ -5,7 +5,7 @@ from discord.ext import commands
 from discord.ext.commands import MissingRequiredArgument
 from tortoise.exceptions import ValidationError, IntegrityError
 
-from groovebot.core.cogs import MusicCog, AlbumCog, HelpCog, MiscCog, AbbreviationCog, ModerationCog, RetrievalCog, \
+from groovebot.core.cogs import MusicCog, AlbumCog, MiscCog, AbbreviationCog, ModerationCog, RetrievalCog, \
     NeuropolCog
 from groovebot.core.utils import read_file, failure_message, config
 from groovebot.lib.tortoise import tortoise_init
@@ -55,7 +55,6 @@ async def on_command_error(ctx, error):
 if __name__ == '__main__':
     bot.add_cog(AlbumCog(bot))
     bot.add_cog(MusicCog(bot))
-    bot.add_cog(HelpCog(bot))
     bot.add_cog(MiscCog(bot))
     bot.add_cog(AbbreviationCog(bot))
     bot.add_cog(ModerationCog(bot))

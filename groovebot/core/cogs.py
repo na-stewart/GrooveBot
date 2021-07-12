@@ -99,20 +99,6 @@ class AbbreviationCog(commands.Cog):
             await failure_message(ctx, 'No abbreviation with passed acronym exists.')
 
 
-class HelpCog(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
-
-    @commands.command()
-    async def help(self, ctx):
-        await ctx.send(await read_file('help.txt'))
-
-    @has_permissions(manage_messages=True)
-    @commands.command(name='modhelp')
-    async def mod_help(self, ctx):
-        await ctx.send(await read_file('modhelp.txt'))
-
-
 class NeuropolCog(commands.Cog):
     font = ImageFont.truetype("./resources/NEUROPOL.ttf", 35)
 
@@ -152,6 +138,15 @@ class MiscCog(commands.Cog):
         if ctx.guild.get_role(int(config['GROOVE']['suspended_role_id'])) not in ctx.author.roles:
             role = ctx.guild.get_role(int(config['GROOVE']['verified_role_id']))
             await ctx.author.add_roles(role)
+
+    @commands.command()
+    async def help(self, ctx):
+        await ctx.send(await read_file('help.txt'))
+
+    @has_permissions(manage_messages=True)
+    @commands.command(name='modhelp')
+    async def mod_help(self, ctx):
+        await ctx.send(await read_file('modhelp.txt'))
 
     @has_permissions(manage_messages=True)
     @commands.command(name='welcometest')
