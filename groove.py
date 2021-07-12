@@ -2,7 +2,7 @@ import random
 
 import discord
 from discord.ext import commands
-from discord.ext.commands import MissingRequiredArgument
+from discord.ext.commands import MissingRequiredArgument, ExpectedClosingQuoteError
 from tortoise.exceptions import ValidationError, IntegrityError
 
 from groovebot.core.cogs import MusicCog, AlbumCog, MiscCog, AbbreviationCog, ModerationCog, RetrievalCog, \
@@ -39,16 +39,27 @@ async def on_member_remove(member):
     await on_member_event(member, 'farewells.txt')
 
 
-@bot.event
-async def on_command_error(ctx, error):
+async def handle_invalid_command(ctx, error):
     if isinstance(error, MissingRequiredArgument):
         await failure_message(ctx, 'You are missing one or more arguments in your command!', error)
+    if isinstance(error, ExpectedClosingQuoteError):
+        await failure_message(ctx, 'A closing quotation is missing in one or more of your command arguments.', error)
+
+
+async def handle_command_error(ctx, error):
+    if isinstance(error, ValidationError):
+        await failure_message(ctx, 'One or more of your arguments in your command is too long!', error)
+    elif isinstance(error, IntegrityError):
+        if error.args[0].args[0] == 1062:
+            await failure_message(ctx, 'This acronym is already being used in the database!', error)
+
+
+@bot.event
+async def on_command_error(ctx, error):
     if hasattr(error, 'original'):
-        if isinstance(error.original, ValidationError):
-            await failure_message(ctx, 'One or more of your arguments in your command is too long!', error.original)
-        elif isinstance(error.original, IntegrityError):
-            if error.original.args[0].args[0] == 1062:
-                await failure_message(ctx, 'This acronym is already being used in the database!', error.original)
+        await handle_command_error(ctx, error.original)
+    else:
+        await handle_invalid_command(ctx, error)
     await failure_message(ctx, 'An unexpected error has occurred! Please see console.', error)
 
 
