@@ -41,7 +41,7 @@ async def on_member_remove(member):
 
 async def handle_invalid_command(ctx, error):
     if isinstance(error, CommandNotFound):
-        await failure_message(ctx, 'Your command could not be found!', error)
+        await failure_message(ctx, 'Your command does not exist! Please use .help for a list of commands.', error)
     if isinstance(error, MissingRequiredArgument):
         await failure_message(ctx, 'You are missing one or more arguments in your command!', error)
     if isinstance(error, ExpectedClosingQuoteError):
