@@ -58,9 +58,9 @@ async def handle_command_error(ctx, error):
 async def on_command_error(ctx, error):
     if hasattr(error, 'original'):
         await handle_command_error(ctx, error.original)
+        await failure_message(ctx, 'An unexpected error has occurred! Please see console.', error)
     else:
         await handle_invalid_command(ctx, error)
-    await failure_message(ctx, 'An unexpected error has occurred! Please see console.', error)
 
 
 if __name__ == '__main__':
