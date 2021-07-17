@@ -2,7 +2,7 @@ import random
 
 import discord
 from discord.ext import commands
-from discord.ext.commands import MissingRequiredArgument, ExpectedClosingQuoteError
+from discord.ext.commands import MissingRequiredArgument, ExpectedClosingQuoteError, CommandNotFound
 from tortoise.exceptions import ValidationError, IntegrityError
 
 from groovebot.core.cogs import MusicCog, AlbumCog, MiscCog, AbbreviationCog, ModerationCog, RetrievalCog, \
@@ -40,6 +40,8 @@ async def on_member_remove(member):
 
 
 async def handle_invalid_command(ctx, error):
+    if isinstance(error, CommandNotFound):
+        await failure_message(ctx, 'Your command could not be found!', error)
     if isinstance(error, MissingRequiredArgument):
         await failure_message(ctx, 'You are missing one or more arguments in your command!', error)
     if isinstance(error, ExpectedClosingQuoteError):
@@ -58,9 +60,9 @@ async def handle_command_error(ctx, error):
 async def on_command_error(ctx, error):
     if hasattr(error, 'original'):
         await handle_command_error(ctx, error.original)
-        await failure_message(ctx, 'An unexpected error has occurred! Please see console.', error.original)
     else:
         await handle_invalid_command(ctx, error)
+    await failure_message(ctx, 'An unexpected error has occurred! Please see console.', error)
 
 
 if __name__ == '__main__':
