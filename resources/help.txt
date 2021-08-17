@@ -6,4 +6,4 @@ If you have any issues/requests contact a Groovebot developer.
 **neuropol** `[message]` - Parses message into neuropol font.
 **getalbums** - Retrieves all Animusic albums.
 **getabbreviations** - Retrieves most Animusic specific abbreviations.
-**get** `[acronym]` - Retreives specific data on music, an album, or an abbreviation.
+**get** `[acronym]` - Retrieves specific data on music, an album, or an abbreviation.
