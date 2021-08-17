@@ -184,8 +184,8 @@ class ModerationCog(commands.Cog):
 
     @has_permissions(manage_messages=True)
     @commands.command()
-    async def strike(self, ctx, member: discord.Member, reason):
-        strike = await Strike.create(member_id=member.id, reason=reason)
+    async def strike(self, ctx, member: discord.Member, reason, proof="`Not provided.`"):
+        strike = await Strike.create(member_id=member.id, reason=reason, proof=proof)
         await success_message(ctx, 'Strike against ' + member.mention + ' added to database!', strike)
 
     @has_permissions(manage_messages=True)
@@ -196,7 +196,7 @@ class ModerationCog(commands.Cog):
             embed = discord.Embed(colour=discord.Colour.red())
             embed.set_author(name='Here\'s a list of all of the strikes against this member!')
             for strike in strikes:
-                embed.add_field(name=str(strike.date_created).split(' ')[0], value=strike.reason, inline=True)
+                embed.add_field(name=strike.id, value=strike.reason, inline=True)
             await success_message(ctx, 'Strikes retrieved!', embed=embed)
         else:
             await failure_message(ctx, 'No strikes associated with this member could be found!')
@@ -214,7 +214,7 @@ class RetrievalCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    async def get_album(self, ctx, album):
+    async def _get_album(self, ctx, album):
         music = await Music.filter(album=album).all()
         if music:
             embed = discord.Embed(colour=discord.Colour.blue())
@@ -230,12 +230,15 @@ class RetrievalCog(commands.Cog):
         acronym_upper = acronym.upper()
         if await Album.filter(acronym=acronym_upper).exists():
             album = await Album.filter(acronym=acronym_upper).first()
-            await self.get_album(ctx, album)
+            await self._get_album(ctx, album)
         elif await Music.filter(acronym=acronym_upper).exists():
             music = await Music.filter(acronym=acronym_upper).prefetch_related('album').first()
             await success_message(ctx, 'Music retrieved!', music)
         elif await Abbreviation.filter(acronym=acronym_upper).exists():
             abbreviation = await Abbreviation.filter(acronym=acronym_upper).first()
             await success_message(ctx, 'Abbreviation retrieved!', abbreviation)
+        elif ctx.channel.permissions_for(ctx.author).manage_messages and acronym.isdigit() and await Strike.filter(id=acronym).exists():
+            strike = await Strike.filter(id=acronym).first()
+            await success_message(ctx, 'Strike retrieved!', strike)
         else:
             await failure_message(ctx, 'No album, music, or abbreviation with this acronym exists.')

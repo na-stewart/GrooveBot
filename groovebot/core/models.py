@@ -37,6 +37,7 @@ class Music(Abbreviation):
 class Strike(BaseModel):
     member_id = fields.CharField(max_length=18)
     reason = fields.CharField(max_length=45)
+    proof = fields.TextField()
 
     def __str__(self):
-        return f"***ID:*** `{self.id}`\n***Reason:*** `{self.reason}`"
+        return f"***ID:*** `{self.id}`\n***Reason:*** `{self.reason}`\n***Proof:*** {self.proof}"

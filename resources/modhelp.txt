@@ -1,6 +1,6 @@
-****Groove Bot V2.3.8****
+****Groove Bot V2.4.0****
 Moderator commands.
-**Argument Help:** `"Spaces must be enclosed with quotation marks"`
+**Argument Help:** `[Required argument]` `(Optional argument)` `"Spaces must be enclosed with quotation marks"`
 >>> ~~---------------~~:tools: Commands :tools:~~----------------~~
 **createalbum** `[acronym]` `[title]` `[description]` - Creates an album.
 **deletealbum** `[acronym]` - Deletes an album
@@ -8,8 +8,9 @@ Moderator commands.
 **deletemusic** `[acronym]` - Deletes music.
 **createabbreviation** `[acronym]` `[value]` - Creates an abbreviation.
 **deleteabbreviation** `[acronym]` - Deletes an abbreviation.
-**strike** `[mention]` `[reason]` - Creates a strike associated to a member.
+**strike** `[mention]` `[reason]` `(proof)` - Creates a strike associated to a member.
 **getstrikes** `[mention]` - Gets all strikes associated to a user.
+Strike data can be retrieved with the get command.
 **deletestrike** `[number]` - Deleted a strike associated to a user.
 **suspend** `[mention]` - Suspends a member of the server.
 **pardon** `[mention]` - Removes a suspension of a member of the server.
