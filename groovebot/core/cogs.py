@@ -241,4 +241,4 @@ class RetrievalCog(commands.Cog):
             strike = await Strike.filter(id=acronym).first()
             await success_message(ctx, 'Strike retrieved!', strike)
         else:
-            await failure_message(ctx, 'No album, music, or abbreviation with this acronym exists.')
+            await failure_message(ctx, 'Nothing with this abbreviation exists!')
