@@ -5,8 +5,7 @@ from discord.ext import commands
 from discord.ext.commands import MissingRequiredArgument, ExpectedClosingQuoteError, CommandNotFound
 from tortoise.exceptions import ValidationError, IntegrityError
 
-from groovebot.core.cogs import MusicCog, AlbumCog, MiscCog, AbbreviationCog, ModerationCog, RetrievalCog, \
-    NeuropolCog
+from groovebot.core.cogs import MusicCog, AlbumCog, MiscCog, AbbreviationCog, ModerationCog, RetrievalCog
 from groovebot.core.utils import read_file, failure_message, config
 from groovebot.lib.tortoise import tortoise_init
 
@@ -72,6 +71,5 @@ if __name__ == '__main__':
     bot.add_cog(AbbreviationCog(bot))
     bot.add_cog(ModerationCog(bot))
     bot.add_cog(RetrievalCog(bot))
-    bot.add_cog(NeuropolCog(bot))
     bot.command_prefix = config['GROOVE']['prefix']
     bot.run(config['GROOVE']['token'], bot=True)
