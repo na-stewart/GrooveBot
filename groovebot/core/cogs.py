@@ -99,32 +99,6 @@ class AbbreviationCog(commands.Cog):
             await failure_message(ctx, 'No abbreviation with passed acronym exists.')
 
 
-class NeuropolCog(commands.Cog):
-    font = ImageFont.truetype("./resources/NEUROPOL.ttf", 35)
-
-    def __init__(self, bot):
-        self.bot = bot
-
-    async def text_to_neuropol(self, message):
-        loop = asyncio.get_running_loop()
-        file = message + '.png'
-        img = Image.new('RGBA', (400, 40), (255, 0, 0, 0))
-        draw = ImageDraw.Draw(img)
-        draw.text((0, 0), message, (255, 255, 255), font=self.font)
-        await loop.run_in_executor(None, img.save, file)
-        return file
-
-    @commands.command()
-    async def neuropol(self, ctx, *args):
-        message = "{}".format(" ".join(args)).upper()
-        if len(message) < 18 and message:
-            neuropol_img = await self.text_to_neuropol(message)
-            await ctx.send(file=discord.File(neuropol_img))
-            await aiofiles.os.remove(neuropol_img)
-        else:
-            await failure_message(ctx, 'Too many characters to parse or empty!')
-
-
 class MiscCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -142,6 +116,28 @@ class MiscCog(commands.Cog):
     @commands.command()
     async def help(self, ctx):
         await ctx.send(await read_file('help.txt'))
+
+    async def text_to_neuropol(self, message):
+        font = ImageFont.truetype("./resources/NEUROPOL.ttf", 35)
+        loop = asyncio.get_running_loop()
+        file = message + '.png'
+        img = Image.new('RGBA', (400, 40), (255, 0, 0, 0))
+        draw = ImageDraw.Draw(img)
+        draw.text((0, 0), message, (255, 255, 255), font=font)
+        await loop.run_in_executor(None, img.save, file)
+        return file
+
+    @commands.command()
+    async def neuropol(self, ctx, *args):
+        message = "{}".format(" ".join(args)).upper()
+        if message:
+            neuropol_img = await self.text_to_neuropol(message)
+            await ctx.send(file=discord.File(neuropol_img))
+            await aiofiles.os.remove(neuropol_img)
+        elif len(message) < 18:
+            await failure_message(ctx, 'Too many characters!')
+        else:
+            await failure_message(ctx, 'Cannot parse non existent text!')
 
     @has_permissions(manage_messages=True)
     @commands.command(name='modhelp')
@@ -237,7 +233,8 @@ class RetrievalCog(commands.Cog):
         elif await Abbreviation.filter(acronym=acronym_upper).exists():
             abbreviation = await Abbreviation.filter(acronym=acronym_upper).first()
             await success_message(ctx, 'Abbreviation retrieved!', abbreviation)
-        elif ctx.channel.permissions_for(ctx.author).manage_messages and acronym.isdigit() and await Strike.filter(id=acronym).exists():
+        elif ctx.channel.permissions_for(ctx.author).manage_messages and acronym.isdigit() and await Strike.filter(
+                id=acronym).exists():
             strike = await Strike.filter(id=acronym).first()
             await success_message(ctx, 'Strike retrieved!', strike)
         else:
