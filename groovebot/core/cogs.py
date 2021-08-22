@@ -130,14 +130,12 @@ class MiscCog(commands.Cog):
     @commands.command()
     async def neuropol(self, ctx, *args):
         message = "{}".format(" ".join(args)).upper()
-        if message:
+        if len(message) < 18 and message:
             neuropol_img = await self.text_to_neuropol(message)
             await ctx.send(file=discord.File(neuropol_img))
             await aiofiles.os.remove(neuropol_img)
-        elif len(message) < 18:
-            await failure_message(ctx, 'Too many characters!')
         else:
-            await failure_message(ctx, 'Cannot parse non existent text!')
+            await failure_message(ctx, 'Could not parse text to neuropol!')
 
     @has_permissions(manage_messages=True)
     @commands.command(name='modhelp')
@@ -168,7 +166,7 @@ class ModerationCog(commands.Cog):
         await self.handle_member_roles(ctx, member, True)
         await member.send('You are temporarily suspended from the Animusic Discord server. '
                           'Please await further information from the staff.')
-        await success_message(ctx, member.mention + ' has been suspended!')
+        await success_message(ctx, f'{member.mention} has been suspended!')
 
     @has_permissions(manage_messages=True)
     @commands.command()
@@ -176,13 +174,13 @@ class ModerationCog(commands.Cog):
         await self.handle_member_roles(ctx, member, False)
         await member.send('You are no longer suspended and your access to the Animusic Discord server has '
                           'been reinstated. Please follow the rules!')
-        await success_message(ctx, member.mention + ' has been pardoned!')
+        await success_message(ctx, f'{member.mention} has been pardoned!')
 
     @has_permissions(manage_messages=True)
     @commands.command()
     async def strike(self, ctx, member: discord.Member, reason, proof="`Not provided.`"):
         strike = await Strike.create(member_id=member.id, reason=reason, proof=proof)
-        await success_message(ctx, 'Strike against ' + member.mention + ' added to database!', strike)
+        await success_message(ctx, f'Strike against {member.mention} added to database!', strike)
 
     @has_permissions(manage_messages=True)
     @commands.command(name='getstrikes')
@@ -233,9 +231,8 @@ class RetrievalCog(commands.Cog):
         elif await Abbreviation.filter(acronym=acronym_upper).exists():
             abbreviation = await Abbreviation.filter(acronym=acronym_upper).first()
             await success_message(ctx, 'Abbreviation retrieved!', abbreviation)
-        elif ctx.channel.permissions_for(ctx.author).manage_messages and acronym.isdigit() and await Strike.filter(
-                id=acronym).exists():
+        elif ctx.channel.permissions_for(ctx.author).manage_messages and acronym.isdigit() and await Strike.filter(id=acronym).exists():
             strike = await Strike.filter(id=acronym).first()
             await success_message(ctx, 'Strike retrieved!', strike)
         else:
-            await failure_message(ctx, 'Nothing with this abbreviation exists!')
+            await failure_message(ctx, 'I could not find what you were looking for! It may not exist.')
