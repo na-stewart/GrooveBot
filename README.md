@@ -123,9 +123,9 @@ suspended_role_id=1625184812712815183
 verified_role_id=1625184182632815125
 
 [TORTOISE]
-username=admin
-password=8UVbijLUGYfUtItAi
-endpoint=groovedb.cweAenuBY6b.us-north-1.rds.amazonaws.com
+username=example
+password=pass
+endpoint=example.com
 schema=groovebot
 models=groovebot.core.models
 engine=mysql
