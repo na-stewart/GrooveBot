@@ -111,8 +111,7 @@ git clone https://github.com/sunset-developer/GrooveBot
 pip3 install -r requirements.txt
 ```
 
-* Create a groove.ini file in the project directory. Make sure Python's working directory is the project directory. 
-  Below is an example of its contents:
+* Create a groove.ini file in the project directory. Below is an example of its contents:
   
 ```ini
 [GROOVE]
