@@ -117,7 +117,7 @@ class MiscCog(commands.Cog):
     async def help(self, ctx):
         await ctx.send(await read_file('help.txt'))
 
-    async def text_to_neuropol(self, message):
+    async def _text_to_neuropol(self, message):
         font = ImageFont.truetype("./resources/NEUROPOL.ttf", 35)
         loop = asyncio.get_running_loop()
         file = message + '.png'
@@ -131,7 +131,7 @@ class MiscCog(commands.Cog):
     async def neuropol(self, ctx, *args):
         message = "{}".format(" ".join(args)).upper()
         if len(message) < 18 and message:
-            neuropol_img = await self.text_to_neuropol(message)
+            neuropol_img = await self._text_to_neuropol(message)
             await ctx.send(file=discord.File(neuropol_img))
             await aiofiles.os.remove(neuropol_img)
         else:
