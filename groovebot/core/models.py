@@ -26,12 +26,14 @@ class Album(Abbreviation):
 
 
 class Music(Abbreviation):
-    album = fields.ForeignKeyField('models.Album')
+    album = fields.ForeignKeyField("models.Album")
     url = fields.CharField(max_length=45)
 
     def __str__(self):
-        return f"***Acronym:*** `{self.acronym}`\n***Title:*** `{self.value}`\n***Album:*** `{self.album.value}`" \
-               f"\n***URL:*** {self.url}"
+        return (
+            f"***Acronym:*** `{self.acronym}`\n***Title:*** `{self.value}`\n***Album:*** `{self.album.value}`"
+            f"\n***URL:*** {self.url}"
+        )
 
 
 class Strike(BaseModel):
