@@ -8,8 +8,7 @@ Moderator commands.
 **deletemusic** `[acronym]` - Deletes music.
 **createabbreviation** `[acronym]` `[value]` - Creates an abbreviation.
 **deleteabbreviation** `[acronym]` - Deletes an abbreviation.
-**strike** `[mention]` `[reason]` `(proof)` - Creates a strike associated to a member. Proof is provided as an attachment, not an url or message.
-**getstrikes** `[mention]` - Gets all strikes associated to a user.
+**strike** `[mention]` `[reason]` `(proof)` - Creates a strike associated to a member. Proof can be provided as a message and an attachment.
 **get** `[id]` - Retrieves specific data about a strike.
 **deletestrike** `[number]` - Deletes a strike associated to a user.
 **suspend** `[mention]` - Suspends a member of the server.
