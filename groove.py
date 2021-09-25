@@ -53,7 +53,7 @@ async def on_member_remove(member):
 
 async def handle_invalid_command(ctx, error):
     if isinstance(error, CommandNotFound):
-        return
+        raise error
     elif isinstance(error, MissingRequiredArgument):
         await failure_message(
             ctx, "You are missing one or more arguments in your command!", error
