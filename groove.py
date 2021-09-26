@@ -3,10 +3,7 @@ import random
 import discord
 from discord.ext import commands
 from discord.ext.commands import (
-    MissingRequiredArgument,
-    ExpectedClosingQuoteError,
     CommandNotFound,
-    MemberNotFound,
 )
 from tortoise.exceptions import ValidationError, IntegrityError
 
@@ -51,32 +48,15 @@ async def on_member_remove(member):
     await read_on_member_event(member, "farewells.txt")
 
 
-async def handle_invalid_command(ctx, error):
-    if isinstance(error, CommandNotFound):
-        raise error
-    elif isinstance(error, MissingRequiredArgument):
-        await failure_message(
-            ctx, "You are missing one or more arguments in your command!", error
-        )
-    elif isinstance(error, ExpectedClosingQuoteError):
-        await failure_message(
-            ctx,
-            "A closing quotation is missing in one or more of your command arguments!",
-            error,
-        )
-    elif isinstance(error, MemberNotFound):
-        await failure_message(ctx, "This member does not exist in the server!", error)
-
-
 async def handle_command_error(ctx, error):
     if isinstance(error, ValidationError):
         await failure_message(
-            ctx, "One or more of your arguments in your command is too long!", error
+            ctx, "One or more of your arguments in your command is too long."
         )
     elif isinstance(error, IntegrityError):
         if error.args[0].args[0] == 1062:
             await failure_message(
-                ctx, "This acronym is already being used in the database!", error
+                ctx, "This acronym is already being used in the database."
             )
 
 
@@ -84,11 +64,8 @@ async def handle_command_error(ctx, error):
 async def on_command_error(ctx, error):
     if hasattr(error, "original"):
         await handle_command_error(ctx, error.original)
-    else:
-        await handle_invalid_command(ctx, error)
-    await failure_message(
-        ctx, "An unexpected error has occurred! Please see console.", error
-    )
+    elif not isinstance(error, CommandNotFound):
+        await failure_message(ctx, str(error))
 
 
 if __name__ == "__main__":

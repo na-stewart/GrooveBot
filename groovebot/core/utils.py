@@ -5,10 +5,8 @@ config = ConfigParser()
 config.read("./groove.ini")
 
 
-async def failure_message(ctx, message, error=None):
+async def failure_message(ctx, message):
     await ctx.send(f":x: **{message}**")
-    if error:
-        raise error
 
 
 async def success_message(ctx, message, model=None, embed=None):
