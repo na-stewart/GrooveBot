@@ -12,5 +12,5 @@ async def tortoise_init():
     models = config["TORTOISE"]["models"].replace(" ", "").split(",")
     url = f"{engine}://{username}:{password}@{endpoint}/{schema}"
     await Tortoise.init(db_url=url, modules={"models": models})
-    if config["TORTOISE"]["generate"] == "true":
+    if config["TORTOISE"].getboolean("generate"):
         await Tortoise.generate_schemas()
