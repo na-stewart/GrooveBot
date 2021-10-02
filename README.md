@@ -119,7 +119,6 @@ pip3 install -r requirements.txt
 token=Nzc4MjYzMjAwMDQyODQ0MTYx.X7PcFg.k-BedTOS3LgoEU6teXsQSi5aVAE
 prefix=.
 general_channel_id=1625118263628154181
-suspended_role_id=1625184812712815183
 verified_role_id=1625184182632815125
 
 [TORTOISE]

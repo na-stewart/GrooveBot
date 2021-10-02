@@ -1,4 +1,4 @@
-****Groove Bot V2.4.5****
+****Groove Bot V2.4.6****
 Moderator commands.
 **Argument Help:** `[Required argument]` `(Optional argument)` `"Spaces must be enclosed with quotation marks"`
 >>> ~~---------------~~:tools: Commands :tools:~~----------------~~
@@ -11,5 +11,4 @@ Moderator commands.
 **strike** `[mention]` `[reason]` `(proof)` - Creates a strike associated to a member. Proof can be provided as a message and an attachment.
 **get** `[id]` - Retrieves specific data about a strike.
 **deletestrike** `[number]` - Deletes a strike associated to a user.
-**suspend** `[mention]` - Suspends a member of the server.
-**pardon** `[mention]` - Removes a suspension of a member of the server.
+**verify** - Allows a member access to the server.

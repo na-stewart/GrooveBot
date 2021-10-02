@@ -117,15 +117,6 @@ class MiscCog(commands.Cog):
         await ctx.send(random.choice(await read_file("facts.txt", True)))
 
     @commands.command()
-    async def verify(self, ctx):
-        if (
-            ctx.guild.get_role(int(config["GROOVE"]["suspended_role_id"]))
-            not in ctx.author.roles
-        ):
-            role = ctx.guild.get_role(int(config["GROOVE"]["verified_role_id"]))
-            await ctx.author.add_roles(role)
-
-    @commands.command()
     async def help(self, ctx):
         await ctx.send(await read_file("help.txt"))
 
@@ -163,37 +154,6 @@ class MiscCog(commands.Cog):
 class ModerationCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-
-    def get_member_role(self, ctx, suspend):
-        return (
-            ctx.guild.get_role(int(config["GROOVE"]["suspended_role_id"]))
-            if suspend
-            else ctx.guild.get_role(int(config["GROOVE"]["verified_role_id"]))
-        )
-
-    async def handle_member_roles(self, ctx, member, suspend):
-        await member.add_roles(self.get_member_role(ctx, suspend))
-        await member.remove_roles(self.get_member_role(ctx, not suspend))
-
-    @has_permissions(manage_messages=True)
-    @commands.command()
-    async def suspend(self, ctx, member: discord.Member):
-        await self.handle_member_roles(ctx, member, True)
-        await member.send(
-            "You are temporarily suspended from the Animusic Discord server. "
-            "Please await further information from the staff."
-        )
-        await success_message(ctx, f"{member.mention} has been suspended!")
-
-    @has_permissions(manage_messages=True)
-    @commands.command()
-    async def pardon(self, ctx, member: discord.Member):
-        await self.handle_member_roles(ctx, member, False)
-        await member.send(
-            "You are no longer suspended and your access to the Animusic Discord server has "
-            "been reinstated. Please follow the rules!"
-        )
-        await success_message(ctx, f"{member.mention} has been pardoned!")
 
     @has_permissions(manage_messages=True)
     @commands.command()
@@ -233,6 +193,12 @@ class ModerationCog(commands.Cog):
             await success_message(ctx, "Strike deleted from database!")
         else:
             await failure_message(ctx, "Could not find strike with id.")
+
+    @commands.command()
+    async def verify(self, ctx):
+        if len(ctx.author.roles) <= 1:
+            role = ctx.guild.get_role(int(config["GROOVE"]["verified_role_id"]))
+            await ctx.author.add_roles(role)
 
 
 class RetrievalCog(commands.Cog):
