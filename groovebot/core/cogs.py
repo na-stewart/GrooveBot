@@ -123,7 +123,7 @@ class MiscCog(commands.Cog):
     async def _text_to_neuropol(self, message):
         font = ImageFont.truetype("./resources/NEUROPOL.ttf", 35)
         loop = asyncio.get_running_loop()
-        file = message + ".png"
+        file = f"{message}.png"
         img = Image.new("RGBA", (400, 40), (255, 0, 0, 0))
         draw = ImageDraw.Draw(img)
         draw.text((0, 0), message, (255, 255, 255), font=font)
