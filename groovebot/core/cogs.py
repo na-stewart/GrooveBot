@@ -234,7 +234,6 @@ class RetrievalCog(commands.Cog):
             await success_message(ctx, "Abbreviation retrieved!", abbreviation)
         elif (
             ctx.channel.permissions_for(ctx.author).manage_messages
-            and acronym.isdigit()
             and await Strike.filter(id=acronym).exists()
         ):
             strike = await Strike.filter(id=acronym).first()
