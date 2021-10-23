@@ -70,21 +70,21 @@ and security features such as verification, suspending and striking users, and j
 Use .help for user commands and .modhelp for moderator commands. 
 
 ## Images
-![alt text](https://github.com/sunset-developer/GrooveBot/blob/master/images/groovebot1.png)
+![alt text](https://github.com/sunset-developer/GrooveBot/blob/main/images/groovebot1.png)
 
-![alt text](https://github.com/sunset-developer/GrooveBot/blob/master/images/groovebot2.png)
+![alt text](https://github.com/sunset-developer/GrooveBot/blob/main/images/groovebot2.png)
 
-![alt text](https://github.com/sunset-developer/GrooveBot/blob/master/images/groovebot3.png)
+![alt text](https://github.com/sunset-developer/GrooveBot/blob/main/images/groovebot3.png)
 
-![alt text](https://github.com/sunset-developer/GrooveBot/blob/master/images/groovebot4.png)
+![alt text](https://github.com/sunset-developer/GrooveBot/blob/main/images/groovebot4.png)
 
-![alt text](https://github.com/sunset-developer/GrooveBot/blob/master/images/groovebot5.png)
+![alt text](https://github.com/sunset-developer/GrooveBot/blob/main/images/groovebot5.png)
 
-![alt text](https://github.com/sunset-developer/GrooveBot/blob/master/images/groovebot6.png)
+![alt text](https://github.com/sunset-developer/GrooveBot/blob/main/images/groovebot6.png)
 
-![alt text](https://github.com/sunset-developer/GrooveBot/blob/master/images/groovebot7.png)
+![alt text](https://github.com/sunset-developer/GrooveBot/blob/main/images/groovebot7.png)
 
-![alt text](https://github.com/sunset-developer/GrooveBot/blob/master/images/groovebot8.png)
+![alt text](https://github.com/sunset-developer/GrooveBot/blob/main/images/groovebot8.png)
 
 
 <!-- GETTING STARTED -->
