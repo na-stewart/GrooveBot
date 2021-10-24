@@ -1,6 +1,7 @@
 import asyncio
 import random
 import re
+import colorsys
 
 import aiofiles.os
 import discord
@@ -11,7 +12,9 @@ from discord.ext.commands import has_permissions
 from groovebot.core.models import Album, Music, Abbreviation, Strike, Appeal
 from groovebot.core.utils import read_file, failure_message, success_message, config
 
-make_color = lambda : (random.randint(50, 255), random.randint(50, 255), random.randint(50,255))
+
+def mapRange(value, inMin, inMax, outMin, outMax):
+    return outMin + (((value - inMin) / (inMax - inMin)) * (outMax - outMin))
 
 
 class MusicCog(commands.Cog):
@@ -120,7 +123,11 @@ class MiscCog(commands.Cog):
         await ctx.send(random.choice(await read_file("facts.txt", True)))
 
     @commands.command()
-    async def help(self, ctx):
+    async def help(self, ctx, message):
+        if message:
+            await ctx.send(f"Message passed: {message}")
+        else:
+            message = ""
         await ctx.send(await read_file("help.txt"))
 
     async def _text_to_neuropol(self, message, color):
@@ -128,12 +135,19 @@ class MiscCog(commands.Cog):
         loop = asyncio.get_running_loop()
         file = f"{message}.png"
         img = Image.new("RGBA", (font.getsize(message)[0] + 20, 40), (255, 0, 0, 0))  # x coord gets bounding box of text + 20px margin
-        if color == "raninbow":
-            for c in message:
-                draw = ImageDraw.Draw(img)
-                draw.text((10, 0), message, fill=color, font=font)  # x = 10 to center
+        draw = ImageDraw.Draw(img)
+        if color == "rainbow":
+            sp = 0
+            rgb_vals = []
+            for i in range(0, (len(message) + 1)):
+                i = mapRange(i, 0, len(message) - 1, 0, 1)
+                rgb_vals.append(tuple(round(i * 255) for i in colorsys.hsv_to_rgb(i,1,1)))
+
+            for i, letter in enumerate(message):
+                draw.text((10 + sp, 0), text=letter, fill=rgb_vals[i], font=font)
+                sp += font.getsize(letter)[0]
+
         else:
-            draw = ImageDraw.Draw(img)
             draw.text((10, 0), message, fill=color, font=font)  # x = 10 to center
         await loop.run_in_executor(None, img.save, file)
         return file
@@ -145,7 +159,9 @@ class MiscCog(commands.Cog):
             # no color param passed
             fill = "#fff"
         elif len(message) == 2:
-            if re.compile("^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$").match(message[1]):
+            if message[1] == "RAINBOW":
+                fill = "rainbow"
+            elif re.compile("^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$").match(message[1]):
                 fill = message[1]
             else:
                 return await failure_message(ctx, "Please enter a valid hex code!")
@@ -153,9 +169,8 @@ class MiscCog(commands.Cog):
             return await failure_message(ctx, "Please enter syntax correctly!")
         elif not message:
             return failure_message(ctx, "Could not parse text.")
-        message = message[0]
-        if len(message) < 80 and message:
-            await ctx.send(f"len = {len(message)}")
+        message = message[0].rstrip().replace('\\\\', '')
+        if len(message) <= 80 and message:
             neuropol_img = await self._text_to_neuropol(message, fill)
             await ctx.send(file=discord.File(neuropol_img))
             await aiofiles.os.remove(neuropol_img)
