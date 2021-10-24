@@ -43,18 +43,3 @@ class Strike(BaseModel):
 
     def __str__(self):
         return f"***ID:*** `{self.id}`\n***Reason:*** `{self.reason}`\n***Proof:*** {self.proof}"
-
-class Appeal(BaseModel):
-    member_id = fields.CharField(max_length=18)
-    reason = fields.CharField(max_length=45)
-
-    def __str__(self):
-        return f"Successfully submitted appeal with ID {self.id}. Reason: {self.reason}"
-
-# class AppealResponse(BaseModel):
-#     id = fields.IntField()
-#     approved = fields.CharField(max_length=7)
-#     approvedReason = fields.CharField(max_length=45)
-
-#     def __str__(self):
-#         return f"Successfully submitted appeal response with ID {self.id}. Status: {self.approved}. Reason: {self.approvedReason}"
