@@ -11,7 +11,8 @@ from discord.ext.commands import has_permissions
 from groovebot.core.models import Album, Music, Abbreviation, Strike, Appeal
 from groovebot.core.utils import read_file, failure_message, success_message, config
 
-client = discord.Client() 
+make_color = lambda : (random.randint(50, 255), random.randint(50, 255), random.randint(50,255))
+
 
 class MusicCog(commands.Cog):
     def __init__(self, bot):
@@ -127,8 +128,13 @@ class MiscCog(commands.Cog):
         loop = asyncio.get_running_loop()
         file = f"{message}.png"
         img = Image.new("RGBA", (font.getsize(message)[0] + 20, 40), (255, 0, 0, 0))  # x coord gets bounding box of text + 20px margin
-        draw = ImageDraw.Draw(img)
-        draw.text((10, 0), message, fill=color, font=font)  # x = 10 to center
+        if color == "raninbow":
+            for c in message:
+                draw = ImageDraw.Draw(img)
+                draw.text((10, 0), message, fill=color, font=font)  # x = 10 to center
+        else:
+            draw = ImageDraw.Draw(img)
+            draw.text((10, 0), message, fill=color, font=font)  # x = 10 to center
         await loop.run_in_executor(None, img.save, file)
         return file
 
@@ -145,10 +151,11 @@ class MiscCog(commands.Cog):
                 return await failure_message(ctx, "Please enter a valid hex code!")
         elif len(message) > 2:
             return await failure_message(ctx, "Please enter syntax correctly!")
-        else:
+        elif not message:
             return failure_message(ctx, "Could not parse text.")
         message = message[0]
-        if len(message[0]) < 80 and message:
+        if len(message) < 80 and message:
+            await ctx.send(f"len = {len(message)}")
             neuropol_img = await self._text_to_neuropol(message, fill)
             await ctx.send(file=discord.File(neuropol_img))
             await aiofiles.os.remove(neuropol_img)
