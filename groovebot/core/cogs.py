@@ -205,7 +205,6 @@ class ModerationCog(commands.Cog):
     #         await success_message(ctx, "user" + user + " has been banned")
     #     await success_message(ctx, bans)
 
-
     @has_permissions(manage_messages=True)
     @commands.command()
     async def strike(self, ctx, member: discord.Member, reason, proof="Not provided."):
