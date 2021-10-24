@@ -1,4 +1,4 @@
-****Groove Bot V2.4.6****
+****Groove Bot V2.4.7****
 Moderator commands.
 **Argument Help:** `[Required argument]` `(Optional argument)` `"Spaces must be enclosed with quotation marks"`
 >>> ~~---------------~~:tools: Commands :tools:~~----------------~~
@@ -12,3 +12,4 @@ Moderator commands.
 **get** `[id]` - Retrieves specific data about a strike.
 **deletestrike** `[number]` - Deletes a strike associated to a user.
 **verify** - Allows a member access to the server.
+**appeal `[id]` `[approve/deny]` `[reason]`** - Allows you to respond to an appeal.

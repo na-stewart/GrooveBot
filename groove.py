@@ -1,4 +1,5 @@
 import random
+#from datetime import datetime
 
 import discord
 from discord.ext import commands
@@ -20,13 +21,19 @@ from groovebot.lib.tortoise import tortoise_init
 
 intents = discord.Intents.default()
 intents.members = True
+intents.messages = True
 bot = commands.Bot(help_command=None, command_prefix=None, intents=intents)
 
+client = discord.Client()
 
 @bot.event
 async def on_ready():
     await tortoise_init()
-    print("Groovebot initialized.")
+    print("Groovebot initalized.")
+    #channel = bot.get_channel(int(config["GROOVE"]["general_channel_id"]))
+    #version = await read_file("help.txt", as_array = True)
+    #await channel.send(f"{version[0]} initialized. Today is {datetime.now().strftime('%m/%d/%Y, %H:%M:%S')} EST.")
+    #print(f"{version[0]} initialized. Today is {datetime.now().strftime('%m/%d/%Y, %H:%M:%S')} EST.")
 
 
 async def read_on_member_event(member, file):
@@ -36,7 +43,6 @@ async def read_on_member_event(member, file):
     )
     await channel.send(response)
 
-
 @bot.event
 async def on_member_join(member):
     await read_on_member_event(member, "greetings.txt")
@@ -45,7 +51,14 @@ async def on_member_join(member):
 
 @bot.event
 async def on_member_remove(member):
-    await read_on_member_event(member, "farewells.txt")
+    channel = member.guild.get_channel(int(config["GROOVE"]["general_channel_id"]))
+    try:
+        bans = await member.guild.fetch_ban(member)
+        # nameDiscrim, id = "{0.name}#{0.discriminator}".format(bans.user), "<@{0.id}>".format(bans.user)
+        await channel.send(f"Uh oh... {member.mention} ({member}) was banned!")
+        await member.send(await read_file("banned.txt"))
+    except:
+        await read_on_member_event(member, "farewells.txt")
 
 
 async def handle_command_error(ctx, error):

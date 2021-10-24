@@ -1,5 +1,6 @@
 import asyncio
 import random
+import re
 
 import aiofiles.os
 import discord
@@ -7,9 +8,10 @@ from PIL import ImageFont, Image, ImageDraw
 from discord.ext import commands
 from discord.ext.commands import has_permissions
 
-from groovebot.core.models import Album, Music, Abbreviation, Strike
+from groovebot.core.models import Album, Music, Abbreviation, Strike, Appeal
 from groovebot.core.utils import read_file, failure_message, success_message, config
 
+client = discord.Client() 
 
 class MusicCog(commands.Cog):
     def __init__(self, bot):
@@ -120,25 +122,40 @@ class MiscCog(commands.Cog):
     async def help(self, ctx):
         await ctx.send(await read_file("help.txt"))
 
-    async def _text_to_neuropol(self, message):
+    async def _text_to_neuropol(self, message, color):
         font = ImageFont.truetype("./resources/NEUROPOL.ttf", 35)
         loop = asyncio.get_running_loop()
         file = f"{message}.png"
-        img = Image.new("RGBA", (400, 40), (255, 0, 0, 0))
+        img = Image.new("RGBA", (font.getsize(message)[0] + 20, 40), (255, 0, 0, 0))  # x coord gets bounding box of text + 20px margin
         draw = ImageDraw.Draw(img)
-        draw.text((0, 0), message, (255, 255, 255), font=font)
+        draw.text((10, 0), message, fill=color, font=font)  # x = 10 to center
         await loop.run_in_executor(None, img.save, file)
         return file
 
     @commands.command()
     async def neuropol(self, ctx, *args):
-        message = "{}".format(" ".join(args)).upper()
-        if len(message) < 18 and message:
-            neuropol_img = await self._text_to_neuropol(message)
+        message = "{}".format(" ".join(args)).upper().rstrip().split("COLOR=")
+        if len(message) == 1:
+            # no color param passed
+            fill = "#fff"
+        elif len(message) == 2:
+            if re.compile("^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$").match(message[1]):
+                fill = message[1]
+            else:
+                return await failure_message(ctx, "Please enter a valid hex code!")
+        elif len(message) > 2:
+            return await failure_message(ctx, "Please enter syntax correctly!")
+        else:
+            return failure_message(ctx, "Could not parse text.")
+        message = message[0]
+        if len(message[0]) < 80 and message:
+            neuropol_img = await self._text_to_neuropol(message, fill)
             await ctx.send(file=discord.File(neuropol_img))
             await aiofiles.os.remove(neuropol_img)
+        elif not message:
+            await failure_message(ctx, "Please enter a message.")
         else:
-            await failure_message(ctx, "Could not parse text to neuropol!")
+            await failure_message(ctx, "Please enter a message under 80 characters.")
 
     @has_permissions(manage_messages=True)
     @commands.command(name="modhelp")
@@ -154,6 +171,40 @@ class MiscCog(commands.Cog):
 class ModerationCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+
+    @commands.command(name="appeal")
+    async def appeal(self, ctx, author, reason):
+        # need to check if user is currently banned
+        # call Appeal() class and add values to DB
+        # return statement to user
+        # also alert #appeals channel
+        bans = await ctx.guild.bans()
+        bans = ["{0.id}".format(entry.user) for entry in bans]
+        author = ctx.author
+
+        if author[3:-1] in bans:
+            # user is in bans
+            await success_message(ctx, "user" + author + " is banned")
+            author = author[3:-1]
+            appeal = await Appeal.create(member_id=author, reason=reason)
+            await success_message(ctx, appeal)
+            channel = ctx.guild.get_channel(int(config["GROOVE"]["appeals_channel_id"]))
+            channel.send(f"A new appeal has arrived from {author}. {appeal}")
+        else:
+             # user not in bans
+            await failure_message(ctx, f"User {author.mention} has not been banned!")
+
+    # @commands.command()
+    # @commands.has_permissions(manage_messages = True)
+    # async def is_banned(self, ctx, user):
+    #     bans = await ctx.guild.bans()
+    #     bans = ["{0.id}".format(entry.user) for entry in bans]
+    #     await success_message(ctx, user[3:-1])
+    #     print(user[3:-1])
+    #     if user[3:-1] in bans:
+    #         await success_message(ctx, "user" + user + " has been banned")
+    #     await success_message(ctx, bans)
+
 
     @has_permissions(manage_messages=True)
     @commands.command()
@@ -176,23 +227,23 @@ class ModerationCog(commands.Cog):
         if strikes:
             embed = discord.Embed(colour=discord.Colour.red())
             embed.set_author(
-                name="Here's a list of all of the strikes against this member!"
+                name=f"Here's a list of all of the strikes against {member.mention}!"
             )
             for strike in strikes:
                 embed.add_field(name=strike.id, value=strike.reason, inline=True)
             await success_message(ctx, "Strikes retrieved!", embed=embed)
         else:
             await failure_message(
-                ctx, "No strikes associated with this member could be found!"
+                ctx, f"No strikes associated with {member.mention} could be found!"
             )
 
     @has_permissions(manage_messages=True)
     @commands.command(name="deletestrike")
     async def delete_strike(self, ctx, id):
         if await Strike.filter(id=id).delete() == 1:
-            await success_message(ctx, "Strike deleted from database!")
+            await success_message(ctx, f"Strike id {id} deleted from database!")
         else:
-            await failure_message(ctx, "Could not find strike with id.")
+            await failure_message(ctx, f"Could not find strike with id {id}.")
 
     @commands.command()
     async def verify(self, ctx):
