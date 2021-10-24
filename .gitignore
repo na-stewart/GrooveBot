@@ -1,4 +1,5 @@
 # Project exclude paths
 /groove.ini
 .idea
+/DS_Store
 venv
