@@ -54,9 +54,10 @@ async def on_member_remove(member):
     channel = member.guild.get_channel(int(config["GROOVE"]["general_channel_id"]))
     try:
         bans = await member.guild.fetch_ban(member)
-        # nameDiscrim, id = "{0.name}#{0.discriminator}".format(bans.user), "<@{0.id}>".format(bans.user)
-        await channel.send(f"Uh oh... {member.mention} ({member}) was banned!")
+        print(bans)
+        #nameDiscrim, id = "{0.name}#{0.discriminator}".format(bans.user), "<@{0.id}>".format(bans.user)
         await member.send(await read_file("banned.txt"))
+        await channel.send(f"Uh oh... {member.mention} ({member}) was banned!")
     except:
         await read_on_member_event(member, "farewells.txt")
 

@@ -9,7 +9,7 @@ from PIL import ImageFont, Image, ImageDraw
 from discord.ext import commands
 from discord.ext.commands import has_permissions
 
-from groovebot.core.models import Album, Music, Abbreviation, Strike, Appeal
+from groovebot.core.models import Album, Music, Abbreviation, Strike
 from groovebot.core.utils import read_file, failure_message, success_message, config
 
 
@@ -194,27 +194,27 @@ class ModerationCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="appeal")
-    async def appeal(self, ctx, author, reason):
-        # need to check if user is currently banned
-        # call Appeal() class and add values to DB
-        # return statement to user
-        # also alert #appeals channel
-        bans = await ctx.guild.bans()
-        bans = ["{0.id}".format(entry.user) for entry in bans]
-        author = ctx.author
+    # @commands.command(name="appeal")
+    # async def appeal(self, ctx, author, reason):
+    #     # need to check if user is currently banned
+    #     # call Appeal() class and add values to DB
+    #     # return statement to user
+    #     # also alert #appeals channel
+    #     bans = await ctx.guild.bans()
+    #     bans = ["{0.id}".format(entry.user) for entry in bans]
+    #     author = ctx.author
 
-        if author[3:-1] in bans:
-            # user is in bans
-            await success_message(ctx, "user" + author + " is banned")
-            author = author[3:-1]
-            appeal = await Appeal.create(member_id=author, reason=reason)
-            await success_message(ctx, appeal)
-            channel = ctx.guild.get_channel(int(config["GROOVE"]["appeals_channel_id"]))
-            channel.send(f"A new appeal has arrived from {author}. {appeal}")
-        else:
-             # user not in bans
-            await failure_message(ctx, f"User {author.mention} has not been banned!")
+    #     if author[3:-1] in bans:
+    #         # user is in bans
+    #         await success_message(ctx, "user" + author + " is banned")
+    #         author = author[3:-1]
+    #         appeal = await Appeal.create(member_id=author, reason=reason)
+    #         await success_message(ctx, appeal)
+    #         channel = ctx.guild.get_channel(int(config["GROOVE"]["appeals_channel_id"]))
+    #         channel.send(f"A new appeal has arrived from {author}. {appeal}")
+    #     else:
+    #          # user not in bans
+    #         await failure_message(ctx, f"User {author.mention} has not been banned!")
 
     # @commands.command()
     # @commands.has_permissions(manage_messages = True)
@@ -232,13 +232,15 @@ class ModerationCog(commands.Cog):
     async def strike(self, ctx, member: discord.Member, reason, proof="Not provided."):
         if ctx.message.attachments:
             for attachment in ctx.message.attachments:
+                if proof == "Not provided.":
+                    proof = ""
                 proof += f" {attachment.url}\n"
         strike = await Strike.create(member_id=member.id, reason=reason, proof=proof)
         await success_message(
             ctx, f"Strike against {member.mention} added to database!", strike
         )
         await member.send(
-            f"You have incurred a strike ({strike.reason}) against you! Please follow the rules."
+            f"You have incurred a strike against you! Please follow the rules. **Reason:** {strike.reason}"
         )
 
     @has_permissions(manage_messages=True)
@@ -286,7 +288,7 @@ class RetrievalCog(commands.Cog):
                 embed.add_field(name=song.acronym, value=song.value, inline=True)
             await success_message(ctx, "Album retrieved!", album, embed)
         else:
-            await failure_message(ctx, "This album contains no music.")
+            await failure_message(ctx, f"Album {album} contains no music.")
 
     @commands.command()
     async def get(self, ctx, acronym):
@@ -312,7 +314,5 @@ class RetrievalCog(commands.Cog):
             await success_message(ctx, "Strike retrieved!", strike)
         else:
             await failure_message(
-                ctx,
-                "Could not find what you were looking for! Please try again with a different "
-                "acronym.",
+                ctx, "Could not find what you were looking for! Please try again with a different acronym."
             )
