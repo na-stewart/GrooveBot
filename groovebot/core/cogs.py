@@ -240,10 +240,7 @@ class ModerationCog(commands.Cog):
                 await success_message(ctx, f"Unbanned {banned_entry.user} successfully!")
             else:
                 await failure_message(ctx, f"This user is not banned currently.")
-        
-    @commands.command()
-    async def hello(self, ctx, member: discord.Member):
-        await ctx.send(f"Hello, {member.id}!")
+
 
     @has_permissions(manage_messages=True)
     @commands.command()
