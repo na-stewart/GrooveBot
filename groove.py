@@ -29,11 +29,11 @@ client = discord.Client()
 @bot.event
 async def on_ready():
     await tortoise_init()
-    #print("Groovebot initalized.")
-    channel = bot.get_channel(int(config["GROOVE"]["general_channel_id"]))
-    version = await read_file("help.txt", as_array = True)
-    await channel.send(f"{version[0]} initialized. Today is {datetime.now().strftime('%m/%d/%Y, %H:%M:%S')} EST.")
-    print(f"{version[0]} initialized. Today is {datetime.now().strftime('%m/%d/%Y, %H:%M:%S')} EST.")
+    print("Groovebot initalized.")
+    # channel = bot.get_channel(int(config["GROOVE"]["general_channel_id"]))
+    # version = await read_file("help.txt", as_array = True)
+    # await channel.send(f"{version[0]} initialized. Today is {datetime.now().strftime('%m/%d/%Y, %H:%M:%S')} EST.")
+    # print(f"{version[0]} initialized. Today is {datetime.now().strftime('%m/%d/%Y, %H:%M:%S')} EST.")
 
 
 async def read_on_member_event(member, file):
