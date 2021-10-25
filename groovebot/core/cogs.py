@@ -194,38 +194,56 @@ class ModerationCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    # @commands.command(name="appeal")
-    # async def appeal(self, ctx, author, reason):
-    #     # need to check if user is currently banned
-    #     # call Appeal() class and add values to DB
-    #     # return statement to user
-    #     # also alert #appeals channel
-    #     bans = await ctx.guild.bans()
-    #     bans = ["{0.id}".format(entry.user) for entry in bans]
-    #     author = ctx.author
+    @has_permissions(manage_messages=True)
+    @commands.command()
+    async def ban(self, ctx, member : discord.Member, *reason):
+        reason = "{}".format(" ".join(reason))
+        if reason:
+            await member.send(f"{await read_file('banned.txt')} \nReason: {reason}")
+            await member.ban(reason = reason)
+            await success_message(ctx, f"Successfully banned user {member.mention} ({member}) for reason: {reason}.")
+        else:
+            await failure_message(ctx, "Please provide a reason.")
 
-    #     if author[3:-1] in bans:
-    #         # user is in bans
-    #         await success_message(ctx, "user" + author + " is banned")
-    #         author = author[3:-1]
-    #         appeal = await Appeal.create(member_id=author, reason=reason)
-    #         await success_message(ctx, appeal)
-    #         channel = ctx.guild.get_channel(int(config["GROOVE"]["appeals_channel_id"]))
-    #         channel.send(f"A new appeal has arrived from {author}. {appeal}")
-    #     else:
-    #          # user not in bans
-    #         await failure_message(ctx, f"User {author.mention} has not been banned!")
+    @has_permissions(manage_messages=True)
+    @commands.command()
+    async def kick(self, ctx, member : discord.Member, *reason):
+        reason = "{}".format(" ".join(reason))
+        if reason:
+            await member.send(f"You have been kicked from the Animusic Discord. \nReason: {reason}")
+            await member.kick(reason = reason)
+            await success_message(ctx, f"Successfully kicked user {member.mention} ({member}) for reason: {reason}.")
+        else:
+            await failure_message(ctx, "Please provide a reason.")
 
-    # @commands.command()
-    # @commands.has_permissions(manage_messages = True)
-    # async def is_banned(self, ctx, user):
-    #     bans = await ctx.guild.bans()
-    #     bans = ["{0.id}".format(entry.user) for entry in bans]
-    #     await success_message(ctx, user[3:-1])
-    #     print(user[3:-1])
-    #     if user[3:-1] in bans:
-    #         await success_message(ctx, "user" + user + " has been banned")
-    #     await success_message(ctx, bans)
+    @has_permissions(manage_messages=True)
+    @commands.command()
+    async def unban(self, ctx, member):
+        banned_users = await ctx.guild.bans()
+        if not bool(banned_users):
+            return await failure_message(ctx, "There are currently no bans on the server.")
+        
+        if member.upper().isupper():
+            return await failure_message(ctx, "Please enter a valid ID.")
+        
+        try:
+            member = int(member)
+        except ValueError:
+            member = int(member[3:-1])
+
+        member = discord.Object(id=int(member)) # user ID
+        for banned_entry in banned_users:
+            ban = banned_entry.user.id
+            member = member.id
+            if (ban == member):
+                await ctx.guild.unban(banned_entry.user)
+                await success_message(ctx, f"Unbanned {banned_entry.user} successfully!")
+            else:
+                await failure_message(ctx, f"This user is not banned currently.")
+        
+    @commands.command()
+    async def hello(self, ctx, member: discord.Member):
+        await ctx.send(f"Hello, {member.id}!")
 
     @has_permissions(manage_messages=True)
     @commands.command()

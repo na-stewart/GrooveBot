@@ -1,4 +1,4 @@
 ***Welcome to the offical r/Animusic Discord server!***
 To make sure you're not a bot or a stick figure we require that you use the `.verify` command in the `#verification` channel to gain access to the server. For all things Animusic and Wayne Lytle, use the `.help` command!
 
-If for some reason you are banned, you can type `.appeal (your message here)`.
+If for some reason you are banned, you can submit an appeal here: https://google.com/
