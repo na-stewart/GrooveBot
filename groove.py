@@ -25,7 +25,7 @@ bot = commands.Bot(help_command=None, command_prefix=None, intents=intents)
 @bot.event
 async def on_ready():
     await tortoise_init()
-    print("Groovebot initalized.")
+    print("Groovebot initialized.")
 
 
 async def read_on_member_event(member, file):
