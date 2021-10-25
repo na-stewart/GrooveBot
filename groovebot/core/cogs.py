@@ -1,5 +1,7 @@
 import asyncio
 import random
+import re
+import colorsys
 
 import aiofiles.os
 import discord
@@ -112,6 +114,9 @@ class MiscCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    def _map_range(self, value, inMin, inMax, outMin, outMax):
+        return outMin + (((value - inMin) / (inMax - inMin)) * (outMax - outMin))
+
     @commands.command()
     async def fact(self, ctx):
         await ctx.send(random.choice(await read_file("facts.txt", True)))
@@ -120,25 +125,54 @@ class MiscCog(commands.Cog):
     async def help(self, ctx):
         await ctx.send(await read_file("help.txt"))
 
-    async def _text_to_neuropol(self, message):
+    async def _text_to_neuropol(self, message, color):_
         font = ImageFont.truetype("./resources/NEUROPOL.ttf", 35)
         loop = asyncio.get_running_loop()
         file = f"{message}.png"
-        img = Image.new("RGBA", (400, 40), (255, 0, 0, 0))
+        img = Image.new("RGBA", (font.getsize(message)[0] + 20, 40), (255, 0, 0, 0))  # x coord gets bounding box of text + 20px margin
         draw = ImageDraw.Draw(img)
-        draw.text((0, 0), message, (255, 255, 255), font=font)
+        if color == "rainbow":
+            sp = 0
+            rgb_vals = []
+            for i in range(0, (len(message) + 1)):
+                i = self._map_range(i, 0, len(message) - 1, 0, 1)
+                rgb_vals.append(tuple(round(i * 255) for i in colorsys.hsv_to_rgb(i,1,1)))
+
+            for i, letter in enumerate(message):
+                draw.text((10 + sp, 0), text=letter, fill=rgb_vals[i], font=font)
+                sp += font.getsize(letter)[0]
+
+        else:
+            draw.text((10, 0), message, fill=color, font=font)  # x = 10 to center
         await loop.run_in_executor(None, img.save, file)
         return file
 
     @commands.command()
     async def neuropol(self, ctx, *args):
-        message = "{}".format(" ".join(args)).upper()
-        if len(message) < 18 and message:
-            neuropol_img = await self._text_to_neuropol(message)
+        message = "{}".format(" ".join(args)).upper().rstrip().split("COLOR=")
+        if len(message) == 1:
+            # no color param passed
+            fill = "#fff"
+        elif len(message) == 2:
+            if message[1] == "RAINBOW":
+                fill = "rainbow"
+            elif re.compile("^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$").match(message[1]):
+                fill = message[1]
+            else:
+                return await failure_message(ctx, "Please enter a valid hex code!")
+        elif len(message) > 2:
+            return await failure_message(ctx, "Please enter syntax correctly!")
+        elif not message:
+            return failure_message(ctx, "Could not parse text.")
+        message = message[0].rstrip().replace('\\\\', '')
+        if len(message) <= 80 and message:
+            neuropol_img = await self._text_to_neuropol(message, fill)
             await ctx.send(file=discord.File(neuropol_img))
             await aiofiles.os.remove(neuropol_img)
+        elif not message:
+            await failure_message(ctx, "Please enter a message.")
         else:
-            await failure_message(ctx, "Could not parse text to neuropol!")
+            await failure_message(ctx, "Please enter a message under 80 characters.")
 
     @has_permissions(manage_messages=True)
     @commands.command(name="modhelp")
@@ -157,6 +191,18 @@ class ModerationCog(commands.Cog):
 
     @has_permissions(manage_messages=True)
     @commands.command()
+    async def ban(self, ctx, member : discord.Member, *reason):
+        reason = "{}".format(" ".join(reason))
+        if reason:
+            await member.send(f"You have been banned from the Animusic server. If you would like to submit an appeal, you can click here: https://forms.gle/FmkxeXaXSsUpS6Vv7 \nReason: {reason}")
+            await member.ban(reason = reason)
+            await success_message(ctx, f"Successfully banned user {member.mention} ({member}) for reason: {reason}.")
+        else:
+            await failure_message(ctx, "Please provide a reason.")
+
+
+    @has_permissions(manage_messages=True)
+    @commands.command()
     async def strike(self, ctx, member: discord.Member, reason, proof="Not provided."):
         if ctx.message.attachments:
             for attachment in ctx.message.attachments:
@@ -166,7 +212,7 @@ class ModerationCog(commands.Cog):
             ctx, f"Strike against {member.mention} added to database!", strike
         )
         await member.send(
-            f"You have incurred a strike ({strike.reason}) against you! Please follow the rules."
+            f"You have incurred a strike against you! Please follow the rules. **Reason:** {strike.reason}"
         )
 
     @has_permissions(manage_messages=True)
@@ -176,23 +222,23 @@ class ModerationCog(commands.Cog):
         if strikes:
             embed = discord.Embed(colour=discord.Colour.red())
             embed.set_author(
-                name="Here's a list of all of the strikes against this member!"
+                name=f"Here's a list of all of the strikes against {member.mention}!"
             )
             for strike in strikes:
                 embed.add_field(name=strike.id, value=strike.reason, inline=True)
             await success_message(ctx, "Strikes retrieved!", embed=embed)
         else:
             await failure_message(
-                ctx, "No strikes associated with this member could be found!"
+                ctx, f"No strikes associated with {member.mention} could be found!"
             )
 
     @has_permissions(manage_messages=True)
     @commands.command(name="deletestrike")
     async def delete_strike(self, ctx, id):
         if await Strike.filter(id=id).delete() == 1:
-            await success_message(ctx, "Strike deleted from database!")
+            await success_message(ctx, f"Strike id {id} deleted from database!")
         else:
-            await failure_message(ctx, "Could not find strike with id.")
+            await failure_message(ctx, f"Could not find strike with id {id}.")
 
     @commands.command()
     async def verify(self, ctx):
@@ -214,7 +260,7 @@ class RetrievalCog(commands.Cog):
                 embed.add_field(name=song.acronym, value=song.value, inline=True)
             await success_message(ctx, "Album retrieved!", album, embed)
         else:
-            await failure_message(ctx, "This album contains no music.")
+            await failure_message(ctx, f"Album {album} contains no music.")
 
     @commands.command()
     async def get(self, ctx, acronym):
@@ -240,7 +286,5 @@ class RetrievalCog(commands.Cog):
             await success_message(ctx, "Strike retrieved!", strike)
         else:
             await failure_message(
-                ctx,
-                "Could not find what you were looking for! Please try again with a different "
-                "acronym.",
+                ctx, "Could not find what you were looking for! Please try again with a different acronym."
             )

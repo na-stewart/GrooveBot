@@ -113,7 +113,9 @@ pip3 install -r requirements.txt
 ```
 
 * Create a groove.ini file in the project directory. Below is an example of its contents:
-  
+* *Note: You will need a database, local or remote.*
+<!-- maybe add examples of free DB server programs?-->
+
 ```ini
 [GROOVE]
 token=Nzc4MjYzMjAwMDQyODQ0MTYx.X7PcFg.k-BedTOS3LgoEU6teXsQSi5aVAE
@@ -152,6 +154,7 @@ Distributed under the MIT License. See `LICENSE` for more information.
 ## Acknowledgements
 
 * Thanks to marchkarcz for improving leave messages for mobile.
+* Thanks to iMac for updates to `.neuropol` and appeal system.
 
 
 <!-- MARKDOWN LINKS & IMAGES -->
