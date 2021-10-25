@@ -113,7 +113,8 @@ pip3 install -r requirements.txt
 ```
 
 * Create a groove.ini file in the project directory. Below is an example of its contents:
-* *Note: You will need an SQL server installed to use Tortise.*
+* *Note: You will need a database, local or remote.*
+<!-- maybe add examples of free DB server programs?-->
 
 ```ini
 [GROOVE]
@@ -131,13 +132,6 @@ models=groovebot.core.models
 engine=mysql
 generate=true
 ```
-*Default port is 3303.*
-
-* Create database `groovebot` (or whatever you enter for `schema` in `groove.ini`).
-
-### Additional Python Versions installed:
-
-If you have additional Python versions installed on your machine, Tortise might ask you to install `aiomysql`. Open up a terminal window and install `aiomysql` with the `pip3` library (found under where you installed Python/bin/pip3).
 
 <!-- CONTRIBUTING -->
 ## Contributing
