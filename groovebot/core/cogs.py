@@ -114,7 +114,7 @@ class MiscCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    async def _map_range(self, value, inMin, inMax, outMin, outMax):
+    def _map_range(self, value, inMin, inMax, outMin, outMax):
         return outMin + (((value - inMin) / (inMax - inMin)) * (outMax - outMin))
 
     @commands.command()
@@ -125,7 +125,7 @@ class MiscCog(commands.Cog):
     async def help(self, ctx):
         await ctx.send(await read_file("help.txt"))
 
-    async def _text_to_neuropol(self, message, color):
+    async def _text_to_neuropol(self, message, color):_
         font = ImageFont.truetype("./resources/NEUROPOL.ttf", 35)
         loop = asyncio.get_running_loop()
         file = f"{message}.png"
@@ -135,7 +135,7 @@ class MiscCog(commands.Cog):
             sp = 0
             rgb_vals = []
             for i in range(0, (len(message) + 1)):
-                i = await self._map_range(i, 0, len(message) - 1, 0, 1)
+                i = self._map_range(i, 0, len(message) - 1, 0, 1)
                 rgb_vals.append(tuple(round(i * 255) for i in colorsys.hsv_to_rgb(i,1,1)))
 
             for i, letter in enumerate(message):
