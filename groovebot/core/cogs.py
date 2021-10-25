@@ -13,10 +13,6 @@ from groovebot.core.models import Album, Music, Abbreviation, Strike
 from groovebot.core.utils import read_file, failure_message, success_message, config
 
 
-def mapRange(value, inMin, inMax, outMin, outMax):
-    return outMin + (((value - inMin) / (inMax - inMin)) * (outMax - outMin))
-
-
 class MusicCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -118,16 +114,15 @@ class MiscCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    async def _map_range(self, value, inMin, inMax, outMin, outMax):
+        return outMin + (((value - inMin) / (inMax - inMin)) * (outMax - outMin))
+
     @commands.command()
     async def fact(self, ctx):
         await ctx.send(random.choice(await read_file("facts.txt", True)))
 
     @commands.command()
-    async def help(self, ctx, message):
-        if message:
-            await ctx.send(f"Message passed: {message}")
-        else:
-            message = ""
+    async def help(self, ctx):
         await ctx.send(await read_file("help.txt"))
 
     async def _text_to_neuropol(self, message, color):
@@ -140,7 +135,7 @@ class MiscCog(commands.Cog):
             sp = 0
             rgb_vals = []
             for i in range(0, (len(message) + 1)):
-                i = mapRange(i, 0, len(message) - 1, 0, 1)
+                i = self._map_range(i, 0, len(message) - 1, 0, 1)
                 rgb_vals.append(tuple(round(i * 255) for i in colorsys.hsv_to_rgb(i,1,1)))
 
             for i, letter in enumerate(message):
@@ -199,47 +194,11 @@ class ModerationCog(commands.Cog):
     async def ban(self, ctx, member : discord.Member, *reason):
         reason = "{}".format(" ".join(reason))
         if reason:
-            await member.send(f"{await read_file('banned.txt')} \nReason: {reason}")
+            await member.send(f"You have been banned from the Animusic server. If you would like to submit an appeal, you can click here: https://forms.gle/FmkxeXaXSsUpS6Vv7 \nReason: {reason}")
             await member.ban(reason = reason)
             await success_message(ctx, f"Successfully banned user {member.mention} ({member}) for reason: {reason}.")
         else:
             await failure_message(ctx, "Please provide a reason.")
-
-    @has_permissions(manage_messages=True)
-    @commands.command()
-    async def kick(self, ctx, member : discord.Member, *reason):
-        reason = "{}".format(" ".join(reason))
-        if reason:
-            await member.send(f"You have been kicked from the Animusic Discord. \nReason: {reason}")
-            await member.kick(reason = reason)
-            await success_message(ctx, f"Successfully kicked user {member.mention} ({member}) for reason: {reason}.")
-        else:
-            await failure_message(ctx, "Please provide a reason.")
-
-    @has_permissions(manage_messages=True)
-    @commands.command()
-    async def unban(self, ctx, member):
-        banned_users = await ctx.guild.bans()
-        if not bool(banned_users):
-            return await failure_message(ctx, "There are currently no bans on the server.")
-        
-        if member.upper().isupper():
-            return await failure_message(ctx, "Please enter a valid ID.")
-        
-        try:
-            member = int(member)
-        except ValueError:
-            member = int(member[3:-1])
-
-        member = discord.Object(id=int(member)) # user ID
-        for banned_entry in banned_users:
-            ban = banned_entry.user.id
-            member = member.id
-            if (ban == member):
-                await ctx.guild.unban(banned_entry.user)
-                await success_message(ctx, f"Unbanned {banned_entry.user} successfully!")
-            else:
-                await failure_message(ctx, f"This user is not banned currently.")
 
 
     @has_permissions(manage_messages=True)
