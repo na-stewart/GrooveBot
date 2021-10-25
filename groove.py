@@ -54,24 +54,24 @@ async def on_member_remove(member):
     await read_on_member_event(member, "farewells.txt")
 
 
-# async def handle_command_error(ctx, error):
-#     if isinstance(error, ValidationError):
-#         await failure_message(
-#             ctx, "One or more of your arguments in your command is too long."
-#         )
-#     elif isinstance(error, IntegrityError):
-#         if error.args[0].args[0] == 1062:
-#             await failure_message(
-#                 ctx, "This acronym is already being used in the database."
-#             )
+async def handle_command_error(ctx, error):
+    if isinstance(error, ValidationError):
+        await failure_message(
+            ctx, "One or more of your arguments in your command is too long."
+        )
+    elif isinstance(error, IntegrityError):
+        if error.args[0].args[0] == 1062:
+            await failure_message(
+                ctx, "This acronym is already being used in the database."
+            )
 
 
-# @bot.event
-# async def on_command_error(ctx, error):
-#     if hasattr(error, "original"):
-#         await handle_command_error(ctx, error.original)
-#     elif not isinstance(error, CommandNotFound):
-#         await failure_message(ctx, str(error))
+@bot.event
+async def on_command_error(ctx, error):
+    if hasattr(error, "original"):
+        await handle_command_error(ctx, error.original)
+    elif not isinstance(error, CommandNotFound):
+        await failure_message(ctx, str(error))
 
 
 if __name__ == "__main__":
