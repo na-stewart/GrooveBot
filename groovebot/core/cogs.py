@@ -135,7 +135,7 @@ class MiscCog(commands.Cog):
             sp = 0
             rgb_vals = []
             for i in range(0, (len(message) + 1)):
-                i = self._map_range(i, 0, len(message) - 1, 0, 1)
+                i = await self._map_range(i, 0, len(message) - 1, 0, 1)
                 rgb_vals.append(tuple(round(i * 255) for i in colorsys.hsv_to_rgb(i,1,1)))
 
             for i, letter in enumerate(message):
