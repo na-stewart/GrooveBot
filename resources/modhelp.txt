@@ -12,3 +12,4 @@ Moderator commands.
 **get** `[id]` - Retrieves specific data about a strike.
 **deletestrike** `[number]` - Deletes a strike associated to a user.
 **verify** - Allows a member access to the server.
+**ban** `[@user]` `[reason]` - Bans a user with reason (required).

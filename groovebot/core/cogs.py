@@ -206,8 +206,6 @@ class ModerationCog(commands.Cog):
     async def strike(self, ctx, member: discord.Member, reason, proof="Not provided."):
         if ctx.message.attachments:
             for attachment in ctx.message.attachments:
-                if proof == "Not provided.":
-                    proof = ""
                 proof += f" {attachment.url}\n"
         strike = await Strike.create(member_id=member.id, reason=reason, proof=proof)
         await success_message(
