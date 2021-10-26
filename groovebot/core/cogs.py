@@ -125,18 +125,22 @@ class MiscCog(commands.Cog):
     async def help(self, ctx):
         await ctx.send(await read_file("help.txt"))
 
-    async def _text_to_neuropol(self, message, color):_
+    async def _text_to_neuropol(self, message, color):
         font = ImageFont.truetype("./resources/NEUROPOL.ttf", 35)
         loop = asyncio.get_running_loop()
         file = f"{message}.png"
-        img = Image.new("RGBA", (font.getsize(message)[0] + 20, 40), (255, 0, 0, 0))  # x coord gets bounding box of text + 20px margin
+        img = Image.new(
+            "RGBA", (font.getsize(message)[0] + 20, 40), (255, 0, 0, 0)
+        )  # x coord gets bounding box of text + 20px margin
         draw = ImageDraw.Draw(img)
         if color == "rainbow":
             sp = 0
             rgb_vals = []
             for i in range(0, (len(message) + 1)):
                 i = self._map_range(i, 0, len(message) - 1, 0, 1)
-                rgb_vals.append(tuple(round(i * 255) for i in colorsys.hsv_to_rgb(i,1,1)))
+                rgb_vals.append(
+                    tuple(round(i * 255) for i in colorsys.hsv_to_rgb(i, 1, 1))
+                )
 
             for i, letter in enumerate(message):
                 draw.text((10 + sp, 0), text=letter, fill=rgb_vals[i], font=font)
@@ -164,7 +168,7 @@ class MiscCog(commands.Cog):
             return await failure_message(ctx, "Please enter syntax correctly!")
         elif not message:
             return failure_message(ctx, "Could not parse text.")
-        message = message[0].rstrip().replace('\\\\', '')
+        message = message[0].rstrip().replace("\\\\", "")
         if len(message) <= 80 and message:
             neuropol_img = await self._text_to_neuropol(message, fill)
             await ctx.send(file=discord.File(neuropol_img))
@@ -191,15 +195,19 @@ class ModerationCog(commands.Cog):
 
     @has_permissions(manage_messages=True)
     @commands.command()
-    async def ban(self, ctx, member : discord.Member, *reason):
+    async def ban(self, ctx, member: discord.Member, *reason):
         reason = "{}".format(" ".join(reason))
         if reason:
-            await member.send(f"You have been banned from the Animusic server. If you would like to submit an appeal, you can click here: https://forms.gle/FmkxeXaXSsUpS6Vv7 \nReason: {reason}")
-            await member.ban(reason = reason)
-            await success_message(ctx, f"Successfully banned user {member.mention} ({member}) for reason: {reason}.")
+            await member.send(
+                f"You have been banned from the Animusic server. If you would like to submit an appeal, you can click here: https://forms.gle/FmkxeXaXSsUpS6Vv7 \nReason: {reason}"
+            )
+            await member.ban(reason=reason)
+            await success_message(
+                ctx,
+                f"Successfully banned user {member.mention} ({member}) for reason: {reason}.",
+            )
         else:
             await failure_message(ctx, "Please provide a reason.")
-
 
     @has_permissions(manage_messages=True)
     @commands.command()
@@ -286,5 +294,6 @@ class RetrievalCog(commands.Cog):
             await success_message(ctx, "Strike retrieved!", strike)
         else:
             await failure_message(
-                ctx, "Could not find what you were looking for! Please try again with a different acronym."
+                ctx,
+                "Could not find what you were looking for! Please try again with a different acronym.",
             )
