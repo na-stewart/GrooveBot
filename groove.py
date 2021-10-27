@@ -66,6 +66,7 @@ async def on_command_error(ctx, error):
         await handle_command_error(ctx, error.original)
     elif not isinstance(error, CommandNotFound):
         await failure_message(ctx, str(error))
+        raise error
 
 
 if __name__ == "__main__":

@@ -127,56 +127,29 @@ class MiscCog(commands.Cog):
 
     async def _text_to_neuropol(self, message, color):
         font = ImageFont.truetype("./resources/NEUROPOL.ttf", 35)
-        loop = asyncio.get_running_loop()
-        file = f"{message}.png"
         img = Image.new(
             "RGBA", (font.getsize(message)[0] + 20, 40), (255, 0, 0, 0)
         )  # x coord gets bounding box of text + 20px margin
-        draw = ImageDraw.Draw(img)
-        if color == "rainbow":
-            sp = 0
-            rgb_vals = []
-            for i in range(0, (len(message) + 1)):
-                i = self._map_range(i, 0, len(message) - 1, 0, 1)
-                rgb_vals.append(
-                    tuple(round(i * 255) for i in colorsys.hsv_to_rgb(i, 1, 1))
-                )
-
-            for i, letter in enumerate(message):
-                draw.text((10 + sp, 0), text=letter, fill=rgb_vals[i], font=font)
-                sp += font.getsize(letter)[0]
-
-        else:
-            draw.text((10, 0), message, fill=color, font=font)  # x = 10 to center
-        await loop.run_in_executor(None, img.save, file)
-        return file
+        ImageDraw.Draw(img).text(
+            (10, 0), message, fill=color if color else "#fff", font=font
+        )  # x = 10 to center
+        await asyncio.get_running_loop().run_in_executor(
+            None, img.save, f"{message}.png"
+        )
+        return f"{message}.png"
 
     @commands.command()
     async def neuropol(self, ctx, *args):
-        message = "{}".format(" ".join(args)).upper().rstrip().split("COLOR=")
-        if len(message) == 1:
-            # no color param passed
-            fill = "#fff"
-        elif len(message) == 2:
-            if message[1] == "RAINBOW":
-                fill = "rainbow"
-            elif re.compile("^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$").match(message[1]):
-                fill = message[1]
-            else:
-                return await failure_message(ctx, "Please enter a valid hex code!")
-        elif len(message) > 2:
-            return await failure_message(ctx, "Please enter syntax correctly!")
-        elif not message:
-            return failure_message(ctx, "Could not parse text.")
-        message = message[0].rstrip().replace("\\\\", "")
-        if len(message) <= 80 and message:
-            neuropol_img = await self._text_to_neuropol(message, fill)
-            await ctx.send(file=discord.File(neuropol_img))
-            await aiofiles.os.remove(neuropol_img)
+        color = args[-1] if re.compile("^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$") else None
+        message = " ".join(args[:-1] if color else args).upper()
+        if len(message) > 80:
+            await failure_message(ctx, "Please enter a message under 80 characters.")
         elif not message:
             await failure_message(ctx, "Please enter a message.")
         else:
-            await failure_message(ctx, "Please enter a message under 80 characters.")
+            neuropol_img = await self._text_to_neuropol(message, color)
+            await ctx.send(file=discord.File(neuropol_img))
+            await aiofiles.os.remove(neuropol_img)
 
     @has_permissions(manage_messages=True)
     @commands.command(name="modhelp")
