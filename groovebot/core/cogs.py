@@ -152,11 +152,6 @@ class MiscCog(commands.Cog):
             await aiofiles.os.remove(neuropol_img)
 
     @has_permissions(manage_messages=True)
-    @commands.command(name="modhelp")
-    async def mod_help(self, ctx):
-        await ctx.send(await read_file("modhelp.txt"))
-
-    @has_permissions(manage_messages=True)
     @commands.command(name="welcometest")
     async def welcome_test(self, ctx):
         await ctx.send(await read_file("welcome.txt"))
@@ -167,12 +162,18 @@ class ModerationCog(commands.Cog):
         self.bot = bot
 
     @has_permissions(manage_messages=True)
+    @commands.command(name="modhelp")
+    async def mod_help(self, ctx):
+        await ctx.send(await read_file("modhelp.txt"))
+
+    @has_permissions(ban_members=True)
     @commands.command()
     async def ban(self, ctx, member: discord.Member, *reason):
         reason = "{}".format(" ".join(reason))
         if reason:
             await member.send(
-                f"You have been banned from the Animusic server. If you would like to submit an appeal, you can click here: https://forms.gle/FmkxeXaXSsUpS6Vv7 \nReason: {reason}"
+                f"You have been banned from the Animusic server. If you would like to submit an appeal, "
+                f"you can click here: https://forms.gle/FmkxeXaXSsUpS6Vv7 \nReason: {reason}"
             )
             await member.ban(reason=reason)
             await success_message(
