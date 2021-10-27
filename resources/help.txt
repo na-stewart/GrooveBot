@@ -3,7 +3,7 @@ Hello! I am GrooveBot, a bot specially created for the r/Animusic Discord server
 If you have any issues/requests contact a Groovebot developer.
 >>> ~~---------------~~:tools: Commands :tools:~~----------------~~
 **fact** - Retrieves an Animusic fact.
-**neuropol** `[message] color=#[hex]` - Parses message into neuropol font. Use `color=#[hex]` to generate color (optional). Use `\\` to escape Unicode.
+**neuropol** `[message]` - Parses message into neuropol font. Put a hexcode at the end of your message to apply color.
 **getalbums** - Retrieves all albums.
 **getabbreviations** - Retrieves all abbreviations.
-**get** `[acronym]` - Retrieves specific data via acronym.
+**get** `[acronym]` - Retrieves data via acronym.

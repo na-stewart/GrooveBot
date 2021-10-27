@@ -9,7 +9,6 @@ Moderator commands.
 **createabbreviation** `[acronym]` `[value]` - Creates an abbreviation.
 **deleteabbreviation** `[acronym]` - Deletes an abbreviation.
 **strike** `[mention]` `[reason]` `(proof)` - Creates a strike associated to a member. Proof can be provided as a message and an attachment.
-**get** `[id]` - Retrieves specific data about a strike.
 **deletestrike** `[number]` - Deletes a strike associated to a user.
 **verify** - Allows a member access to the server.
-**ban** `[@user]` `[reason]` - Bans a user with reason (required).
+**ban** `[mention]` `[reason]` - Bans a user with reason (required).

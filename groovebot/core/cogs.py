@@ -114,9 +114,6 @@ class MiscCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    def _map_range(self, value, inMin, inMax, outMin, outMax):
-        return outMin + (((value - inMin) / (inMax - inMin)) * (outMax - outMin))
-
     @commands.command()
     async def fact(self, ctx):
         await ctx.send(random.choice(await read_file("facts.txt", True)))
@@ -140,16 +137,18 @@ class MiscCog(commands.Cog):
 
     @commands.command()
     async def neuropol(self, ctx, *args):
-        color = args[-1] if re.compile("^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$") else None
+        color = (
+            args[-1]
+            if re.search("^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$", args[-1])
+            else None
+        )
         message = " ".join(args[:-1] if color else args).upper()
-        if len(message) > 80:
-            await failure_message(ctx, "Please enter a message under 80 characters.")
-        elif not message:
-            await failure_message(ctx, "Please enter a message.")
-        else:
+        if len(message) <= 80:
             neuropol_img = await self._text_to_neuropol(message, color)
             await ctx.send(file=discord.File(neuropol_img))
             await aiofiles.os.remove(neuropol_img)
+        else:
+            await failure_message(ctx, "Please enter a message under 80 characters.")
 
     @has_permissions(manage_messages=True)
     @commands.command(name="welcometest")
@@ -168,20 +167,16 @@ class ModerationCog(commands.Cog):
 
     @has_permissions(ban_members=True)
     @commands.command()
-    async def ban(self, ctx, member: discord.Member, *reason):
-        reason = "{}".format(" ".join(reason))
-        if reason:
-            await member.send(
-                f"You have been banned from the Animusic server. If you would like to submit an appeal, "
-                f"you can click here: https://forms.gle/FmkxeXaXSsUpS6Vv7 \nReason: {reason}"
-            )
-            await member.ban(reason=reason)
-            await success_message(
-                ctx,
-                f"Successfully banned user {member.mention} ({member}) for reason: {reason}.",
-            )
-        else:
-            await failure_message(ctx, "Please provide a reason.")
+    async def ban(self, ctx, member: discord.Member, reason):
+        await member.ban(reason=reason)
+        await member.send(
+            f"You have been banned from the Animusic server. If you would like to submit an appeal, "
+            f"you can click here: https://forms.gle/FmkxeXaXSsUpS6Vv7 \nReason: {reason}"
+        )
+        await success_message(
+            ctx,
+            f"Successfully banned user {member.mention} ({member}) for reason: {reason}.",
+        )
 
     @has_permissions(manage_messages=True)
     @commands.command()
@@ -207,7 +202,7 @@ class ModerationCog(commands.Cog):
                 name=f"Here's a list of all of the strikes against {member.mention}!"
             )
             for strike in strikes:
-                embed.add_field(name=strike.id, value=strike.reason, inline=True)
+                embed.add_field(name=f"Number: {strike.id}", value=strike.reason, inline=True)
             await success_message(ctx, "Strikes retrieved!", embed=embed)
         else:
             await failure_message(
@@ -216,11 +211,11 @@ class ModerationCog(commands.Cog):
 
     @has_permissions(manage_messages=True)
     @commands.command(name="deletestrike")
-    async def delete_strike(self, ctx, id):
-        if await Strike.filter(id=id).delete() == 1:
-            await success_message(ctx, f"Strike id {id} deleted from database!")
+    async def delete_strike(self, ctx, number):
+        if await Strike.filter(id=number).delete() == 1:
+            await success_message(ctx, f"Strike id {number} deleted from database!")
         else:
-            await failure_message(ctx, f"Could not find strike with id {id}.")
+            await failure_message(ctx, f"Could not find strike with id {number}.")
 
     @commands.command()
     async def verify(self, ctx):
@@ -253,16 +248,16 @@ class RetrievalCog(commands.Cog):
         elif await Music.filter(acronym=acronym_upper).exists():
             music = (
                 await Music.filter(acronym=acronym_upper)
-                .prefetch_related("album")
-                .first()
+                    .prefetch_related("album")
+                    .first()
             )
             await success_message(ctx, "Music retrieved!", music)
         elif await Abbreviation.filter(acronym=acronym_upper).exists():
             abbreviation = await Abbreviation.filter(acronym=acronym_upper).first()
             await success_message(ctx, "Abbreviation retrieved!", abbreviation)
         elif (
-            ctx.channel.permissions_for(ctx.author).manage_messages
-            and await Strike.filter(id=acronym).exists()
+                ctx.channel.permissions_for(ctx.author).manage_messages
+                and await Strike.filter(id=acronym).exists()
         ):
             strike = await Strike.filter(id=acronym).first()
             await success_message(ctx, "Strike retrieved!", strike)
