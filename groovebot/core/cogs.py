@@ -113,7 +113,7 @@ class AbbreviationCog(commands.Cog):
 class MiscCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-    
+
     def _map_range(self, value, inMin, inMax, outMin, outMax):
         return outMin + (((value - inMin) / (inMax - inMin)) * (outMax - outMin))
 
@@ -127,17 +127,28 @@ class MiscCog(commands.Cog):
 
     async def _text_to_neuropol(self, message, color):
         font = ImageFont.truetype("./resources/NEUROPOL.ttf", 35)
-        img = Image.new("RGBA", (font.getsize(message)[0] + 20, 40), (255, 0, 0, 0))  # x coord gets bounding box of text + 20px margin
+        img = Image.new(
+            "RGBA", (font.getsize(message)[0] + 20, 40), (255, 0, 0, 0)
+        )  # x coord gets bounding box of text + 20px margin
         if color == "#rainbow":
             sp = 0
             rgb_vals = []
             for i in range(len(message)):
                 map_range = self._map_range(i, 0, len(message), 0, 1)
-                rgb_vals.append(tuple(round(map_range * 255) for map_range in hsv_to_rgb(map_range,1,1)))
-                ImageDraw.Draw(img).text((10 + sp, 0), text=message[i], fill=rgb_vals[i], font=font)
+                rgb_vals.append(
+                    tuple(
+                        round(map_range * 255)
+                        for map_range in hsv_to_rgb(map_range, 1, 1)
+                    )
+                )
+                ImageDraw.Draw(img).text(
+                    (10 + sp, 0), text=message[i], fill=rgb_vals[i], font=font
+                )
                 sp += font.getsize(message[i])[0]
         else:
-            ImageDraw.Draw(img).text((10, 0), message, fill=color if color else "#fff", font=font)  # x = 10 to center
+            ImageDraw.Draw(img).text(
+                (10, 0), message, fill=color if color else "#fff", font=font
+            )  # x = 10 to center
         await asyncio.get_running_loop().run_in_executor(
             None, img.save, f"{message}.png"
         )
@@ -147,7 +158,8 @@ class MiscCog(commands.Cog):
     async def neuropol(self, ctx, *args):
         color = (
             args[-1]
-            if re.search("^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$", args[-1]) or args[-1] == "#rainbow"
+            if re.search("^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$", args[-1])
+            or args[-1] == "#rainbow"
             else None
         )
         message = " ".join(args[:-1] if color else args).upper()
