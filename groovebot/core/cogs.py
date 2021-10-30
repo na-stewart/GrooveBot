@@ -150,9 +150,9 @@ class MiscCog(commands.Cog):
                 (10, 0), message, fill=color if color else "#fff", font=font
             )  # x = 10 to center
         await asyncio.get_running_loop().run_in_executor(
-            None, img.save, f"{message}.png"
+            None, img.save, "neuropol.png"
         )
-        return f"{message}.png"
+        return "neuropol.png"
 
     @commands.command()
     async def neuropol(self, ctx, *args):
