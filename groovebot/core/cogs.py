@@ -156,10 +156,11 @@ class MiscCog(commands.Cog):
 
     @commands.command()
     async def neuropol(self, ctx, *args):
+        color_arg = args[-1].lower()
         color = (
-            args[-1]
-            if re.search("^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$", args[-1])
-            or args[-1].lower() == "#rainbow"
+            color_arg
+            if re.search("^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$", color_arg)
+            or color_arg == "#rainbow"
             else None
         )
         message = " ".join(args[:-1] if color else args).upper()
