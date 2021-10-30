@@ -1,4 +1,4 @@
-****Groove Bot V2.5****
+****Groove Bot V2.5.0****
 Hello! I am GrooveBot, a bot specially created for the r/Animusic Discord server!
 If you have any issues/requests contact a Groovebot developer.
 >>> ~~---------------~~:tools: Commands :tools:~~----------------~~
