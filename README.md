@@ -56,7 +56,6 @@
   * [Installation](#installation)
 * [Contributing](#contributing)
 * [License](#license)
-* [Acknowledgements](#acknowledgements)
 
 
 
