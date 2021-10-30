@@ -163,7 +163,7 @@ class MiscCog(commands.Cog):
             or color_arg == "#rainbow"
             else None
         )
-        message = " ".join(args[:-1] if color else args).upper()
+        message = " ".join(args[:-1] if color else args)
         if len(message) <= 80:
             neuropol_img = await self._text_to_neuropol(message, color)
             await ctx.send(file=discord.File(neuropol_img))
