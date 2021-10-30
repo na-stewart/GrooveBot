@@ -159,7 +159,7 @@ class MiscCog(commands.Cog):
         color = (
             args[-1]
             if re.search("^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$", args[-1])
-            or args[-1] == "#rainbow"
+            or args[-1].lower() == "#rainbow"
             else None
         )
         message = " ".join(args[:-1] if color else args).upper()
