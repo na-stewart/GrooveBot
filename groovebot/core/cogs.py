@@ -265,23 +265,25 @@ class RetrievalCog(commands.Cog):
     @commands.command()
     async def get(self, ctx, acronym):
         acronym_upper = acronym.upper()
-        album = await Album.filter(acronym=acronym_upper).get_or_none()
-        if album:
+        if await Album.filter(acronym=acronym_upper).exists():
+            album = await Album.filter(acronym=acronym_upper).first()
             await self._get_album(ctx, album)
-            return
-        music = await Music.filter(acronym=acronym_upper).get_or_none()
-        if music:
+        elif await Music.filter(acronym=acronym_upper).exists():
+            music = (
+                await Music.filter(acronym=acronym_upper)
+                .prefetch_related("album")
+                .first()
+            )
             await success_message(ctx, "Music retrieved!", music)
-            return
-        if (
-            acronym_upper.isnuneric()
-            and ctx.channel.permissions_for(ctx.author).manage_messages
-        ):
-            strike = await Strike.filter(acronym=acronym_upper).get_or_none()
-            if strike:
+        elif await Abbreviation.filter(acronym=acronym_upper).exists():
+            abbreviation = await Abbreviation.filter(acronym=acronym_upper).first()
+            await success_message(ctx, "Abbreviation retrieved!", abbreviation)
+        elif ctx.channel.permissions_for(ctx.author).manage_messages:
+            if acronym.isnumeric() and await Strike.filter(id=acronym).exists():
+                strike = await Strike.filter(id=acronym).first()
                 await success_message(ctx, "Strike retrieved!", strike)
-                return
-        await failure_message(
-            ctx,
-            "Could not find what you were looking for! Please try again with a different acronym.",
-        )
+        else:
+            await failure_message(
+                ctx,
+                "Could not find what you were looking for! Please try again with a different acronym.",
+            )
