@@ -114,9 +114,6 @@ class MiscCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    def _map_range(self, value, inMin, inMax, outMin, outMax):
-        return outMin + (((value - inMin) / (inMax - inMin)) * (outMax - outMin))
-
     @commands.command()
     async def fact(self, ctx):
         await ctx.send(random.choice(await read_file("facts.txt", True)))
@@ -125,26 +122,31 @@ class MiscCog(commands.Cog):
     async def help(self, ctx):
         await ctx.send(await read_file("help.txt"))
 
+    def _map_range(self, value, inMin, inMax, outMin, outMax):
+        return outMin + (((value - inMin) / (inMax - inMin)) * (outMax - outMin))
+
+    def _draw_rainbow(self, message, img, font):
+        sp = 0
+        rgb_vals = []
+        for i in range(len(message)):
+            map_range = self._map_range(i, 0, len(message), 0, 1)
+            rgb_vals.append(
+                tuple(
+                    round(map_range * 255) for map_range in hsv_to_rgb(map_range, 1, 1)
+                )
+            )
+            ImageDraw.Draw(img).text(
+                (10 + sp, 0), text=message[i], fill=rgb_vals[i], font=font
+            )
+            sp += font.getsize(message[i])[0]
+
     async def _text_to_neuropol(self, message, color):
         font = ImageFont.truetype("./resources/NEUROPOL.ttf", 35)
         img = Image.new(
             "RGBA", (font.getsize(message)[0] + 20, 40), (255, 0, 0, 0)
         )  # x coord gets bounding box of text + 20px margin
         if color == "#rainbow":
-            sp = 0
-            rgb_vals = []
-            for i in range(len(message)):
-                map_range = self._map_range(i, 0, len(message), 0, 1)
-                rgb_vals.append(
-                    tuple(
-                        round(map_range * 255)
-                        for map_range in hsv_to_rgb(map_range, 1, 1)
-                    )
-                )
-                ImageDraw.Draw(img).text(
-                    (10 + sp, 0), text=message[i], fill=rgb_vals[i], font=font
-                )
-                sp += font.getsize(message[i])[0]
+            self._draw_rainbow(message, img, font)
         else:
             ImageDraw.Draw(img).text(
                 (10, 0), message, fill=color if color else "#fff", font=font
@@ -263,28 +265,23 @@ class RetrievalCog(commands.Cog):
     @commands.command()
     async def get(self, ctx, acronym):
         acronym_upper = acronym.upper()
-        if await Album.filter(acronym=acronym_upper).exists():
-            album = await Album.filter(acronym=acronym_upper).first()
+        album = await Album.filter(acronym=acronym_upper).get_or_none()
+        if album:
             await self._get_album(ctx, album)
-        elif await Music.filter(acronym=acronym_upper).exists():
-            music = (
-                await Music.filter(acronym=acronym_upper)
-                .prefetch_related("album")
-                .first()
-            )
+            return
+        music = await Music.filter(acronym=acronym_upper).get_or_none()
+        if music:
             await success_message(ctx, "Music retrieved!", music)
-        elif await Abbreviation.filter(acronym=acronym_upper).exists():
-            abbreviation = await Abbreviation.filter(acronym=acronym_upper).first()
-            await success_message(ctx, "Abbreviation retrieved!", abbreviation)
-        elif (
-            ctx.channel.permissions_for(ctx.author).manage_messages
-            and acronym.isnumeric()
-            and await Strike.filter(id=acronym).exists()
+            return
+        if (
+            acronym_upper.isnuneric()
+            and ctx.channel.permissions_for(ctx.author).manage_messages
         ):
-            strike = await Strike.filter(id=acronym).first()
-            await success_message(ctx, "Strike retrieved!", strike)
-        else:
-            await failure_message(
-                ctx,
-                "Could not find what you were looking for! Please try again with a different acronym.",
-            )
+            strike = await Strike.filter(acronym=acronym_upper).get_or_none()
+            if strike:
+                await success_message(ctx, "Strike retrieved!", strike)
+                return
+        await failure_message(
+            ctx,
+            "Could not find what you were looking for! Please try again with a different acronym.",
+        )
