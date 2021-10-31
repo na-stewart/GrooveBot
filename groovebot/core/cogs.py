@@ -149,9 +149,7 @@ class MiscCog(commands.Cog):
             ImageDraw.Draw(img).text(
                 (10, 0), message, fill=color if color else "#fff", font=font
             )  # x = 10 to center
-        await asyncio.get_running_loop().run_in_executor(
-            None, img.save, "neuropol.png"
-        )
+        await asyncio.get_running_loop().run_in_executor(None, img.save, "neuropol.png")
         return "neuropol.png"
 
     @commands.command()
@@ -280,6 +278,7 @@ class RetrievalCog(commands.Cog):
             await success_message(ctx, "Abbreviation retrieved!", abbreviation)
         elif (
             ctx.channel.permissions_for(ctx.author).manage_messages
+            and acronym.isnumeric()
             and await Strike.filter(id=acronym).exists()
         ):
             strike = await Strike.filter(id=acronym).first()
