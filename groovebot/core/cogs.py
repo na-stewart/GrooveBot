@@ -141,7 +141,7 @@ class MiscCog(commands.Cog):
             )
             spacing += font.getbbox(message[i])[2]
 
-    async def _text_to_neuropol(self, message, color):
+    async def _text_to_neuropol(self, message, color, file):
         font = ImageFont.truetype("./resources/NEUROPOL.ttf", 35)
         width = 0
         for i in range(len(message)):
@@ -154,9 +154,8 @@ class MiscCog(commands.Cog):
                 (10, 5), message, fill=color if color else "#fff", font=font
             )
         await asyncio.get_running_loop().run_in_executor(
-            None, img.save, f"{message}.png"
+            None, img.save, file
         )
-        return f"{message}.png"
 
     @commands.command()
     async def neuropol(self, ctx, *args):
@@ -171,7 +170,7 @@ class MiscCog(commands.Cog):
         message = " ".join(args[:-1] if color else args)
         if len(message) <= 80:
             neuropol_img_file = "neuropol.png"
-            await self._text_to_neuropol(message, color)
+            await self._text_to_neuropol(message, color, neuropol_img_file)
             await ctx.send(file=discord.File(neuropol_img_file))
             await aiofiles.os.remove(neuropol_img_file)
         else:
