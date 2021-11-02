@@ -157,6 +157,7 @@ class MiscCog(commands.Cog):
     @commands.command()
     async def neuropol(self, ctx, *args):
         color_arg = args[-1].lower()
+        # TODO: Color check via draw instead of regex.
         color = (
             color_arg
             if re.search("^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$", color_arg)
