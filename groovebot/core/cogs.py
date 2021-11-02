@@ -128,8 +128,9 @@ class MiscCog(commands.Cog):
     def _draw_rainbow(self, message, img, font):
         sp = 0
         rgb_vals = []
-        for i in range(len(message)):
-            map_range = self._map_range(i, 0, len(message), 0, 1)
+        message_length = len(message)
+        for i in range(message_length):
+            map_range = self._map_range(i, 0, message_length, 0, 1)
             rgb_vals.append(
                 tuple(
                     round(map_range * 255) for map_range in hsv_to_rgb(map_range, 1, 1)
@@ -140,7 +141,7 @@ class MiscCog(commands.Cog):
             )
             sp += font.getsize(message[i])[0]
 
-    async def _text_to_neuropol(self, message, color):
+    async def _text_to_neuropol(self, message, color, file):
         font = ImageFont.truetype("./resources/NEUROPOL.ttf", 35)
         img = Image.new(
             "RGBA", (font.getsize(message)[0] + 20, 40), (255, 0, 0, 0)
@@ -151,8 +152,7 @@ class MiscCog(commands.Cog):
             ImageDraw.Draw(img).text(
                 (10, 0), message, fill=color if color else "#fff", font=font
             )  # x = 10 to center
-        await asyncio.get_running_loop().run_in_executor(None, img.save, "neuropol.png")
-        return "neuropol.png"
+        await asyncio.get_running_loop().run_in_executor(None, img.save, file)
 
     @commands.command()
     async def neuropol(self, ctx, *args):
@@ -165,9 +165,10 @@ class MiscCog(commands.Cog):
         )
         message = " ".join(args[:-1] if color else args)
         if len(message) <= 80:
-            neuropol_img = await self._text_to_neuropol(message, color)
-            await ctx.send(file=discord.File(neuropol_img))
-            await aiofiles.os.remove(neuropol_img)
+            neuropol_img_file = "neuropol.png"
+            await self._text_to_neuropol(message, color, neuropol_img_file)
+            await ctx.send(file=discord.File(neuropol_img_file))
+            await aiofiles.os.remove(neuropol_img_file)
         else:
             await failure_message(ctx, "Please enter a message under 80 characters.")
 
