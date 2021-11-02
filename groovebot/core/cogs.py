@@ -289,7 +289,4 @@ class RetrievalCog(commands.Cog):
                 strike = await Strike.filter(id=acronym).first()
                 await success_message(ctx, "Strike retrieved!", strike)
         else:
-            await failure_message(
-                ctx,
-                "Could not find what you were looking for! Please try again with a different acronym.",
-            )
+            await failure_message(ctx, "Please try again with a different acronym.")
