@@ -122,37 +122,41 @@ class MiscCog(commands.Cog):
     async def help(self, ctx):
         await ctx.send(await read_file("help.txt"))
 
-    def _map_range(self, value, inMin, inMax, outMin, outMax):
-        return outMin + (((value - inMin) / (inMax - inMin)) * (outMax - outMin))
+    def _map_range(self, value, in_min, in_max, out_min, out_max):
+        return out_min + (((value - in_min) / (in_max - in_min)) * (out_max - out_min))
 
-    def _draw_rainbow(self, message, img, font):
-        sp = 0
-        rgb_vals = []
-        message_length = len(message)
-        for i in range(message_length):
-            map_range = self._map_range(i, 0, message_length, 0, 1)
-            rgb_vals.append(
+    def _draw_rainbow(self, img, message, font):
+        spacing = 0
+        rgb_values = []
+        image_draw = ImageDraw.Draw(img)
+        for i in range(len(message)):
+            map_range = self._map_range(i, 0, len(message), 0, 1)
+            rgb_values.append(
                 tuple(
                     round(map_range * 255) for map_range in hsv_to_rgb(map_range, 1, 1)
                 )
             )
-            ImageDraw.Draw(img).text(
-                (10 + sp, 0), text=message[i], fill=rgb_vals[i], font=font
+            image_draw.text(
+                (10 + spacing, 0), text=message[i], fill=rgb_values[i], font=font
             )
-            sp += font.getsize(message[i])[0]
+            spacing += font.getbbox(message[i])[2]
 
-    async def _text_to_neuropol(self, message, color, file):
+    async def _text_to_neuropol(self, message, color):
         font = ImageFont.truetype("./resources/NEUROPOL.ttf", 35)
-        img = Image.new(
-            "RGBA", (font.getsize(message)[0] + 20, 40), (255, 0, 0, 0)
-        )  # x coord gets bounding box of text + 20px margin
+        width = 0
+        for i in range(len(message)):
+            width += font.getbbox(message[i])[2]
+        img = Image.new("RGBA", (width + 20, 40), (255, 0, 0, 0))
         if color == "#rainbow":
-            self._draw_rainbow(message, img, font)
+            self._draw_rainbow(img, message, font)
         else:
             ImageDraw.Draw(img).text(
-                (10, 0), message, fill=color if color else "#fff", font=font
-            )  # x = 10 to center
-        await asyncio.get_running_loop().run_in_executor(None, img.save, file)
+                (10, 5), message, fill=color if color else "#fff", font=font
+            )
+        await asyncio.get_running_loop().run_in_executor(
+            None, img.save, f"{message}.png"
+        )
+        return f"{message}.png"
 
     @commands.command()
     async def neuropol(self, ctx, *args):
@@ -167,7 +171,7 @@ class MiscCog(commands.Cog):
         message = " ".join(args[:-1] if color else args)
         if len(message) <= 80:
             neuropol_img_file = "neuropol.png"
-            await self._text_to_neuropol(message, color, neuropol_img_file)
+            await self._text_to_neuropol(message, color)
             await ctx.send(file=discord.File(neuropol_img_file))
             await aiofiles.os.remove(neuropol_img_file)
         else:
