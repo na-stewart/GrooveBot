@@ -153,9 +153,7 @@ class MiscCog(commands.Cog):
             ImageDraw.Draw(img).text(
                 (10, 5), message, fill=color if color else "#fff", font=font
             )
-        await asyncio.get_running_loop().run_in_executor(
-            None, img.save, file
-        )
+        await asyncio.get_running_loop().run_in_executor(None, img.save, file)
 
     @commands.command()
     async def neuropol(self, ctx, *args):
