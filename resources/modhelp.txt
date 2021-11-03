@@ -11,4 +11,4 @@ Moderator commands.
 **strike** `[mention]` `[reason]` `(proof)` - Creates a strike associated to a member. Proof can be provided as a message and an attachment.
 **deletestrike** `[number]` - Deletes a strike associated to a user.
 **verify** - Allows a member access to the server.
-**ban** `[mention]` `[reason]` - Bans a user with reason (required).
+**ban** `[mention]` `[reason]` - Bans a user with reason and sends the user a DM with ban appeal link.
