@@ -227,7 +227,7 @@ class ModerationCog(commands.Cog):
             )
             for strike in strikes:
                 embed.add_field(
-                    name=f"Number: {strike.id}", value=strike.reason, inline=True
+                    name=f"ID: {strike.id}", value=strike.reason, inline=True
                 )
             await success_message(ctx, "Strikes retrieved!", embed=embed)
         else:
