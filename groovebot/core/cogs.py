@@ -284,9 +284,9 @@ class RetrievalCog(commands.Cog):
         elif (
             ctx.channel.permissions_for(ctx.author).manage_messages
             and acronym.isnumeric()
+            and await Strike.filter(id=acronym).exists()
         ):
-            if await Strike.filter(id=acronym).exists():
-                strike = await Strike.filter(id=acronym).first()
-                await success_message(ctx, "Strike retrieved!", strike)
+            strike = await Strike.filter(id=acronym).first()
+            await success_message(ctx, "Strike retrieved!", strike)
         else:
             await failure_message(ctx, "Please try again with a different acronym.")
