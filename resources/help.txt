@@ -1,9 +1,9 @@
-****Groove Bot V2.5.1****
-Hello! I am GrooveBot, a bot specially created for the r/Animusic Discord server!
-If you have any issues/requests contact a Groovebot developer.
+****Groove Bot V2.5.2****
+Hello! I am GrooveBot, a bot specially created for the Animusic Discord server!
+**Argument Help:** `[Required argument]` `(Optional argument)` `"Spaces must be enclosed with quotation marks"`
 >>> ~~---------------~~:tools: Commands :tools:~~----------------~~
 **fact** - Retrieves an Animusic fact.
-**neuropol** `[message]` - Parses message into neuropol font. Put a hexcode or `#rainbow` at the end of your message to apply color.
+**neuropol** `[message]` `(color)` - Parses message into neuropol font. Color argument must be a color code (RGB, HEX) or `rainbow`.
 **getalbums** - Retrieves all albums.
 **getabbreviations** - Retrieves all abbreviations.
 **get** `[acronym]` - Retrieves data via acronym.

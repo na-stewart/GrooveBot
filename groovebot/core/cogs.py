@@ -147,32 +147,24 @@ class MiscCog(commands.Cog):
         for i in range(len(message)):
             width += font.getbbox(message[i])[2]
         img = Image.new("RGBA", (width + 20, 40), (255, 0, 0, 0))
-        if color == "#rainbow":
+        if color == "rainbow":
             self._draw_rainbow(img, message, font)
         else:
-            ImageDraw.Draw(img).text(
-                (10, 5), message, fill=color if color else "#fff", font=font
-            )
+            ImageDraw.Draw(img).text((10, 5), message, fill=color, font=font)
         await asyncio.get_running_loop().run_in_executor(None, img.save, file)
 
     @commands.command()
-    async def neuropol(self, ctx, *args):
-        color_arg = args[-1].lower()
-        # TODO: Color check via draw instead of regex.
-        color = (
-            color_arg
-            if re.search("^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$", color_arg)
-            or color_arg == "#rainbow"
-            else None
-        )
-        message = " ".join(args[:-1] if color else args)
-        if len(message) <= 80:
+    async def neuropol(self, ctx, message, color=None):
+        if len(message) <= 30:
             neuropol_img_file = "neuropol.png"
-            await self._text_to_neuropol(message, color, neuropol_img_file)
-            await ctx.send(file=discord.File(neuropol_img_file))
-            await aiofiles.os.remove(neuropol_img_file)
+            try:
+                await self._text_to_neuropol(message, color, neuropol_img_file)
+                await ctx.send(file=discord.File(neuropol_img_file))
+                await aiofiles.os.remove(neuropol_img_file)
+            except ValueError:
+                await failure_message(ctx, "Invalid color code.")
         else:
-            await failure_message(ctx, "Please enter a message under 80 characters.")
+            await failure_message(ctx, "Please enter a message under 30 characters.")
 
     @has_permissions(manage_messages=True)
     @commands.command(name="welcometest")
@@ -223,7 +215,7 @@ class ModerationCog(commands.Cog):
         if strikes:
             embed = discord.Embed(colour=discord.Colour.red())
             embed.set_author(
-                name=f"Here's a list of all of the strikes against {member.mention}!"
+                name=f"Here's a list of all of the strikes against {member.display_name}!"
             )
             for strike in strikes:
                 embed.add_field(
