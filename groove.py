@@ -59,7 +59,9 @@ async def handle_command_error(ctx, error):
                 ctx, "This acronym is already being used in the database."
             )
     else:
-        await failure_message(ctx, "An unexpected error has occurred, please see console.")
+        await failure_message(
+            ctx, "An unexpected error has occurred, please see console."
+        )
 
 
 @bot.event
