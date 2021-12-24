@@ -142,8 +142,8 @@ class MiscCog(commands.Cog):
             spacing += font.getbbox(message[i])[2]
 
     async def text_to_neuropol(self, message, color=None, file="neuropol.png"):
-        if len(message) > 30:
-            raise ValueError("Message cannot be over thirty characters!")
+        if len(message) > 35:
+            raise ValueError("Message cannot be over 35 characters!")
         font = ImageFont.truetype("./resources/NEUROPOL.ttf", 35)
         width = 0
         for i in range(len(message)):
