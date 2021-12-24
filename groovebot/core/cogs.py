@@ -143,7 +143,7 @@ class MiscCog(commands.Cog):
 
     async def text_to_neuropol(self, message, color=None, file="neuropol.png"):
         if len(message) > 35:
-            raise ValueError("Message cannot be over 35 characters!")
+            raise ValueError("Message cannot be over 35 characters.")
         font = ImageFont.truetype("./resources/NEUROPOL.ttf", 35)
         width = 0
         for i in range(len(message)):
@@ -167,7 +167,7 @@ class MiscCog(commands.Cog):
                 await ctx.send(file=discord.File(neuropol_img_file))
             except ValueError:
                 await failure_message(
-                    ctx, "Please enter a message under 30 characters."
+                    ctx, "Message cannot be over 35 characters."
                 )
 
     @has_permissions(manage_messages=True)
