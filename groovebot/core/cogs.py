@@ -163,10 +163,12 @@ class MiscCog(commands.Cog):
         except ValueError:
             try:
                 await self.text_to_neuropol(" ".join(args))
+                await ctx.send(file=discord.File(neuropol_img_file))
+                await aiofiles.os.remove(neuropol_img_file)
             except ValueError:
-                await failure_message(ctx, "Please enter a message under 30 characters.")
-        await ctx.send(file=discord.File(neuropol_img_file))
-        await aiofiles.os.remove(neuropol_img_file)
+                await failure_message(
+                    ctx, "Please enter a message under 30 characters."
+                )
 
     @has_permissions(manage_messages=True)
     @commands.command(name="welcometest")
@@ -268,17 +270,17 @@ class RetrievalCog(commands.Cog):
         elif await Music.filter(acronym=acronym_upper).exists():
             music = (
                 await Music.filter(acronym=acronym_upper)
-                    .prefetch_related("album")
-                    .first()
+                .prefetch_related("album")
+                .first()
             )
             await success_message(ctx, "Music retrieved!", music)
         elif await Abbreviation.filter(acronym=acronym_upper).exists():
             abbreviation = await Abbreviation.filter(acronym=acronym_upper).first()
             await success_message(ctx, "Abbreviation retrieved!", abbreviation)
         elif (
-                ctx.channel.permissions_for(ctx.author).manage_messages
-                and acronym.isnumeric()
-                and await Strike.filter(id=acronym).exists()
+            ctx.channel.permissions_for(ctx.author).manage_messages
+            and acronym.isnumeric()
+            and await Strike.filter(id=acronym).exists()
         ):
             strike = await Strike.filter(id=acronym).first()
             await success_message(ctx, "Strike retrieved!", strike)
