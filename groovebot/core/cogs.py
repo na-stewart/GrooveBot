@@ -160,11 +160,11 @@ class MiscCog(commands.Cog):
         neuropol_img_file = "neuropol.png"
         try:
             await self.text_to_neuropol(" ".join(args[:-1]), args[-1])
+            await ctx.send(file=discord.File(neuropol_img_file))
         except ValueError:
             try:
                 await self.text_to_neuropol(" ".join(args))
                 await ctx.send(file=discord.File(neuropol_img_file))
-                await aiofiles.os.remove(neuropol_img_file)
             except ValueError:
                 await failure_message(
                     ctx, "Please enter a message under 30 characters."
