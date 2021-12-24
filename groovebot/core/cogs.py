@@ -166,9 +166,7 @@ class MiscCog(commands.Cog):
                 await self.text_to_neuropol(" ".join(args))
                 await ctx.send(file=discord.File(neuropol_img_file))
             except ValueError:
-                await failure_message(
-                    ctx, "Message cannot be over 35 characters."
-                )
+                await failure_message(ctx, "Message cannot be over 35 characters.")
 
     @has_permissions(manage_messages=True)
     @commands.command(name="welcometest")
