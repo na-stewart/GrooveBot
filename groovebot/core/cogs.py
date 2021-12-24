@@ -1,16 +1,17 @@
-import asyncio
 import random
-import re
-from colorsys import hsv_to_rgb
 
-import aiofiles.os
 import discord
-from PIL import ImageFont, Image, ImageDraw
 from discord.ext import commands
 from discord.ext.commands import has_permissions
 
 from groovebot.core.models import Album, Music, Abbreviation, Strike
-from groovebot.core.utils import read_file, failure_message, success_message, config
+from groovebot.core.utils import (
+    read_file,
+    failure_message,
+    success_message,
+    config,
+    text_to_neuropol,
+)
 
 
 class MusicCog(commands.Cog):
@@ -122,48 +123,15 @@ class MiscCog(commands.Cog):
     async def help(self, ctx):
         await ctx.send(await read_file("help.txt"))
 
-    def _map_range(self, value, in_min, in_max, out_min, out_max):
-        return out_min + (((value - in_min) / (in_max - in_min)) * (out_max - out_min))
-
-    def _draw_rainbow(self, img, message, font):
-        spacing = 0
-        rgb_values = []
-        image_draw = ImageDraw.Draw(img)
-        for i in range(len(message)):
-            map_range = self._map_range(i, 0, len(message), 0, 1)
-            rgb_values.append(
-                tuple(
-                    round(map_range * 255) for map_range in hsv_to_rgb(map_range, 1, 1)
-                )
-            )
-            image_draw.text(
-                (10 + spacing, 0), text=message[i], fill=rgb_values[i], font=font
-            )
-            spacing += font.getbbox(message[i])[2]
-
-    async def text_to_neuropol(self, message, color=None, file="neuropol.png"):
-        if len(message) > 35:
-            raise ValueError("Message cannot be over 35 characters.")
-        font = ImageFont.truetype("./resources/NEUROPOL.ttf", 35)
-        width = 0
-        for i in range(len(message)):
-            width += font.getbbox(message[i])[2]
-        img = Image.new("RGBA", (width + 20, 40), (255, 0, 0, 0))
-        if color == "rainbow":
-            self._draw_rainbow(img, message, font)
-        else:
-            ImageDraw.Draw(img).text((10, 5), message, fill=color, font=font)
-        await asyncio.get_running_loop().run_in_executor(None, img.save, file)
-
     @commands.command()
     async def neuropol(self, ctx, *args):
         neuropol_img_file = "neuropol.png"
         try:
-            await self.text_to_neuropol(" ".join(args[:-1]), args[-1])
+            await text_to_neuropol(" ".join(args[:-1]), args[-1])
             await ctx.send(file=discord.File(neuropol_img_file))
         except ValueError:
             try:
-                await self.text_to_neuropol(" ".join(args))
+                await text_to_neuropol(" ".join(args))
                 await ctx.send(file=discord.File(neuropol_img_file))
             except ValueError:
                 await failure_message(ctx, "Message cannot be over 35 characters.")
