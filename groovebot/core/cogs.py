@@ -153,13 +153,24 @@ class MiscCog(commands.Cog):
             ImageDraw.Draw(img).text((10, 5), message, fill=color, font=font)
         await asyncio.get_running_loop().run_in_executor(None, img.save, file)
 
+
+
     @commands.command()
     async def neuropol(self, ctx, *args):
         neuropol_img_file = "neuropol.png"
         try:
-            await self._text_to_neuropol(" ".join(args[:-1]), args[-1])
+            message = " ".join(args[:-1])
+            if len(message) <= 30:
+                await self._text_to_neuropol(message, args[-1])
+            else:
+                await failure_message(ctx, "Please enter a message under 30 characters.")
         except ValueError:
-            await self._text_to_neuropol(" ".join(args))
+            message = " ".join(args)
+            if len(message) <= 30:
+                await self._text_to_neuropol(message)
+            else:
+                await failure_message(ctx, "Please enter a message under 30 characters.")
+            await self._text_to_neuropol(message)
         await ctx.send(file=discord.File(neuropol_img_file))
         await aiofiles.os.remove(neuropol_img_file)
 
