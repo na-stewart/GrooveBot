@@ -141,7 +141,7 @@ class MiscCog(commands.Cog):
             )
             spacing += font.getbbox(message[i])[2]
 
-    async def _text_to_neuropol(self, message, color, file):
+    async def _text_to_neuropol(self, message, color=None, file="neuropol.png"):
         font = ImageFont.truetype("./resources/NEUROPOL.ttf", 35)
         width = 0
         for i in range(len(message)):
@@ -154,17 +154,14 @@ class MiscCog(commands.Cog):
         await asyncio.get_running_loop().run_in_executor(None, img.save, file)
 
     @commands.command()
-    async def neuropol(self, ctx, message, color=None):
-        if len(message) <= 30:
-            neuropol_img_file = "neuropol.png"
-            try:
-                await self._text_to_neuropol(message, color, neuropol_img_file)
-                await ctx.send(file=discord.File(neuropol_img_file))
-                await aiofiles.os.remove(neuropol_img_file)
-            except ValueError:
-                await failure_message(ctx, "Invalid color code.")
-        else:
-            await failure_message(ctx, "Please enter a message under 30 characters.")
+    async def neuropol(self, ctx, *args):
+        neuropol_img_file = "neuropol.png"
+        try:
+            await self._text_to_neuropol(" ".join(args[:-1]), args[-1])
+        except ValueError:
+            await self._text_to_neuropol(" ".join(args))
+        await ctx.send(file=discord.File(neuropol_img_file))
+        await aiofiles.os.remove(neuropol_img_file)
 
     @has_permissions(manage_messages=True)
     @commands.command(name="welcometest")
