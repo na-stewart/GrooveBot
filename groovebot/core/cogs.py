@@ -141,7 +141,9 @@ class MiscCog(commands.Cog):
             )
             spacing += font.getbbox(message[i])[2]
 
-    async def _text_to_neuropol(self, message, color=None, file="neuropol.png"):
+    async def text_to_neuropol(self, message, color=None, file="neuropol.png"):
+        if len(message) > 30:
+            raise ValueError("Message cannot be over thirty characters!")
         font = ImageFont.truetype("./resources/NEUROPOL.ttf", 35)
         width = 0
         for i in range(len(message)):
@@ -157,22 +159,12 @@ class MiscCog(commands.Cog):
     async def neuropol(self, ctx, *args):
         neuropol_img_file = "neuropol.png"
         try:
-            message = " ".join(args[:-1])
-            if len(message) <= 30:
-                await self._text_to_neuropol(message, args[-1])
-            else:
-                await failure_message(
-                    ctx, "Please enter a message under 30 characters."
-                )
+            await self.text_to_neuropol(" ".join(args[:-1]), args[-1])
         except ValueError:
-            message = " ".join(args)
-            if len(message) <= 30:
-                await self._text_to_neuropol(message)
-            else:
-                await failure_message(
-                    ctx, "Please enter a message under 30 characters."
-                )
-            await self._text_to_neuropol(message)
+            try:
+                await self.text_to_neuropol(" ".join(args))
+            except ValueError:
+                await failure_message(ctx, "Please enter a message under 30 characters.")
         await ctx.send(file=discord.File(neuropol_img_file))
         await aiofiles.os.remove(neuropol_img_file)
 
@@ -276,17 +268,17 @@ class RetrievalCog(commands.Cog):
         elif await Music.filter(acronym=acronym_upper).exists():
             music = (
                 await Music.filter(acronym=acronym_upper)
-                .prefetch_related("album")
-                .first()
+                    .prefetch_related("album")
+                    .first()
             )
             await success_message(ctx, "Music retrieved!", music)
         elif await Abbreviation.filter(acronym=acronym_upper).exists():
             abbreviation = await Abbreviation.filter(acronym=acronym_upper).first()
             await success_message(ctx, "Abbreviation retrieved!", abbreviation)
         elif (
-            ctx.channel.permissions_for(ctx.author).manage_messages
-            and acronym.isnumeric()
-            and await Strike.filter(id=acronym).exists()
+                ctx.channel.permissions_for(ctx.author).manage_messages
+                and acronym.isnumeric()
+                and await Strike.filter(id=acronym).exists()
         ):
             strike = await Strike.filter(id=acronym).first()
             await success_message(ctx, "Strike retrieved!", strike)
