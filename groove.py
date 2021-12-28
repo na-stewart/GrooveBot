@@ -49,15 +49,14 @@ async def on_member_remove(member):
 
 
 async def handle_command_error(ctx, error):
-    if isinstance(error, ValidationError):
+    if isinstance(error, ValidationError) and "Length of" in str(error):
         await failure_message(
             ctx, "One or more of your arguments in your command is too long."
         )
-    elif isinstance(error, IntegrityError):
-        if error.args[0].args[0] == 1062:
-            await failure_message(
-                ctx, "This acronym is already being used in the database."
-            )
+    elif isinstance(error, IntegrityError) and "UNIQUE constraint" in str(error):
+        await failure_message(
+            ctx, "This acronym is already being used in the database."
+        )
     else:
         await failure_message(
             ctx, "An unexpected error has occurred, please see console."
