@@ -147,9 +147,9 @@ class ModerationCog(commands.Cog):
         self.bot = bot
 
     @has_permissions(manage_messages=True)
-    @commands.command(name="modhelp")
-    async def mod_help(self, ctx):
-        await ctx.send(await read_file("modhelp.txt"))
+    @commands.command(name="ahelp")
+    async def admin_help(self, ctx):
+        await ctx.send(await read_file("ahelp.txt"))
 
     @has_permissions(ban_members=True)
     @commands.command()
