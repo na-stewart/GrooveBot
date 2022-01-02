@@ -54,9 +54,7 @@ async def handle_command_error(ctx, error):
             ctx, "One or more of your arguments in your command may be too long."
         )
     elif isinstance(error, IntegrityError):
-        await failure_message(
-            ctx, "Creation failed. Please use a unique acronym."
-        )
+        await failure_message(ctx, "Creation failed. Please use a unique acronym.")
     else:
         await failure_message(
             ctx, "An unexpected error has occurred, please inform a developer."

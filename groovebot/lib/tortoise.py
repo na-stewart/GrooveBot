@@ -4,13 +4,9 @@ from groovebot.core.utils import config
 
 
 async def tortoise_init():
-    username = config["TORTOISE"]["username"]
-    password = config["TORTOISE"]["password"]
-    endpoint = config["TORTOISE"]["endpoint"]
-    schema = config["TORTOISE"]["schema"]
-    engine = config["TORTOISE"]["engine"]
     models = config["TORTOISE"]["models"].replace(" ", "").split(",")
-    url = f"{engine}://{username}:{password}@{endpoint}/{schema}"
-    await Tortoise.init(db_url=url, modules={"models": models})
+    await Tortoise.init(
+        db_url=config["TORTOISE"]["database_url"], modules={"models": models}
+    )
     if config["TORTOISE"].getboolean("generate"):
         await Tortoise.generate_schemas()
