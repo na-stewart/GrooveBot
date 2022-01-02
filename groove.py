@@ -59,7 +59,7 @@ async def handle_command_error(ctx, error):
         )
     else:
         await failure_message(
-            ctx, "An unexpected error has occurred, please see console."
+            ctx, "An unexpected error has occurred, please inform a developer."
         )
 
 
