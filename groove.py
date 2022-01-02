@@ -16,7 +16,7 @@ from groovebot.core.cogs import (
     RetrievalCog,
 )
 from groovebot.core.utils import read_file, failure_message, config
-from groovebot.lib.tortoise import tortoise_init
+from groovebot.lib.tortoise_orm import tortoise_init
 
 intents = discord.Intents.default()
 intents.members = True
