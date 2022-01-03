@@ -120,12 +120,7 @@ general_channel_id=1625118263628154181
 verified_role_id=1625184182632815125
 
 [TORTOISE]
-username=example
-password=pass
-endpoint=example.com
-schema=groovebot
-models=groovebot.core.models
-engine=mysql
+database_url="sqlite://db.sqlite3"
 generate=true
 ```
 
