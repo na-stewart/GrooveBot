@@ -109,7 +109,7 @@ pip3 install -r requirements.txt
 ```
 
 * Create a groove.ini file in the project directory. Below is an example of its contents:
-* *Note: You will need a database, local or remote.*
+Note: You will need a database, local or remote.*
 <!-- maybe add examples of free DB server programs?-->
 
 ```ini
