@@ -10,10 +10,6 @@ config = ConfigParser()
 config.read("./groove.ini")
 
 
-def _map_range(value, in_min, in_max, out_min, out_max):
-    return
-
-
 def _draw_rainbow(img, message, font):
     spacing = 0
     rgb_values = []
