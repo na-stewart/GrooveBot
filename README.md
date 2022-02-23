@@ -47,7 +47,7 @@
 ## Table of Contents
 
 * [About the Project](#about-the-project)
-* [Images](#Images)
+* [Demo](#Demo)
 * [Getting Started](#getting-started)
   * [Prerequisites](#prerequisites)
   * [Installation](#installation)
@@ -64,7 +64,7 @@ Wayne Lytle's work and understand abbreviations that may be used within the serv
 
 Use .help for commands and .ahelp for admin commands. 
 
-## Images
+## Demo
 ![alt text](https://github.com/sunset-developer/GrooveBot/blob/main/images/groovebot1.png)
 
 ![alt text](https://github.com/sunset-developer/GrooveBot/blob/main/images/groovebot2.png)
