@@ -26,7 +26,7 @@ def _draw_rainbow(img, message, font):
 async def text_to_neuropol(message, color=None, file="neuropol.png"):
     if len(message) > 35:
         raise ValueError("Message cannot be over 35 characters.")
-    font = ImageFont.truetype("./resources/NEUROPOL.ttf", 35)
+    font = ImageFont.truetype("./resources/neuropol.ttf", 35)
     width = 0
     for i in range(len(message)):
         width += font.getbbox(message[i])[2]
