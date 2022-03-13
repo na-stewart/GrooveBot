@@ -209,7 +209,7 @@ class ModerationCog(commands.Cog):
             await failure_message(ctx, f"Could not find strike with id {number}.")
 
 
-def setup(bot):
+def setup_cogs(bot):
     bot.add_cog(AlbumCog(bot))
     bot.add_cog(MusicCog(bot))
     bot.add_cog(MiscCog(bot))

@@ -8,7 +8,7 @@ from discord.ext.commands import (
 from tortoise import Tortoise
 from tortoise.exceptions import ValidationError, IntegrityError
 
-from groovebot.core.cogs import setup
+from groovebot.core.cogs import setup_cogs
 from groovebot.core.models import Album, Music, Abbreviation, Strike
 from groovebot.core.utils import failure_message, config, success_message
 
@@ -109,6 +109,6 @@ async def get(ctx, acronym):
 
 
 if __name__ == "__main__":
-    setup(bot)
+    setup_cogs(bot)
     bot.command_prefix = config["GROOVE"]["prefix"]
     bot.run(config["GROOVE"]["token"], bot=True)
