@@ -14,7 +14,9 @@ from groovebot.core.utils import failure_message, config, success_message
 
 intents = discord.Intents.default()
 intents.members = True
-bot = commands.Bot(help_command=None, command_prefix=config["GROOVE"]["prefix"], intents=intents)
+bot = commands.Bot(
+    help_command=None, command_prefix=config["GROOVE"]["prefix"], intents=intents
+)
 
 
 @bot.event
