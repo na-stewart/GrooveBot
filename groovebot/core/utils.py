@@ -1,7 +1,5 @@
 import asyncio
 from colorsys import hsv_to_rgb
-
-import aiofiles
 from configparser import ConfigParser
 
 from PIL import ImageDraw, ImageFont, Image
@@ -49,8 +47,3 @@ async def success_message(ctx, message, model=None, embed=None):
     if model:
         message += f"\n{str(model)}"
     await ctx.send(message, embed=embed)
-
-
-async def read_file(path, as_array=False):
-    async with aiofiles.open(f"resources/{path}") as f:
-        return [line.strip() async for line in f] if as_array else await f.read()

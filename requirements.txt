@@ -1,4 +1,3 @@
 discord>=1.0.0
 Pillow
 tortoise-orm>=0.17.0
-aiofiles>=0.3.0

@@ -116,6 +116,7 @@ Note: You will need a database, local or remote.
 token=Nzc4MjYzMjAwMDQyODQ0MTYx.X7PcFg.k-BedTOS3LgoEU6teXsQSi5aVAE
 prefix=.
 general_channel_id=1625118263628154181
+verification_channel_id=176371620648173633
 verified_role_id=1625184182632815125
 
 [TORTOISE]

@@ -1,4 +1,4 @@
-****Groove Bot V2.5.5****
+****Groove Bot V2.6.0****
 Admin commands.
 **Argument Help:** `[Required argument]` `(Optional argument)` `"Spaces must be enclosed with quotation marks"`
 >>> ~~---------------~~:tools: Commands :tools:~~----------------~~
@@ -11,6 +11,5 @@ Admin commands.
 **strike** `[mention]` `[reason]` `(proof)` - Creates a strike associated to a member. Proof can be provided as a message and an attachment.
 **getstrikes** `[mention]` - Retrieves all strikes associated to a member.
 **deletestrike** `[id]` - Deletes a strike associated to a member.
-**verify** - Allows a member access to the server.
 **ban** `[mention]` `[reason]` - Bans a user with reason and sends the user a DM with ban appeal form.
 **get** `[acronym/id]` - Retrieves data via acronym or id.

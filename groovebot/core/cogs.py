@@ -6,7 +6,6 @@ from discord.ext.commands import has_permissions
 
 from groovebot.core.models import Album, Music, Abbreviation, Strike
 from groovebot.core.utils import (
-    read_file,
     failure_message,
     success_message,
     config,
@@ -117,11 +116,13 @@ class MiscCog(commands.Cog):
 
     @commands.command()
     async def fact(self, ctx):
-        await ctx.send(random.choice(await read_file("facts.txt", True)))
+        with open("resources/facts.txt", "r") as f:
+            await ctx.send(random.choice(f.readlines()))
 
     @commands.command()
     async def help(self, ctx):
-        await ctx.send(await read_file("help.txt"))
+        with open("resources/help.txt", "r") as f:
+            await ctx.send(f.read())
 
     @commands.command()
     async def neuropol(self, ctx, *args):
@@ -136,10 +137,11 @@ class MiscCog(commands.Cog):
             except ValueError:
                 await failure_message(ctx, "Message cannot be over 35 characters.")
 
-    @has_permissions(manage_messages=True)
-    @commands.command(name="welcometest")
-    async def welcome_test(self, ctx):
-        await ctx.send(await read_file("welcome.txt"))
+    @commands.command()
+    async def verify(self, ctx):
+        role = ctx.guild.get_role(int(config["GROOVE"]["verified_role_id"]))
+        if len(ctx.author.roles) <= 1:
+            await ctx.author.add_roles(role)
 
 
 class ModerationCog(commands.Cog):
@@ -149,7 +151,8 @@ class ModerationCog(commands.Cog):
     @has_permissions(manage_messages=True)
     @commands.command(name="ahelp")
     async def admin_help(self, ctx):
-        await ctx.send(await read_file("ahelp.txt"))
+        with open("resources/ahelp.txt", "r") as f:
+            await ctx.send(f.read())
 
     @has_permissions(ban_members=True)
     @commands.command()
@@ -205,50 +208,10 @@ class ModerationCog(commands.Cog):
         else:
             await failure_message(ctx, f"Could not find strike with id {number}.")
 
-    @commands.command()
-    async def verify(self, ctx):
-        if len(ctx.author.roles) <= 1:
-            role = ctx.guild.get_role(int(config["GROOVE"]["verified_role_id"]))
-            await ctx.author.add_roles(role)
 
-
-class RetrievalCog(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
-
-    async def _get_album(self, ctx, album):
-        music = await Music.filter(album=album).all()
-        if music:
-            embed = discord.Embed(colour=discord.Colour.blue())
-            embed.set_author(name="Here's a guide to all of the music abbreviations!")
-            for song in music:
-                embed.add_field(name=song.acronym, value=song.value, inline=True)
-            await success_message(ctx, "Album retrieved!", album, embed)
-        else:
-            await failure_message(ctx, f"Album {album} contains no music.")
-
-    @commands.command()
-    async def get(self, ctx, acronym):
-        acronym_upper = acronym.upper()
-        if await Album.filter(acronym=acronym_upper).exists():
-            album = await Album.filter(acronym=acronym_upper).first()
-            await self._get_album(ctx, album)
-        elif await Music.filter(acronym=acronym_upper).exists():
-            music = (
-                await Music.filter(acronym=acronym_upper)
-                .prefetch_related("album")
-                .first()
-            )
-            await success_message(ctx, "Music retrieved!", music)
-        elif await Abbreviation.filter(acronym=acronym_upper).exists():
-            abbreviation = await Abbreviation.filter(acronym=acronym_upper).first()
-            await success_message(ctx, "Abbreviation retrieved!", abbreviation)
-        elif (
-            ctx.channel.permissions_for(ctx.author).manage_messages
-            and acronym.isnumeric()
-            and await Strike.filter(id=acronym).exists()
-        ):
-            strike = await Strike.filter(id=acronym).first()
-            await success_message(ctx, "Strike retrieved!", strike)
-        else:
-            await failure_message(ctx, "Please try again with a different acronym.")
+def setup(bot):
+    bot.add_cog(AlbumCog(bot))
+    bot.add_cog(MusicCog(bot))
+    bot.add_cog(MiscCog(bot))
+    bot.add_cog(AbbreviationCog(bot))
+    bot.add_cog(ModerationCog(bot))
