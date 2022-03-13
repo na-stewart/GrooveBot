@@ -14,7 +14,7 @@ from groovebot.core.utils import failure_message, config, success_message
 
 intents = discord.Intents.default()
 intents.members = True
-bot = commands.Bot(help_command=None, command_prefix=None, intents=intents)
+bot = commands.Bot(help_command=None, command_prefix=config["GROOVE"]["prefix"], intents=intents)
 
 
 @bot.event
@@ -110,5 +110,4 @@ async def get(ctx, acronym):
 
 if __name__ == "__main__":
     setup_cogs(bot)
-    bot.command_prefix = config["GROOVE"]["prefix"]
     bot.run(config["GROOVE"]["token"], bot=True)
