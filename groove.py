@@ -34,7 +34,7 @@ async def on_ready():
 @bot.event
 async def on_member_join(member):
     with open("resources/welcome.txt", "r") as wf, open(
-            "resources/greetings.txt", "r"
+        "resources/greetings.txt", "r"
     ) as gf:
         await member.guild.get_channel(
             int(config["GROOVE"]["general_channel_id"])
@@ -102,9 +102,9 @@ async def get(ctx, acronym):
         abbreviation = await Abbreviation.filter(acronym=acronym_upper).first()
         await success_message(ctx, "Abbreviation retrieved!", abbreviation)
     elif (
-            ctx.channel.permissions_for(ctx.author).manage_messages
-            and acronym.isnumeric()
-            and await Strike.filter(id=acronym).exists()
+        ctx.channel.permissions_for(ctx.author).manage_messages
+        and acronym.isnumeric()
+        and await Strike.filter(id=acronym).exists()
     ):
         strike = await Strike.filter(id=acronym).first()
         await success_message(ctx, "Strike retrieved!", strike)
