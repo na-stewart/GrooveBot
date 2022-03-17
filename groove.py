@@ -43,7 +43,6 @@ async def on_member_join(member):
                 member.mention, member.name, member.discriminator
             )
         )
-        await asyncio.sleep(1)
         await member.guild.get_channel(
             int(config["GROOVE"]["verification_channel_id"])
         ).send(wf.read())
