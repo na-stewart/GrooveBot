@@ -1,6 +1,6 @@
 ****Groove Bot V2.6.0****
 Admin commands.
-**Argument Help:** `[Required argument]` `(Optional argument)` `"Spaces must be enclosed with quotation marks"`
+**Argument Help:** `[Required argument]` `(Optional argument)` `"Spaces in arguments must be enclosed with quotation marks"`
 >>> ~~---------------~~:tools: Commands :tools:~~----------------~~
 **createalbum** `[acronym]` `[title]` `[description]` - Creates an album.
 **deletealbum** `[acronym]` - Deletes an album
