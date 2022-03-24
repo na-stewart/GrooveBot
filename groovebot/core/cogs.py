@@ -174,7 +174,6 @@ class ModerationCog(commands.Cog):
                 f"Successfully banned user {member.mention} but the ban message was not sent..",
             )
 
-
     @has_permissions(manage_messages=True)
     @commands.command()
     async def strike(self, ctx, member: discord.Member, reason, proof="Not provided."):
