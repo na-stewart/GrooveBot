@@ -1,6 +1,7 @@
 import random
 
 import discord
+from discord import Forbidden
 from discord.ext import commands
 from discord.ext.commands import has_permissions
 
@@ -157,15 +158,22 @@ class ModerationCog(commands.Cog):
     @has_permissions(ban_members=True)
     @commands.command()
     async def ban(self, ctx, member: discord.Member, reason):
-        await member.ban(reason=reason)
-        await member.send(
-            f"You have been banned from the Animusic server. If you would like to submit an appeal, "
-            f"you can click here: https://forms.gle/FmkxeXaXSsUpS6Vv7 \nReason: {reason}"
-        )
-        await success_message(
-            ctx,
-            f"Successfully banned user {member.mention} ({member}) for reason: {reason}.",
-        )
+        try:
+            await member.ban(reason=reason)
+            await member.send(
+                f"You have been banned from the Animusic server. If you would like to submit an appeal, "
+                f"you can click here: https://forms.gle/FmkxeXaXSsUpS6Vv7 \nReason: {reason}"
+            )
+            await success_message(
+                ctx,
+                f"Successfully banned user {member.mention}.",
+            )
+        except Forbidden:
+            await success_message(
+                ctx,
+                f"Successfully banned user {member.mention} but the ban message was not sent..",
+            )
+
 
     @has_permissions(manage_messages=True)
     @commands.command()
