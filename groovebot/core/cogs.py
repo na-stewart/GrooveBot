@@ -169,9 +169,9 @@ class ModerationCog(commands.Cog):
                 f"Successfully banned user {member.mention}.",
             )
         except Forbidden:
-            await success_message(
+            await failure_message(
                 ctx,
-                f"Successfully banned user {member.mention} but the ban message was not sent..",
+                f"Could not ban member {member.mention}.",
             )
 
     @has_permissions(manage_messages=True)
