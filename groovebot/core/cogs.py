@@ -159,20 +159,16 @@ class ModerationCog(commands.Cog):
     @commands.command()
     async def ban(self, ctx, member: discord.Member, reason):
         try:
-            await member.send(
-                f"You have been banned from the Animusic server. If you would like to submit an appeal, "
-                f"you can click here: https://forms.gle/FmkxeXaXSsUpS6Vv7 \nReason: {reason}"
-            )
-            await member.ban(reason=reason)
-            await success_message(
-                ctx,
-                f"Successfully banned user {member.mention}.",
-            )
+            await member.send(f"{config['GROOVE']['message_on_ban']}\nReason: {reason}")
         except Forbidden:
             await failure_message(
-                ctx,
-                f"Could not ban member {member.mention}.",
+                ctx, f"Ban message could not be sent to {member.mention}."
             )
+        await member.ban(reason=reason)
+        await success_message(
+            ctx,
+            f"Successfully banned user {member.mention}.",
+        )
 
     @has_permissions(manage_messages=True)
     @commands.command()

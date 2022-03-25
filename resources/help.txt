@@ -1,4 +1,4 @@
-****Groove Bot V2.6.0****
+****Groove Bot V2.6.1****
 Hello! I am GrooveBot, a bot specially created for the Animusic Discord server!
 >>> ~~---------------~~:tools: Commands :tools:~~----------------~~
 **fact** - Retrieves an Animusic fact.
