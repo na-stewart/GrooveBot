@@ -1,4 +1,4 @@
-****Groove Bot V2.6.1****
+****Groove Bot V2.6.2****
 Admin commands.
 **Argument Help:** `[Required argument]` `(Optional argument)` `"Spaces in arguments must be enclosed with quotation marks"`
 >>> ~~---------------~~:tools: Commands :tools:~~----------------~~

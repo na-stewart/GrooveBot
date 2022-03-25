@@ -32,19 +32,17 @@ async def on_ready():
 
 @bot.event
 async def on_member_join(member):
-    with open("resources/welcome.txt", "r") as wf, open(
-        "resources/greetings.txt", "r"
-    ) as gf:
+    with open("resources/greetings.txt", "r") as f:
         await member.guild.get_channel(
             int(config["GROOVE"]["general_channel_id"])
         ).send(
-            random.choice(gf.readlines()).format(
+            random.choice(f.readlines()).format(
                 member.mention, member.name, member.discriminator
             )
         )
-        await member.guild.get_channel(
-            int(config["GROOVE"]["verification_channel_id"])
-        ).send(wf.read())
+    await member.guild.get_channel(
+        int(config["GROOVE"]["verification_channel_id"])
+    ).send(config["GROOVE"]["message_on_join"])
 
 
 @bot.event
