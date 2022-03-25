@@ -159,11 +159,11 @@ class ModerationCog(commands.Cog):
     @commands.command()
     async def ban(self, ctx, member: discord.Member, reason):
         try:
-            await member.ban(reason=reason)
             await member.send(
                 f"You have been banned from the Animusic server. If you would like to submit an appeal, "
                 f"you can click here: https://forms.gle/FmkxeXaXSsUpS6Vv7 \nReason: {reason}"
             )
+            await member.ban(reason=reason)
             await success_message(
                 ctx,
                 f"Successfully banned user {member.mention}.",
