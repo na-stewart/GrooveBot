@@ -1,5 +1,6 @@
 ****Groove Bot V2.6.2****
 Hello! I am GrooveBot, a bot specially created for the Animusic Discord server!
+**Argument Help:** `[Required argument]`
 >>> ~~---------------~~:tools: Commands :tools:~~----------------~~
 **fact** - Retrieves an Animusic fact.
 **neuropol** `[message]` - Parses message into neuropol font. Add a color code (RGB, HEX) or `rainbow` to the end of your message to apply color.
