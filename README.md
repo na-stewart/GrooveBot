@@ -62,9 +62,9 @@
 GrooveBot is a bot specially coded for the Animusic Discord server. It was created as an easy way to reference
 Wayne Lytle's (and other's) work as well as understand abbreviations that may be used within the server. There are also security features such as verification, user strikes, and join/leave messages.
 
-https://discord.gg/yDfyhfA
-
 Use .help for commands and .ahelp for admin commands. 
+
+https://discord.gg/yDfyhfA
 
 ## Demo
 ![alt text](https://github.com/sunset-developer/GrooveBot/blob/main/images/groovebot1.png)
