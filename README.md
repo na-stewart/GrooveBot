@@ -66,23 +66,6 @@ Use .help for commands and .ahelp for admin commands.
 
 https://discord.gg/yDfyhfA
 
-## Demo
-![alt text](https://github.com/sunset-developer/GrooveBot/blob/main/images/groovebot1.png)
-
-![alt text](https://github.com/sunset-developer/GrooveBot/blob/main/images/groovebot2.png)
-
-![alt text](https://github.com/sunset-developer/GrooveBot/blob/main/images/groovebot3.png)
-
-![alt text](https://github.com/sunset-developer/GrooveBot/blob/main/images/groovebot4.png)
-
-![alt text](https://github.com/sunset-developer/GrooveBot/blob/main/images/groovebot5.png)
-
-![alt text](https://github.com/sunset-developer/GrooveBot/blob/main/images/groovebot6.png)
-
-![alt text](https://github.com/sunset-developer/GrooveBot/blob/main/images/groovebot7.png)
-
-![alt text](https://github.com/sunset-developer/GrooveBot/blob/main/images/groovebot8.png)
-
 
 <!-- GETTING STARTED -->
 ## Getting Started
