@@ -10,30 +10,26 @@ class BaseModel(Model):
         abstract = True
 
 
-class Abbreviation(BaseModel):
+class Album(BaseModel):
     acronym = fields.CharField(max_length=12, unique=True)
-    value = fields.CharField(max_length=455)
-
-    def __str__(self):
-        return f"***Acronym:*** `{self.acronym}`\n***Value:*** `{self.value}`"
-
-
-class Album(Abbreviation):
+    title = fields.CharField(max_length=455)
     description = fields.TextField()
 
     def __str__(self):
-        return f"***Acronym:*** `{self.acronym}`\n***Title:*** `{self.value}`\n***Description:*** `{self.description}`"
+        return f"***Acronym:*** `{self.acronym}`\n***Title:*** `{self.title}`\n***Description:*** `{self.description}`"
 
 
-class Music(Abbreviation):
-    album = fields.ForeignKeyField("models.Album")
-    url = fields.CharField(max_length=455)
+class Music(BaseModel):
+    acronym = fields.CharField(max_length=12, unique=True)
+    title = fields.CharField(max_length=455)
+    album = fields.ForeignKeyField("models.Album", null=True)
+    url = fields.CharField(max_length=455, null=True)
 
     def __str__(self):
-        return (
-            f"***Acronym:*** `{self.acronym}`\n***Title:*** `{self.value}`\n***Album:*** `{self.album.value}`"
-            f"\n***URL:*** {self.url}"
-        )
+        model_str = f"***Acronym:*** `{self.acronym}`\n***Title:*** `{self.title}`\n"
+        if self.url:
+            model_str += f"***URL:*** {self.url}"
+        return model_str
 
 
 class Strike(BaseModel):
