@@ -26,10 +26,10 @@ class Music(BaseModel):
     url = fields.CharField(max_length=455, null=True)
 
     def __str__(self):
-        return (
-            f"***Acronym:*** `{self.acronym}`\n***Title:*** `{self.title}`\n***Album:*** `{self.album.value}`"
-            f"\n***URL:*** {self.url}"
-        )
+        model_str = f"***Acronym:*** `{self.acronym}`\n***Title:*** `{self.title}`\n"
+        if self.url:
+            model_str += f"***URL:*** {self.url}"
+        return model_str
 
 
 class Strike(BaseModel):
