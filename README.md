@@ -47,7 +47,6 @@
 ## Table of Contents
 
 * [About the Project](#about-the-project)
-* [Demo](#Demo)
 * [Getting Started](#getting-started)
   * [Prerequisites](#prerequisites)
   * [Installation](#installation)
@@ -61,8 +60,6 @@
 
 GrooveBot is a bot specially coded for the Animusic Discord server. It was created as an easy way to reference
 Wayne Lytle's (and other's) work as well as understand abbreviations that may be used within the server. There are also security features such as verification, user strikes, and join/leave messages.
-
-Use .help for commands and .ahelp for admin commands. 
 
 https://discord.gg/yDfyhfA
 
@@ -99,15 +96,13 @@ Note: You will need a database, local or remote.
 ```ini
 [GROOVE]
 token=Nzc4MjYzMjAwMDQyODQ0MTYx.X7PcFg.k-BedTOS3LgoEU6teXsQSi5aVAE
-prefix=.
 general_channel_id=1625118263628154181
 verification_channel_id=176371620648173633
 verified_role_id=1625184182632815125
-message_on_ban=You have been banned from the Animusic server.
 message_on_join=Welcome to the official Animusic Discord server!
 
 [TORTOISE]
-database_url="sqlite://db.sqlite3"
+database_url=sqlite://db.sqlite3
 generate=true
 ```
 
