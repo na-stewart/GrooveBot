@@ -63,7 +63,7 @@ Wayne Lytle's (and other's) work as well as understand abbreviations that may be
 
 https://discord.gg/yDfyhfA
 
-`v3.0.0`
+`v3.0.1`
 
 
 <!-- GETTING STARTED -->
