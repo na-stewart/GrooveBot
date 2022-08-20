@@ -86,7 +86,7 @@ async def list_albums(ctx: discord.ApplicationContext):
     albums = await Album.all()
     if albums:
         embed = discord.Embed(colour=discord.Colour.purple())
-        embed.set_author(name="Here are all of the album entries.")
+        embed.set_author(name="Here are all of the albums.")
         for album in albums:
             embed.add_field(name=album.acronym, value=album.title, inline=True)
         await response(ctx, "Albums retrieved!", embed=embed)
@@ -193,7 +193,7 @@ async def delete_strike(ctx: discord.ApplicationContext, strike_id: int):
 
 
 @bot.slash_command(
-    name="whatis", description="Used to Decipher acronyms used in this server."
+    name="whatis", description="Used to decipher acronyms used in this server."
 )
 async def what_is(ctx: discord.ApplicationContext, acronym: str):
     acronym_upper = acronym.upper()
