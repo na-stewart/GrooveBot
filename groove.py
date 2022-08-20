@@ -12,7 +12,9 @@ from groovebot.core.models import Album, Music, Strike
 
 config = ConfigParser()
 config.read("groove.ini")
-bot = discord.Bot(intents=discord.Intents(members=True))
+intents = discord.Intents.default()
+intents.members = True
+bot = discord.Bot(intents=intents)
 music_group = SlashCommandGroup("music", "Retrieve and manage music.")
 album_group = SlashCommandGroup("album", "Retrieve and manage albums.")
 strike_group = SlashCommandGroup("strike", "Retrieve and manage strikes.")
@@ -32,22 +34,22 @@ async def on_ready():
 async def on_member_join(member):
     with open("resources/greetings.txt", "r") as f:
         await member.guild.get_channel(
-            int(config["GROOVE"]["general_channel_id"])
+            int(config.get("GROOVE", "general_channel_id"))
         ).send(
             random.choice(f.readlines()).format(
                 member.mention, member.name, member.discriminator
             )
         )
     await member.guild.get_channel(
-        int(config["GROOVE"]["verification_channel_id"])
-    ).send(config["GROOVE"]["message_on_join"])
+        int(config.get("GROOVE", "verification_channel_id"))
+    ).send(config.get("GROOVE", "message_on_join"))
 
 
 @bot.event
 async def on_member_remove(member):
     with open("resources/farewells.txt", "r") as f:
         await member.guild.get_channel(
-            int(config["GROOVE"]["general_channel_id"])
+            int(config.get("GROOVE", "general_channel_id"))
         ).send(
             random.choice(f.readlines()).format(
                 member.mention, member.name, member.discriminator
@@ -60,6 +62,7 @@ async def on_application_command_error(
     ctx: discord.ApplicationContext, error: discord.DiscordException
 ):
     await response(ctx, str(error), success=False)
+    raise error
 
 
 async def response(
@@ -231,7 +234,7 @@ async def fact(ctx: discord.ApplicationContext):
     name="verify", description="Verify your account to access the server."
 )
 async def verify(ctx: discord.ApplicationContext):
-    role = ctx.guild.get_role(int(config["GROOVE"]["verified_role_id"]))
+    role = ctx.guild.get_role(int(config.get("GROOVE", "verified_role_id")))
     if len(ctx.author.roles) <= 1:
         await ctx.author.add_roles(role)
         await response(ctx, "You have been verified.")
