@@ -185,7 +185,7 @@ async def delete_strike(ctx: discord.ApplicationContext, strike_id: int):
         await response(ctx, f"Could not find strike with id {strike_id}.")
 
 
-@bot.slash_command(name="whatis", description="Deciphers acronyms used in this server.")
+@bot.slash_command(name="whatis", description="Used to Decipher acronyms used in this server.")
 async def what_is(ctx: discord.ApplicationContext, acronym: str):
     acronym_upper = acronym.upper()
     if await Album.filter(acronym=acronym_upper).exists():
@@ -217,7 +217,7 @@ async def fact(ctx: discord.ApplicationContext):
         await ctx.respond(random.choice(f.readlines()))
 
 
-@bot.slash_command(name="verify", description="Verify your account to access server.")
+@bot.slash_command(name="verify", description="Verify your account to access the server.")
 async def verify(ctx: discord.ApplicationContext):
     role = ctx.guild.get_role(int(config["GROOVE"]["verified_role_id"]))
     if len(ctx.author.roles) <= 1:
