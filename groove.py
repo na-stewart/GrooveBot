@@ -114,23 +114,6 @@ async def delete_album(ctx: discord.ApplicationContext, acronym: str):
         await response(ctx, "Album has not been deleted successfully.")
 
 
-@music_group.command(
-    name="list", description="List all of Groovebot's available music."
-)
-async def list_music(ctx: discord.ApplicationContext):
-    music = await Music.all()
-    if music:
-        embed = discord.Embed(colour=discord.Colour.purple())
-        embed.set_author(name="Here are all of the album entries.")
-        for music_entry in music:
-            embed.add_field(
-                name=music_entry.acronym, value=music_entry.title, inline=True
-            )
-        await response(ctx, "Music retrieved!", embed=embed)
-    else:
-        await response(ctx, "No music has been created.", success=False)
-
-
 @music_group.command(name="create", description="Create new music entry.")
 @default_permissions(manage_messages=True)
 async def create_music(
