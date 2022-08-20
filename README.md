@@ -33,7 +33,7 @@
   <h3 align="center">GrooveBot</h3>
 
   <p align="center">
-    The official Animusic Discord bot.
+    The official Animusic Discord bot. v3.0.0
     <br />
     <a href="https://github.com/sunset-developer/GrooveBot/issues">Report Bug</a>
     ·

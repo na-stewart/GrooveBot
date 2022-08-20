@@ -221,11 +221,6 @@ async def what_is(ctx: discord.ApplicationContext, acronym: str):
         )
 
 
-@bot.slash_command(name="version", description="Current Groovebot version.")
-async def version(ctx: discord.ApplicationContext):
-    await ctx.respond("`v3.0.0`")
-
-
 @bot.slash_command(name="fact", description="Random Animusic fact.")
 async def fact(ctx: discord.ApplicationContext):
     with open("resources/facts.txt", "r") as f:
