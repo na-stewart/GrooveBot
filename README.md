@@ -33,7 +33,7 @@
   <h3 align="center">GrooveBot</h3>
 
   <p align="center">
-    The official Animusic Discord bot. v3.0.0
+    The official Animusic Discord bot. 
     <br />
     <a href="https://github.com/sunset-developer/GrooveBot/issues">Report Bug</a>
     ·
@@ -62,6 +62,8 @@ GrooveBot is a bot specially coded for the Animusic Discord server. It was creat
 Wayne Lytle's (and other's) work as well as understand abbreviations that may be used within the server. There are also security features such as verification, user strikes, and join/leave messages.
 
 https://discord.gg/yDfyhfA
+
+`v3.0.0`
 
 
 <!-- GETTING STARTED -->
