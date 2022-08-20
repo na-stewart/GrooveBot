@@ -57,18 +57,18 @@ async def on_member_remove(member):
 
 @bot.event
 async def on_application_command_error(
-        ctx: discord.ApplicationContext, error: discord.DiscordException
+    ctx: discord.ApplicationContext, error: discord.DiscordException
 ):
     await response(ctx, str(error), success=False)
 
 
 async def response(
-        ctx: discord.ApplicationContext,
-        message: str,
-        *,
-        success: bool = True,
-        model=None,
-        embed: discord.Embed = None,
+    ctx: discord.ApplicationContext,
+    message: str,
+    *,
+    success: bool = True,
+    model=None,
+    embed: discord.Embed = None,
 ):
     if success:
         response_message = f":white_check_mark: **{message}**"
@@ -97,7 +97,7 @@ async def list_albums(ctx: discord.ApplicationContext):
 @album_group.command(name="create", description="Create new album entry.")
 @default_permissions(manage_messages=True)
 async def create_album(
-        ctx: discord.ApplicationContext, acronym: str, title: str, description: str
+    ctx: discord.ApplicationContext, acronym: str, title: str, description: str
 ):
     album = await Album.create(
         acronym=acronym.upper(), title=title, description=description
@@ -114,14 +114,31 @@ async def delete_album(ctx: discord.ApplicationContext, acronym: str):
         await response(ctx, "Album has not been deleted successfully.")
 
 
+@music_group.command(
+    name="list", description="List all of Groovebot's available music."
+)
+async def list_music(ctx: discord.ApplicationContext):
+    music = await Music.all()
+    if music:
+        embed = discord.Embed(colour=discord.Colour.purple())
+        embed.set_author(name="Here are all of the album entries.")
+        for music_entry in music:
+            embed.add_field(
+                name=music_entry.acronym, value=music_entry.title, inline=True
+            )
+        await response(ctx, "Music retrieved!", embed=embed)
+    else:
+        await response(ctx, "No music has been created.", success=False)
+
+
 @music_group.command(name="create", description="Create new music entry.")
 @default_permissions(manage_messages=True)
 async def create_music(
-        ctx: discord.ApplicationContext,
-        acronym: str,
-        title: str,
-        album: str = None,
-        url: str = None,
+    ctx: discord.ApplicationContext,
+    acronym: str,
+    title: str,
+    album: str = None,
+    url: str = None,
 ):
     associated_album = (
         await Album.filter(acronym=album.upper()).first() if album else None
@@ -141,9 +158,16 @@ async def delete_music(ctx: discord.ApplicationContext, acronym: str):
         await response(ctx, "Music has not been deleted successfully.")
 
 
-@strike_group.command(name="create", description="Create a strike against a rule breaker >:(.")
+@strike_group.command(
+    name="create", description="Create a strike against a rule breaker >:(."
+)
 @default_permissions(manage_messages=True)
-async def create_strike(ctx: discord.ApplicationContext, member: discord.Member, reason: str, proof: str = "Not provided."):
+async def create_strike(
+    ctx: discord.ApplicationContext,
+    member: discord.Member,
+    reason: str,
+    proof: str = "Not provided.",
+):
     if ctx.message.attachments:
         for attachment in ctx.message.attachments:
             proof += f" {attachment.url}\n"
@@ -166,13 +190,13 @@ async def get_strikes(ctx: discord.ApplicationContext, member: discord.Member):
             name=f"Here's a list of all of the strikes against {member.display_name}!"
         )
         for strike in strikes:
-            embed.add_field(
-                name=f"ID: {strike.id}", value=strike.reason, inline=True
-            )
+            embed.add_field(name=f"ID: {strike.id}", value=strike.reason, inline=True)
         await response(ctx, "Strikes retrieved!", embed=embed)
     else:
         await response(
-            ctx, f"No strikes associated with {member.mention} could be found!", success=False
+            ctx,
+            f"No strikes associated with {member.mention} could be found!",
+            success=False,
         )
 
 
@@ -185,7 +209,9 @@ async def delete_strike(ctx: discord.ApplicationContext, strike_id: int):
         await response(ctx, f"Could not find strike with id {strike_id}.")
 
 
-@bot.slash_command(name="whatis", description="Used to Decipher acronyms used in this server.")
+@bot.slash_command(
+    name="whatis", description="Used to Decipher acronyms used in this server."
+)
 async def what_is(ctx: discord.ApplicationContext, acronym: str):
     acronym_upper = acronym.upper()
     if await Album.filter(acronym=acronym_upper).exists():
@@ -217,7 +243,9 @@ async def fact(ctx: discord.ApplicationContext):
         await ctx.respond(random.choice(f.readlines()))
 
 
-@bot.slash_command(name="verify", description="Verify your account to access the server.")
+@bot.slash_command(
+    name="verify", description="Verify your account to access the server."
+)
 async def verify(ctx: discord.ApplicationContext):
     role = ctx.guild.get_role(int(config["GROOVE"]["verified_role_id"]))
     if len(ctx.author.roles) <= 1:
@@ -232,7 +260,7 @@ async def verify(ctx: discord.ApplicationContext):
     description="Parses message into neuropol font. For color use RGB, HEX, or rainbow.",
 )
 async def neuropol(
-        ctx: discord.ApplicationContext, message: str, color: str = "#FFFFFF"
+    ctx: discord.ApplicationContext, message: str, color: str = "#FFFFFF"
 ):
     if len(message) < 35:
         font = ImageFont.truetype("./resources/neuropol.ttf", 35)
