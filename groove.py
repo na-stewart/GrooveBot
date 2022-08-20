@@ -12,7 +12,7 @@ from groovebot.core.models import Album, Music, Strike
 
 config = ConfigParser()
 config.read("groove.ini")
-bot = discord.Bot()
+bot = discord.Bot(intents=discord.Intents(members=True))
 music_group = SlashCommandGroup("music", "Retrieve and manage music.")
 album_group = SlashCommandGroup("album", "Retrieve and manage albums.")
 strike_group = SlashCommandGroup("strike", "Retrieve and manage strikes.")
