@@ -100,10 +100,7 @@ general_channel_id=1625118263628154181
 verification_channel_id=176371620648173633
 verified_role_id=1625184182632815125
 message_on_join=Welcome to the official Animusic Discord server!
-
-[TORTOISE]
 database_url=sqlite://db.sqlite3
-generate=true
 ```
 
 <!-- CONTRIBUTING -->
