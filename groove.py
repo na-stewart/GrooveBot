@@ -23,7 +23,7 @@ strike_group = SlashCommandGroup("strike", "Retrieve and manage strikes.")
 @bot.event
 async def on_ready():
     await Tortoise.init(
-        db_url=config.get("GROOVE", "database_url"),
+        db_url=config.get("SETTINGS", "database_url"),
         modules={"models": ["groovebot.core.models"]},
     )
     await Tortoise.generate_schemas()
@@ -34,22 +34,22 @@ async def on_ready():
 async def on_member_join(member):
     with open("resources/greetings.txt", "r") as f:
         await member.guild.get_channel(
-            int(config.get("GROOVE", "general_channel_id"))
+            int(config.get("SETTINGS", "general_channel_id"))
         ).send(
             random.choice(f.readlines()).format(
                 member.mention, member.name, member.discriminator
             )
         )
     await member.guild.get_channel(
-        int(config.get("GROOVE", "verification_channel_id"))
-    ).send(config.get("GROOVE", "message_on_join"))
+        int(config.get("SETTINGS", "verification_channel_id"))
+    ).send(config.get("SETTINGS", "message_on_join"))
 
 
 @bot.event
 async def on_member_remove(member):
     with open("resources/farewells.txt", "r") as f:
         await member.guild.get_channel(
-            int(config.get("GROOVE", "general_channel_id"))
+            int(config.get("SETTINGS", "general_channel_id"))
         ).send(
             random.choice(f.readlines()).format(
                 member.mention, member.name, member.discriminator
@@ -234,7 +234,7 @@ async def fact(ctx: discord.ApplicationContext):
     name="verify", description="Verify your account to access the server."
 )
 async def verify(ctx: discord.ApplicationContext):
-    role = ctx.guild.get_role(int(config.get("GROOVE", "verified_role_id")))
+    role = ctx.guild.get_role(int(config.get("SETTINGS", "verified_role_id")))
     if len(ctx.author.roles) <= 1:
         await ctx.author.add_roles(role)
         await response(ctx, "You have been verified.")
@@ -285,4 +285,4 @@ bot.add_application_command(album_group)
 bot.add_application_command(music_group)
 bot.add_application_command(strike_group)
 if __name__ == "__main__":
-    bot.run(config.get("GROOVE", "TOKEN"))
+    bot.run(config.get("SETTINGS", "TOKEN"))

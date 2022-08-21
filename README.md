@@ -63,7 +63,7 @@ Wayne Lytle's (and other's) work as well as understand abbreviations that may be
 
 https://discord.gg/yDfyhfA
 
-`v3.0.1`
+`v3.1.0`
 
 
 <!-- GETTING STARTED -->
@@ -96,7 +96,7 @@ pip3 install -r requirements.txt
 Note: You will need a database, local or remote.
 
 ```ini
-[GROOVE]
+[SETTINGS]
 token=Nzc4MjYzMjAwMDQyODQ0MTYx.X7PcFg.k-BedTOS3LgoEU6teXsQSi5aVAE
 general_channel_id=1625118263628154181
 verification_channel_id=176371620648173633
