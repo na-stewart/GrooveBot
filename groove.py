@@ -196,7 +196,7 @@ async def delete_strike(ctx: discord.ApplicationContext, strike_id: int):
 
 
 @bot.slash_command(
-    name="whatis", description="Used to decipher acronyms used in this server."
+    name="whatis", description="Deciphers acronyms used in this server."
 )
 async def what_is(ctx: discord.ApplicationContext, acronym: str):
     acronym_upper = acronym.upper()
