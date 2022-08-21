@@ -115,7 +115,7 @@ async def delete_album(ctx: discord.ApplicationContext, acronym: str):
     if await Album.filter(acronym=acronym.upper()).delete() == 1:
         await response(ctx, "Album successfully deleted from database.")
     else:
-        await response(ctx, "Album has not been deleted successfully.")
+        await response(ctx, "Album has not been deleted successfully.", success=False)
 
 
 @music_group.command(name="create", description="Create new music entry.")
@@ -142,7 +142,7 @@ async def delete_music(ctx: discord.ApplicationContext, acronym: str):
     if await Music.filter(acronym=acronym.upper()).delete() == 1:
         await response(ctx, "Music successfully deleted from database.")
     else:
-        await response(ctx, "Music has not been deleted successfully.")
+        await response(ctx, "Music has not been deleted successfully.", success=False)
 
 
 @strike_group.command(
@@ -193,7 +193,7 @@ async def delete_strike(ctx: discord.ApplicationContext, strike_id: int):
     if await Strike.filter(id=strike_id).delete() == 1:
         await response(ctx, f"Strike with id {strike_id} deleted from database!")
     else:
-        await response(ctx, f"Could not find strike with id {strike_id}.")
+        await response(ctx, f"Could not find strike with id {strike_id}.", success=False)
 
 
 @bot.slash_command(
