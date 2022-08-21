@@ -92,8 +92,7 @@ async def list_albums(ctx: discord.ApplicationContext):
         embed.set_author(name="Here are all of the albums.")
         for album in albums:
             embed.add_field(name=album.acronym, value=album.title, inline=True)
-        await ctx.send("Use **/whatis** for album information.")
-        await response(ctx, "Albums retrieved!", embed=embed)
+        await response(ctx, "Albums retrieved! Use **/whatis** for album information.", embed=embed)
     else:
         await response(ctx, "No albums have been created.", success=False)
 
