@@ -83,7 +83,7 @@ async def response(
 
 
 @album_group.command(
-    name="list", description="List all of Groovebot's available albums."
+    name="list", description="List all available albums."
 )
 async def list_albums(ctx: discord.ApplicationContext):
     albums = await Album.all()
@@ -92,7 +92,7 @@ async def list_albums(ctx: discord.ApplicationContext):
         embed.set_author(name="Here are all of the albums.")
         for album in albums:
             embed.add_field(name=album.acronym, value=album.title, inline=True)
-        await response(ctx, "Albums retrieved! Use **/whatis** for album information.", embed=embed)
+        await response(ctx, "Albums retrieved! Use /whatis for album information.", embed=embed)
     else:
         await response(ctx, "No albums have been created.", success=False)
 
