@@ -154,9 +154,6 @@ async def create_strike(
     reason: str,
     proof: str = "Not provided.",
 ):
-    if ctx.message.attachments:
-        for attachment in ctx.message.attachments:
-            proof += f" {attachment.url}\n"
     strike = await Strike.create(member_id=member.id, reason=reason, proof=proof)
     await response(
         ctx, f"Strike against {member.mention} added to database!", model=strike
