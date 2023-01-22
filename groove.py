@@ -59,19 +59,19 @@ async def on_member_remove(member):
 
 @bot.event
 async def on_application_command_error(
-        ctx: discord.ApplicationContext, error: discord.DiscordException
+    ctx: discord.ApplicationContext, error: discord.DiscordException
 ):
     await response(ctx, str(error), success=False)
     raise error
 
 
 async def response(
-        ctx: discord.ApplicationContext,
-        message: str,
-        *,
-        success: bool = True,
-        model=None,
-        embed: discord.Embed = None,
+    ctx: discord.ApplicationContext,
+    message: str,
+    *,
+    success: bool = True,
+    model=None,
+    embed: discord.Embed = None,
 ):
     if success:
         response_message = f":white_check_mark: **{message}**"
@@ -82,9 +82,7 @@ async def response(
     await ctx.respond(response_message, embed=embed)
 
 
-@album_group.command(
-    name="list", description="List all available albums."
-)
+@album_group.command(name="list", description="List all available albums.")
 async def list_albums(ctx: discord.ApplicationContext):
     albums = await Album.all()
     if albums:
@@ -92,7 +90,9 @@ async def list_albums(ctx: discord.ApplicationContext):
         embed.set_author(name="Here are all of the albums.")
         for album in albums:
             embed.add_field(name=album.acronym, value=album.title, inline=True)
-        await response(ctx, "Albums retrieved! Use /whatis for album information.", embed=embed)
+        await response(
+            ctx, "Albums retrieved! Use /whatis for album information.", embed=embed
+        )
     else:
         await response(ctx, "No albums have been created.", success=False)
 
@@ -100,7 +100,7 @@ async def list_albums(ctx: discord.ApplicationContext):
 @album_group.command(name="create", description="Create new album entry.")
 @default_permissions(manage_messages=True)
 async def create_album(
-        ctx: discord.ApplicationContext, acronym: str, title: str, description: str
+    ctx: discord.ApplicationContext, acronym: str, title: str, description: str
 ):
     album = await Album.create(
         acronym=acronym.upper(), title=title, description=description
@@ -120,11 +120,11 @@ async def delete_album(ctx: discord.ApplicationContext, acronym: str):
 @music_group.command(name="create", description="Create new music entry.")
 @default_permissions(manage_messages=True)
 async def create_music(
-        ctx: discord.ApplicationContext,
-        acronym: str,
-        title: str,
-        album: str = None,
-        url: str = None,
+    ctx: discord.ApplicationContext,
+    acronym: str,
+    title: str,
+    album: str = None,
+    url: str = None,
 ):
     associated_album = (
         await Album.filter(acronym=album.upper()).first() if album else None
@@ -149,10 +149,10 @@ async def delete_music(ctx: discord.ApplicationContext, acronym: str):
 )
 @default_permissions(manage_messages=True)
 async def create_strike(
-        ctx: discord.ApplicationContext,
-        member: discord.Member,
-        reason: str,
-        proof: str = "Not provided.",
+    ctx: discord.ApplicationContext,
+    member: discord.Member,
+    reason: str,
+    proof: str = "Not provided.",
 ):
     strike = await Strike.create(member_id=member.id, reason=reason, proof=proof)
     await response(
@@ -189,12 +189,12 @@ async def delete_strike(ctx: discord.ApplicationContext, strike_id: int):
     if await Strike.filter(id=strike_id).delete() == 1:
         await response(ctx, f"Strike with id {strike_id} deleted from database!")
     else:
-        await response(ctx, f"Could not find strike with id {strike_id}.", success=False)
+        await response(
+            ctx, f"Could not find strike with id {strike_id}.", success=False
+        )
 
 
-@bot.slash_command(
-    name="whatis", description="Deciphers acronyms used in this server."
-)
+@bot.slash_command(name="whatis", description="Deciphers acronyms used in this server.")
 async def what_is(ctx: discord.ApplicationContext, acronym: str):
     acronym_upper = acronym.upper()
     if await Album.filter(acronym=acronym_upper).exists():
@@ -210,8 +210,8 @@ async def what_is(ctx: discord.ApplicationContext, acronym: str):
     elif await Music.filter(acronym=acronym_upper).exists():
         music = (
             await Music.filter(acronym=acronym.upper())
-                .prefetch_related("album")
-                .first()
+            .prefetch_related("album")
+            .first()
         )
         await response(ctx, "Music retrieved!", model=music)
     else:
@@ -220,9 +220,7 @@ async def what_is(ctx: discord.ApplicationContext, acronym: str):
         )
 
 
-@bot.slash_command(
-    name="get", description="Retrieves information via acronym."
-)
+@bot.slash_command(name="get", description="Retrieves information via acronym.")
 async def get(ctx: discord.ApplicationContext, acronym: str):
     await what_is(ctx, acronym)
 
@@ -250,7 +248,7 @@ async def verify(ctx: discord.ApplicationContext):
     description="Parses message into neuropol font. For color use RGB, HEX, or rainbow.",
 )
 async def neuropol(
-        ctx: discord.ApplicationContext, message: str, color: str = "#FFFFFF"
+    ctx: discord.ApplicationContext, message: str, color: str = "#FFFFFF"
 ):
     if len(message) < 35:
         font = ImageFont.truetype("./resources/neuropol.ttf", 35)
