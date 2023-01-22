@@ -59,19 +59,19 @@ async def on_member_remove(member):
 
 @bot.event
 async def on_application_command_error(
-    ctx: discord.ApplicationContext, error: discord.DiscordException
+        ctx: discord.ApplicationContext, error: discord.DiscordException
 ):
     await response(ctx, str(error), success=False)
     raise error
 
 
 async def response(
-    ctx: discord.ApplicationContext,
-    message: str,
-    *,
-    success: bool = True,
-    model=None,
-    embed: discord.Embed = None,
+        ctx: discord.ApplicationContext,
+        message: str,
+        *,
+        success: bool = True,
+        model=None,
+        embed: discord.Embed = None,
 ):
     if success:
         response_message = f":white_check_mark: **{message}**"
@@ -100,7 +100,7 @@ async def list_albums(ctx: discord.ApplicationContext):
 @album_group.command(name="create", description="Create new album entry.")
 @default_permissions(manage_messages=True)
 async def create_album(
-    ctx: discord.ApplicationContext, acronym: str, title: str, description: str
+        ctx: discord.ApplicationContext, acronym: str, title: str, description: str
 ):
     album = await Album.create(
         acronym=acronym.upper(), title=title, description=description
@@ -120,11 +120,11 @@ async def delete_album(ctx: discord.ApplicationContext, acronym: str):
 @music_group.command(name="create", description="Create new music entry.")
 @default_permissions(manage_messages=True)
 async def create_music(
-    ctx: discord.ApplicationContext,
-    acronym: str,
-    title: str,
-    album: str = None,
-    url: str = None,
+        ctx: discord.ApplicationContext,
+        acronym: str,
+        title: str,
+        album: str = None,
+        url: str = None,
 ):
     associated_album = (
         await Album.filter(acronym=album.upper()).first() if album else None
@@ -149,10 +149,10 @@ async def delete_music(ctx: discord.ApplicationContext, acronym: str):
 )
 @default_permissions(manage_messages=True)
 async def create_strike(
-    ctx: discord.ApplicationContext,
-    member: discord.Member,
-    reason: str,
-    proof: str = "Not provided.",
+        ctx: discord.ApplicationContext,
+        member: discord.Member,
+        reason: str,
+        proof: str = "Not provided.",
 ):
     strike = await Strike.create(member_id=member.id, reason=reason, proof=proof)
     await response(
@@ -210,14 +210,21 @@ async def what_is(ctx: discord.ApplicationContext, acronym: str):
     elif await Music.filter(acronym=acronym_upper).exists():
         music = (
             await Music.filter(acronym=acronym.upper())
-            .prefetch_related("album")
-            .first()
+                .prefetch_related("album")
+                .first()
         )
         await response(ctx, "Music retrieved!", model=music)
     else:
         await response(
             ctx, "I don't know what this acronym means, sorry!", success=False
         )
+
+
+@bot.slash_command(
+    name="get", description="Retrieves information via acronym."
+)
+async def get(ctx: discord.ApplicationContext, acronym: str):
+    await what_is(ctx, acronym)
 
 
 @bot.slash_command(name="fact", description="Random Animusic fact.")
@@ -243,7 +250,7 @@ async def verify(ctx: discord.ApplicationContext):
     description="Parses message into neuropol font. For color use RGB, HEX, or rainbow.",
 )
 async def neuropol(
-    ctx: discord.ApplicationContext, message: str, color: str = "#FFFFFF"
+        ctx: discord.ApplicationContext, message: str, color: str = "#FFFFFF"
 ):
     if len(message) < 35:
         font = ImageFont.truetype("./resources/neuropol.ttf", 35)
