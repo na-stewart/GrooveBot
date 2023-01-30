@@ -42,7 +42,7 @@ async def on_member_join(member):
         )
     await member.guild.get_channel(
         int(config.get("SETTINGS", "verification_channel_id"))
-    ).send(config.get("SETTINGS", "message_on_join"))
+    ).send(config.get("SETTINGS", "message_on_join").format(member.mention))
 
 
 @bot.event
