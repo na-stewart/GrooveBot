@@ -35,11 +35,7 @@ async def on_member_join(member):
     with open("resources/greetings.txt", "r") as f:
         await member.guild.get_channel(
             int(config.get("SETTINGS", "general_channel_id"))
-        ).send(
-            random.choice(f.readlines()).format(
-                member.mention, member.name, member.discriminator
-            )
-        )
+        ).send(random.choice(f.readlines()).format(member.mention))
     await member.guild.get_channel(
         int(config.get("SETTINGS", "verification_channel_id"))
     ).send(config.get("SETTINGS", "message_on_join").format(member.mention))
@@ -52,7 +48,7 @@ async def on_member_remove(member):
             int(config.get("SETTINGS", "general_channel_id"))
         ).send(
             random.choice(f.readlines()).format(
-                member.mention, member.name, member.discriminator
+                member.mention, f"{member.name}#{member.discriminator}"
             )
         )
 

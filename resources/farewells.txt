@@ -1,11 +1,11 @@
-{0} ({1}#{2}) escaped the Heavy Light Temple.
-{0} ({1}#{2}) was really un-curving my acoustics, they gone now.
-{0} ({1}#{2}) was chased away by pogo sticks.
-{0} ({1}#{2}) had trouble with lasers apparently.
-{0} ({1}#{2}) was vaporized by lasers.
-I guess {0} ({1}#{2}) was never informed that Animusic 3 is still being worked on.
-{0} ({1}#{2}) left the moment Animusic 3 was released, looks like they will never get to see it.
-I guess {0} ({1}#{2}) is not an Animusic fan.
-{0} ({1}#{2}) was peeing ANIMUSIC, then left. :(
-{0} ({1}#{2}) saw Dank abusing the announcement channel and did not take it too well.
-{0} ({1}#{2}) lost their spine to the sticks.
+{0} ({1}) escaped the Heavy Light Temple.
+{0} ({1}) was really un-curving my acoustics, they gone now.
+{0} ({1}) was chased away by pogo sticks.
+{0} ({1}) had trouble with lasers apparently.
+{0} ({1}) was vaporized by lasers.
+I guess {0} ({1}) was never informed that Animusic 3 is still being worked on.
+{0} ({1}) left the moment Animusic 3 was released, looks like they will never get to see it.
+I guess {0} ({1}) is not an Animusic fan.
+{0} ({1}) was peeing ANIMUSIC, then left. :(
+{0} ({1}) saw Dank abusing the announcement channel and did not take it too well.
+{0} ({1}) lost their spine to the sticks.
