@@ -33,7 +33,7 @@
   <h3 align="center">GrooveBot</h3>
 
   <p align="center">
-    The official Animusic Discord bot. 
+    The official r/Animusic Discord bot. 
     <br />
     <a href="https://github.com/sunset-developer/GrooveBot/issues">Report Bug</a>
     ·
@@ -60,7 +60,7 @@
 
 ![alt text](https://github.com/na-stewart/GrooveBot/blob/main/img/pipe-dream.jpg)
 
-GrooveBot is a bot specially coded for the Animusic Discord server. It was created as an easy way to reference
+GrooveBot is a bot specially coded for the r/Animusic Discord server. It was created as an easy way to reference
 Wayne Lytle's (and other's) work as well as understand abbreviations that may be used within the server. There are also security features such as verification, user strikes, and join/leave messages.
 
 https://discord.gg/yDfyhfA
