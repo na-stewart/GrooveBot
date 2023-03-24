@@ -8,7 +8,7 @@ from PIL import ImageDraw, ImageFont, Image
 from discord import default_permissions, SlashCommandGroup
 from tortoise import Tortoise
 
-from groovebot.core.models import Album, Music, Strike
+from models import Album, Music, Strike
 
 config = ConfigParser()
 config.read("groove.ini")
