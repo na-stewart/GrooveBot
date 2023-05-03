@@ -24,7 +24,7 @@ strike_group = SlashCommandGroup("strike", "Retrieve and manage strikes.")
 async def on_ready():
     await Tortoise.init(
         db_url=config.get("SETTINGS", "database_url"),
-        modules={"models": ["groovebot.core.models"]},
+        modules={"models": ["models"]},
     )
     await Tortoise.generate_schemas()
     print("Groovebot initialized.")
