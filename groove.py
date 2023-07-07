@@ -5,7 +5,8 @@ from configparser import ConfigParser
 
 import discord
 from PIL import ImageDraw, ImageFont, Image
-from discord import default_permissions, SlashCommandGroup
+from discord import SlashCommandGroup
+from discord.ext import commands
 from tortoise import Tortoise
 
 from models import Album, Music, Strike
@@ -79,6 +80,7 @@ async def response(
 
 
 @album_group.command(name="list", description="List all available albums.")
+@commands.has_permissions(manage_messages=True)
 async def list_albums(ctx: discord.ApplicationContext):
     albums = await Album.all()
     if albums:
@@ -94,7 +96,7 @@ async def list_albums(ctx: discord.ApplicationContext):
 
 
 @album_group.command(name="create", description="Create new album entry.")
-@default_permissions(manage_messages=True)
+@commands.has_permissions(manage_messages=True)
 async def create_album(
     ctx: discord.ApplicationContext, acronym: str, title: str, description: str
 ):
@@ -105,7 +107,7 @@ async def create_album(
 
 
 @album_group.command(name="delete", description="Delete album entry.")
-@default_permissions(manage_messages=True)
+@commands.has_permissions(manage_messages=True)
 async def delete_album(ctx: discord.ApplicationContext, acronym: str):
     if await Album.filter(acronym=acronym.upper()).delete() == 1:
         await response(ctx, "Album successfully deleted from database.")
@@ -114,7 +116,7 @@ async def delete_album(ctx: discord.ApplicationContext, acronym: str):
 
 
 @music_group.command(name="create", description="Create new music entry.")
-@default_permissions(manage_messages=True)
+@commands.has_permissions(manage_messages=True)
 async def create_music(
     ctx: discord.ApplicationContext,
     acronym: str,
@@ -132,7 +134,7 @@ async def create_music(
 
 
 @music_group.command(name="delete", description="Delete music entry.")
-@default_permissions(manage_messages=True)
+@commands.has_permissions(manage_messages=True)
 async def delete_music(ctx: discord.ApplicationContext, acronym: str):
     if await Music.filter(acronym=acronym.upper()).delete() == 1:
         await response(ctx, "Music successfully deleted from database.")
@@ -143,7 +145,7 @@ async def delete_music(ctx: discord.ApplicationContext, acronym: str):
 @strike_group.command(
     name="create", description="Create a strike against a rule breaker >:(."
 )
-@default_permissions(manage_messages=True)
+@commands.has_permissions(manage_messages=True)
 async def create_strike(
     ctx: discord.ApplicationContext,
     member: discord.Member,
@@ -160,7 +162,7 @@ async def create_strike(
 
 
 @strike_group.command(name="get", description="Retrieve a rule breaker's strikes.")
-@default_permissions(manage_messages=True)
+@commands.has_permissions(manage_messages=True)
 async def get_strikes(ctx: discord.ApplicationContext, member: discord.Member):
     strikes = await Strike.filter(member_id=member.id).all()
     if strikes:
@@ -180,7 +182,7 @@ async def get_strikes(ctx: discord.ApplicationContext, member: discord.Member):
 
 
 @strike_group.command(name="delete", description="Delete a rule breaker's strike.")
-@default_permissions(manage_messages=True)
+@commands.has_permissions(manage_messages=True)
 async def delete_strike(ctx: discord.ApplicationContext, strike_id: int):
     if await Strike.filter(id=strike_id).delete() == 1:
         await response(ctx, f"Strike with id {strike_id} deleted from database!")
