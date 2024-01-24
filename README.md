@@ -58,7 +58,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-![alt text](https://github.com/na-stewart/GrooveBot/blob/main/img/pipe-dream.jpg)
+![alt text](https://github.com/na-stewart/GrooveBot/blob/main/img/groovebot.PNG)
 
 GrooveBot is a bot specially coded for the r/Animusic Discord server. It was created as an easy way to reference
 Wayne Lytle's (and other's) work as well as understand abbreviations that may be used within the server. There are also security features such as verification, user strikes, and join/leave messages.
