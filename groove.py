@@ -177,7 +177,7 @@ async def delete_strike(ctx: discord.ApplicationContext, strike_id: int):
         )
 
 
-@bot.slash_command(name="albums", description="List all available albums.")
+@bot.slash_command(name="albums", description="Retrieves all albums.")
 async def list_albums(ctx: discord.ApplicationContext):
     albums = await Album.all()
     if albums:
@@ -186,13 +186,17 @@ async def list_albums(ctx: discord.ApplicationContext):
         for album in albums:
             embed.add_field(name=album.acronym, value=album.title, inline=True)
         await response(
-            ctx, "Albums retrieved! Use /whatis for album information.", embed=embed
+            ctx,
+            "Albums retrieved! Use /get command for album information.",
+            embed=embed,
         )
     else:
         await response(ctx, "No albums have been created.", success=False)
 
 
-@bot.slash_command(name="whatis", description="Deciphers acronym used in this server.")
+@bot.slash_command(
+    name="whatis", description="Deciphers music/album acronym used in this server."
+)
 async def what_is(ctx: discord.ApplicationContext, acronym: str):
     acronym_upper = acronym.upper()
     if await Album.filter(acronym=acronym_upper).exists():
@@ -218,7 +222,7 @@ async def what_is(ctx: discord.ApplicationContext, acronym: str):
         )
 
 
-@bot.slash_command(name="get", description="Retrieves information via acronym.")
+@bot.slash_command(name="get", description="Retrieves music/album via acronym.")
 async def get(ctx: discord.ApplicationContext, acronym: str):
     await what_is(ctx, acronym)
 
