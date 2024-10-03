@@ -18,12 +18,12 @@ config = Config(
 bot = discord.Bot(intents=discord.Intents(members=True))
 music_group = SlashCommandGroup(
     "music",
-    "Retrieve and manage music.",
+    "Manage music data.",
     default_member_permissions=discord.Permissions(manage_messages=True),
 )
 album_group = SlashCommandGroup(
     "album",
-    "Retrieve and manage albums.",
+    "Manage album data.",
     default_member_permissions=discord.Permissions(manage_messages=True),
 )
 strike_group = SlashCommandGroup(
