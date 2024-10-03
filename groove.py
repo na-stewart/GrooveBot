@@ -46,20 +46,18 @@ async def on_ready():
 @bot.event
 async def on_member_join(member):
     with open("resources/greetings.txt", "r") as f:
-        await member.guild.get_channel(
-            int(config.GENERAL_CHANNEL_ID)
-        ).send(random.choice(f.readlines()).format(member.mention))
-    await member.guild.get_channel(
-        int(config.VERIFICATION_CHANNEL_ID)
-    ).send(config.WELCOME_MESSAGE.format(member.mention))
+        await member.guild.get_channel(int(config.WELCOME_CHANNEL_ID)).send(
+            random.choice(f.readlines()).format(member.mention)
+        )
+    await member.guild.get_channel(int(config.VERIFICATION_CHANNEL_ID)).send(
+        config.WELCOME_MESSAGE.format(member.mention)
+    )
 
 
 @bot.event
 async def on_member_remove(member):
     with open("resources/farewells.txt", "r") as f:
-        await member.guild.get_channel(
-            int(config.GENERAL_CHANNEL_ID)
-        ).send(
+        await member.guild.get_channel(int(config.WELCOME_CHANNEL_ID)).send(
             random.choice(f.readlines()).format(f"{member.name}#{member.discriminator}")
         )
 
