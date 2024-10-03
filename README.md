@@ -60,7 +60,7 @@
 
 ![alt text](https://github.com/na-stewart/GrooveBot/blob/main/img/groovebot.PNG)
 
-GrooveBot is a bot specially coded for the r/Animusic Discord server. It was created as an easy way to reference
+GrooveBot was created for the r/Animusic Discord server. Used as an easy way to reference
 Wayne Lytle's, David Crognale's, and other's work as well as understand abbreviations that may be used within the server. There are also security features such as verification, user strikes, and join/leave messages.
 
 `v3.1.6`
