@@ -60,7 +60,7 @@ async def on_member_join(member):
 async def on_member_remove(member):
     with open("resources/farewells.txt", "r") as f:
         await member.guild.get_channel(int(config.WELCOME_CHANNEL_ID)).send(
-            random.choice(f.readlines()).format(f"{member.name}#{member.discriminator}")
+            random.choice(f.readlines()).format(member.name)
         )
 
 
