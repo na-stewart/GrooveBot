@@ -63,7 +63,7 @@
 GrooveBot is a bot specially coded for the r/Animusic Discord server. It was created as an easy way to reference
 Wayne Lytle's, David Crognale's, and other's work as well as understand abbreviations that may be used within the server. There are also security features such as verification, user strikes, and join/leave messages.
 
-`v3.1.5`
+`v3.1.6`
 
 
 <!-- GETTING STARTED -->
@@ -91,19 +91,26 @@ git clone https://github.com/sunset-developer/GrooveBot
 pip3 install -r requirements.txt
 ```
 
-* Create a groove.ini file in the project directory. Below is an example of its contents:
+* Make desired changes to Groovebot's config dictionary in `groove.py`, below is an example of its contents:
 
-Note: You will need a database, local or remote.
 
-```ini
-[SETTINGS]
-token=Nzc4MjYzMjAwMDQyODQ0MTYx.X7PcFg.k-BedTOS3LgoEU6teXsQSi5aVAE
-message_on_join=Welcome to the official r/Animusic Discord server!
-database_url=sqlite://db.sqlite3
-general_channel_id=1625118263628154181
-verification_channel_id=176371620648173633
-verified_role_id=1625184182632815125
+
+
+```python
+config = Config(
+    {
+        "TOKEN": "Nzc4MjYzMjAwMDQyODQ0MTYx.X7PcFg.k-BedTOS3LgoEU6teXsQSi5aVAE",
+        "MESSAGE_ON_JOIN": "Welcome to the official r/Animusic Discord server!",
+        "DATABASE_URL": "sqlite://db.sqlite3",
+        "GENERAL_CHANNEL_ID": "1625118263628154181",
+        "VERIFICATION_CHANNEL_ID": "176371620648173633",
+        "VERIFIED_ROLE_ID": "1625184182632815125"
+    }
+)
 ```
+
+Any environment variables defined with the GROOVEBOT_ prefix will be applied to the config. For example, setting 
+GROOVEBOT_TOKEN will be loaded by the application automatically and fed into the TOKEN config variable.
 
 <!-- CONTRIBUTING -->
 ## Contributing
