@@ -15,7 +15,9 @@ config = Config(
         "DATABASE_URL": "sqlite://db.sqlite3",
     }
 )
-bot = discord.Bot(intents=discord.Intents(members=True))
+intents = discord.Intents.default()
+intents.members = True
+bot = discord.Bot(intents=intents)
 music_group = SlashCommandGroup(
     "music",
     "Manage music data.",
