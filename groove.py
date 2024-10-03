@@ -87,25 +87,6 @@ async def response(
     await ctx.respond(response_message, embed=embed)
 
 
-@album_group.command(
-    name="list",
-    description="List all available albums.",
-    default_member_permissions=None,
-)
-async def list_albums(ctx: discord.ApplicationContext):
-    albums = await Album.all()
-    if albums:
-        embed = discord.Embed(colour=discord.Colour.purple())
-        embed.set_author(name="Here are all of the albums.")
-        for album in albums:
-            embed.add_field(name=album.acronym, value=album.title, inline=True)
-        await response(
-            ctx, "Albums retrieved! Use /whatis for album information.", embed=embed
-        )
-    else:
-        await response(ctx, "No albums have been created.", success=False)
-
-
 @album_group.command(name="create", description="Create new album entry.")
 async def create_album(
     ctx: discord.ApplicationContext, acronym: str, title: str, description: str
@@ -196,7 +177,22 @@ async def delete_strike(ctx: discord.ApplicationContext, strike_id: int):
         )
 
 
-@bot.slash_command(name="whatis", description="Deciphers acronyms used in this server.")
+@bot.slash_command(name="albums", description="List all available albums.")
+async def list_albums(ctx: discord.ApplicationContext):
+    albums = await Album.all()
+    if albums:
+        embed = discord.Embed(colour=discord.Colour.purple())
+        embed.set_author(name="Here are all of the albums.")
+        for album in albums:
+            embed.add_field(name=album.acronym, value=album.title, inline=True)
+        await response(
+            ctx, "Albums retrieved! Use /whatis for album information.", embed=embed
+        )
+    else:
+        await response(ctx, "No albums have been created.", success=False)
+
+
+@bot.slash_command(name="whatis", description="Deciphers acronym used in this server.")
 async def what_is(ctx: discord.ApplicationContext, acronym: str):
     acronym_upper = acronym.upper()
     if await Album.filter(acronym=acronym_upper).exists():
