@@ -102,7 +102,7 @@ config = Config(
         "TOKEN": "Nzc4MjYzMjAwMDQyODQ0MTYx.X7PcFg.k-BedTOS3LgoEU6teXsQSi5aVAE",
         "MESSAGE_ON_JOIN": "Welcome to the official r/Animusic Discord server!",
         "DATABASE_URL": "sqlite://db.sqlite3",
-        "GENERAL_CHANNEL_ID": "1625118263628154181",
+        "WELCOME_CHANNEL_ID": "1625118263628154181",
         "VERIFICATION_CHANNEL_ID": "176371620648173633",
         "VERIFIED_ROLE_ID": "1625184182632815125"
     }

@@ -47,7 +47,7 @@ class Config(dict):
     TOKEN: str
     WELCOME_MESSAGE: str
     DATABASE_URL: str
-    GENERAL_CHANNEL_ID: str
+    WELCOME_CHANNEL_ID: str
     VERIFICATION_CHANNEL_ID: str
     VERIFIED_ROLE_ID: str
 
