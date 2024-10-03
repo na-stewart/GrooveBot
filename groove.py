@@ -1,30 +1,42 @@
 import asyncio
 import random
 from colorsys import hsv_to_rgb
-from configparser import ConfigParser
 
 import discord
 from PIL import ImageDraw, ImageFont, Image
 from discord import SlashCommandGroup
-from discord.ext import commands
 from tortoise import Tortoise
 
-from models import Album, Music, Strike
+from models import Album, Music, Strike, Config
 
-config = ConfigParser()
-config.read("groove.ini")
-intents = discord.Intents.default()
-intents.members = True
-bot = discord.Bot(intents=intents)
-music_group = SlashCommandGroup("music", "Retrieve and manage music.")
-album_group = SlashCommandGroup("album", "Retrieve and manage albums.")
-strike_group = SlashCommandGroup("strike", "Retrieve and manage strikes.")
+config = Config(
+    {
+        "MESSAGE_ON_JOIN": "Welcome to the official r/Animusic Discord server!",
+        "DATABASE_URL": "sqlite://db.sqlite3",
+    }
+)
+bot = discord.Bot(intents=discord.Intents(members=True))
+music_group = SlashCommandGroup(
+    "music",
+    "Retrieve and manage music.",
+    default_member_permissions=discord.Permissions(manage_messages=True),
+)
+album_group = SlashCommandGroup(
+    "album",
+    "Retrieve and manage albums.",
+    default_member_permissions=discord.Permissions(manage_messages=True),
+)
+strike_group = SlashCommandGroup(
+    "strike",
+    "Retrieve and manage strikes.",
+    default_member_permissions=discord.Permissions(manage_messages=True),
+)
 
 
 @bot.event
 async def on_ready():
     await Tortoise.init(
-        db_url=config.get("SETTINGS", "database_url"),
+        db_url=config.DATABASE_URL,
         modules={"models": ["models"]},
     )
     await Tortoise.generate_schemas()
@@ -35,22 +47,20 @@ async def on_ready():
 async def on_member_join(member):
     with open("resources/greetings.txt", "r") as f:
         await member.guild.get_channel(
-            int(config.get("SETTINGS", "general_channel_id"))
+            int(config.GENERAL_CHANNEL_ID)
         ).send(random.choice(f.readlines()).format(member.mention))
     await member.guild.get_channel(
-        int(config.get("SETTINGS", "verification_channel_id"))
-    ).send(config.get("SETTINGS", "message_on_join").format(member.mention))
+        int(config.VERIFICATION_CHANNEL_ID)
+    ).send(config.WELCOME_MESSAGE.format(member.mention))
 
 
 @bot.event
 async def on_member_remove(member):
     with open("resources/farewells.txt", "r") as f:
         await member.guild.get_channel(
-            int(config.get("SETTINGS", "general_channel_id"))
+            int(config.GENERAL_CHANNEL_ID)
         ).send(
-            random.choice(f.readlines()).format(
-                member.mention, f"{member.name}#{member.discriminator}"
-            )
+            random.choice(f.readlines()).format(f"{member.name}#{member.discriminator}")
         )
 
 
@@ -80,7 +90,6 @@ async def response(
 
 
 @album_group.command(name="list", description="List all available albums.")
-@commands.has_permissions(manage_messages=True)
 async def list_albums(ctx: discord.ApplicationContext):
     albums = await Album.all()
     if albums:
@@ -96,7 +105,6 @@ async def list_albums(ctx: discord.ApplicationContext):
 
 
 @album_group.command(name="create", description="Create new album entry.")
-@commands.has_permissions(manage_messages=True)
 async def create_album(
     ctx: discord.ApplicationContext, acronym: str, title: str, description: str
 ):
@@ -107,7 +115,6 @@ async def create_album(
 
 
 @album_group.command(name="delete", description="Delete album entry.")
-@commands.has_permissions(manage_messages=True)
 async def delete_album(ctx: discord.ApplicationContext, acronym: str):
     if await Album.filter(acronym=acronym.upper()).delete() == 1:
         await response(ctx, "Album successfully deleted from database.")
@@ -116,7 +123,6 @@ async def delete_album(ctx: discord.ApplicationContext, acronym: str):
 
 
 @music_group.command(name="create", description="Create new music entry.")
-@commands.has_permissions(manage_messages=True)
 async def create_music(
     ctx: discord.ApplicationContext,
     acronym: str,
@@ -134,7 +140,6 @@ async def create_music(
 
 
 @music_group.command(name="delete", description="Delete music entry.")
-@commands.has_permissions(manage_messages=True)
 async def delete_music(ctx: discord.ApplicationContext, acronym: str):
     if await Music.filter(acronym=acronym.upper()).delete() == 1:
         await response(ctx, "Music successfully deleted from database.")
@@ -145,7 +150,6 @@ async def delete_music(ctx: discord.ApplicationContext, acronym: str):
 @strike_group.command(
     name="create", description="Create a strike against a rule breaker >:(."
 )
-@commands.has_permissions(manage_messages=True)
 async def create_strike(
     ctx: discord.ApplicationContext,
     member: discord.Member,
@@ -162,7 +166,6 @@ async def create_strike(
 
 
 @strike_group.command(name="get", description="Retrieve a rule breaker's strikes.")
-@commands.has_permissions(manage_messages=True)
 async def get_strikes(ctx: discord.ApplicationContext, member: discord.Member):
     strikes = await Strike.filter(member_id=member.id).all()
     if strikes:
@@ -182,7 +185,6 @@ async def get_strikes(ctx: discord.ApplicationContext, member: discord.Member):
 
 
 @strike_group.command(name="delete", description="Delete a rule breaker's strike.")
-@commands.has_permissions(manage_messages=True)
 async def delete_strike(ctx: discord.ApplicationContext, strike_id: int):
     if await Strike.filter(id=strike_id).delete() == 1:
         await response(ctx, f"Strike with id {strike_id} deleted from database!")
@@ -233,7 +235,7 @@ async def fact(ctx: discord.ApplicationContext):
     name="verify", description="Verify your account to access the server."
 )
 async def verify(ctx: discord.ApplicationContext):
-    role = ctx.guild.get_role(int(config.get("SETTINGS", "verified_role_id")))
+    role = ctx.guild.get_role(int(config.VERIFIED_ROLE_ID))
     if len(ctx.author.roles) <= 1:
         await ctx.author.add_roles(role)
         await response(ctx, "You have been verified.")
@@ -284,4 +286,4 @@ bot.add_application_command(album_group)
 bot.add_application_command(music_group)
 bot.add_application_command(strike_group)
 if __name__ == "__main__":
-    bot.run(config.get("SETTINGS", "TOKEN"))
+    bot.run(config.TOKEN)

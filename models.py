@@ -1,3 +1,5 @@
+from os import environ
+
 from tortoise import Model, fields
 
 
@@ -39,3 +41,29 @@ class Strike(BaseModel):
 
     def __str__(self):
         return f"***ID:*** `{self.id}`\n***Reason:*** `{self.reason}`\n***Proof:*** {self.proof}"
+
+
+class Config(dict):
+    TOKEN: str
+    WELCOME_MESSAGE: str
+    DATABASE_URL: str
+    GENERAL_CHANNEL_ID: str
+    VERIFICATION_CHANNEL_ID: str
+    VERIFIED_ROLE_ID: str
+
+    def load_environment_variables(self, load_env="GROOVEBOT_") -> None:
+        """
+        Any environment variables defined with the prefix argument will be applied to the config.
+        Args:
+            load_env (str): Prefix being used to apply environment variables into the config.
+        """
+        for key, value in environ.items():
+            if not key.startswith(load_env):
+                continue
+            _, config_key = key.split(load_env, 1)
+            self[config_key] = str(value)
+
+    def __init__(self, default_config: dict):
+        super().__init__(default_config)
+        self.__dict__ = self
+        self.load_environment_variables()
