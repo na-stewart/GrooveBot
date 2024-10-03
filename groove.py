@@ -87,7 +87,7 @@ async def response(
     await ctx.respond(response_message, embed=embed)
 
 
-@album_group.command(name="list", description="List all available albums.")
+@album_group.command(name="list", description="List all available albums.",  default_member_permissions=None)
 async def list_albums(ctx: discord.ApplicationContext):
     albums = await Album.all()
     if albums:
