@@ -63,7 +63,7 @@
 GrooveBot was created for the r/Animusic Discord server. Used as an easy way to reference
 Wayne Lytle's, David Crognale's, and other's work as well as understand abbreviations that may be used within the server. There are also security features such as verification, user strikes, and join/leave messages.
 
-`v3.1.6`
+`v3.1.7`
 
 
 <!-- GETTING STARTED -->
