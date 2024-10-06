@@ -209,7 +209,7 @@ async def what_is(ctx: discord.ApplicationContext, acronym: str):
 
 @bot.slash_command(
     name="get",
-    description="Retreives music/album information via acronym or displays all available albums.",
+    description="Retrieves music/album information via acronym or displays all available albums.",
 )
 async def get(ctx: discord.ApplicationContext, acronym: str = None):
     if acronym:
