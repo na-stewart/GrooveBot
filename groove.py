@@ -190,10 +190,15 @@ async def what_is(ctx: discord.ApplicationContext, acronym: str):
         embed = None
         if music:
             embed = discord.Embed(colour=discord.Colour.blue())
-            embed.set_author(name="Here are all of this album's music. ")
+            embed.set_author(name="Here are all of this album's music.")
             for song in music:
                 embed.add_field(name=song.acronym, value=song.title, inline=True)
-        await response(ctx, "Album retrieved!", model=album, embed=embed)
+        await response(
+            ctx,
+            "Album retrieved! Use /get command with acronym for more information.",
+            model=album,
+            embed=embed,
+        )
     elif await Music.filter(acronym=acronym_upper).exists():
         music = (
             await Music.filter(acronym=acronym.upper())
