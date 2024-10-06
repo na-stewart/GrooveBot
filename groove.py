@@ -223,7 +223,7 @@ async def get(ctx: discord.ApplicationContext, acronym: str = None):
                 embed.add_field(name=album.acronym, value=album.title, inline=True)
             await response(
                 ctx,
-                "Albums retrieved! Use /get command for album information.",
+                "Albums retrieved! Use /get command with acronym for more information.",
                 embed=embed,
             )
         else:
